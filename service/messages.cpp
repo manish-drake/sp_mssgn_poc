@@ -60,6 +60,24 @@ std::string Messaging::Messages::MSG_SCRB(const char* args/*event*/)
     });
 }
 
+std::string Messaging::Messages::MSG_STRT(const char* args/*event*/)
+{
+    return construct({
+        m_endpoint.c_str(),
+        203,
+        args
+    });
+}
+
+std::string Messaging::Messages::MSG_STOP(const char* args/*event*/)
+{
+    return construct({
+        m_endpoint.c_str(),
+        204,
+        args
+    });
+}
+
 Messaging::Messages::~Messages()
 {
 }

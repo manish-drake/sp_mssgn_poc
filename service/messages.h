@@ -38,6 +38,8 @@ namespace Messaging
         std::string MSG_UNKN();
         std::string MSG_NWVA(const char* args);
         std::string MSG_SCRB(const char* args);
+        std::string MSG_STRT();
+        std::string MSG_STOP();
     };
 } // namespace Messaging
 #endif //MESSAGES_H

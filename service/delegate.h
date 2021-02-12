@@ -28,6 +28,8 @@ namespace Messaging
 
     void Received(const std::string &argMsg);
     void Notify(const std::string &argNewVideo);
+    void StartRecording(const std::string &argFrom);
+    void StopRecording(const std::string &argFrom);
 
     ~Delegate();
   };
