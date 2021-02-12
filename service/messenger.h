@@ -2,15 +2,15 @@
 #define MESSENGER_H
 #include <string>
 using std::string;
-struct Node{
-
-};
-class Messenger
+namespace Messaging
 {
+  class Messenger
+  {
   private:
   public:
     Messenger();
-    void Send(std::string &msg, Node& node);
+    void Send(const char *to, const std::string &msg);
     ~Messenger();
-};
+  };
+} // namespace Messaging
 #endif //MESSENGER_H

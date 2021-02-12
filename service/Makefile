@@ -42,7 +42,7 @@ TARGET        = target
 INCPATH	     += -I/home/manish/libzmq-bin-x64/include
 VPATH        +=	
 LIBS         += -L/home/manish/libzmq-bin-x64/lib -lzmq
-SOURCES	     += 
+SOURCES	     += $(wildcard home/manish/git/csvdb/*.cpp)
 #########################################
 
 ####### Build rules
