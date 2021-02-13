@@ -14,7 +14,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    csvlist.cpp \
+    delegate.cpp \
+    listener.cpp \
+    messages.cpp \
+    messenger.cpp \
+    viewmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -28,3 +34,17 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    csvlist.h \
+    delegate.h \
+    listener.h \
+    messages.h \
+    messaging_exceptions.h \
+    messenger.h \
+    viewmodel.h
+
+unix:!macx: LIBS += -L$$PWD/../../libzmq-bin-x64/lib/ -lzmq
+
+INCLUDEPATH += $$PWD/../../libzmq-bin-x64/include
+DEPENDPATH += $$PWD/../../libzmq-bin-x64/include

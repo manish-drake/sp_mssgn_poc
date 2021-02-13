@@ -18,7 +18,7 @@ Grid{
             size: pnlTemplate.size/5
             lable: action
             defined: working
-
+            clickAction: arg
         }
     }
 }

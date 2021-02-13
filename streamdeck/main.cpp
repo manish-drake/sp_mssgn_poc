@@ -1,5 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include "viewmodel.h"
+#include "messages.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,6 +11,10 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+    auto ctx = engine.rootContext();
+    viewmodel _vm;
+    ctx->setContextProperty("vm", &_vm);
+    Messaging::Messages::Factory()->Register("tcp://localhost");
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

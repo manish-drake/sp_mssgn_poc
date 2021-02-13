@@ -8,8 +8,8 @@ Listener::Listener(std::function<void(const std::string&)> cb):m_cb{cb}
 
 void Listener::Listen()
 {
-    zmq::message_t msg(1024);
-    m_sock->recv(&msg, false);
+    zmq::message_t msg;
+    m_sock->recv(&msg);
     m_cb(std::string((char*)msg.data()));
 }
 

@@ -5,6 +5,7 @@ Rectangle {
     property string lable
     property bool pressed: false
     property bool defined: false
+    property int clickAction: -1
     id: buttTemplate
     height: size
     width: size
@@ -25,6 +26,7 @@ Rectangle {
     }
     MouseArea{
         id:maButtTemplate
+        property bool valid: false
         enabled: buttTemplate.defined
         anchors.fill: parent
         hoverEnabled: true
@@ -38,12 +40,18 @@ Rectangle {
                 lbl.color="#939994"
         }
         onClicked: {
-            buttTemplate.pressed = !buttTemplate.pressed
-            lbl.color="#73f188"
-            if(buttTemplate.pressed)
-                buttTemplate.color="gray"
-            else
-                buttTemplate.color="lightgray"
+            valid = vm.run(buttTemplate.clickAction)
+            if(valid)
+            {
+                buttTemplate.pressed = !buttTemplate.pressed
+                lbl.color="#73f188"
+                if(buttTemplate.pressed)
+                    buttTemplate.color="gray"
+                else
+                    buttTemplate.color="lightgray"
+
+            }
+
         }
     }
 }

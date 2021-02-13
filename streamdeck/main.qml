@@ -9,18 +9,18 @@ Window {
     title: qsTr("Emulator - Stream Deck")
     ListModel{
         id: pnlModel
-        ListElement{ working: true;  action: "Start"}
-        ListElement{ working: true;  action: "Stop"}
-        ListElement{ working: false;  action: "u/def"}
-        ListElement{ working: false;  action: "u/def"}
-        ListElement{ working: false;  action: "u/def"}
-        ListElement{ working: false;  action: "u/def"}
-        ListElement{ working: false;  action: "u/def"}
-        ListElement{ working: false;  action: "u/def"}
-        ListElement{ working: false;  action: "u/def"}
-        ListElement{ working: false;  action: "u/def"}
-        ListElement{ working: false;  action: "u/def"}
-        ListElement{ working: false;  action: "u/def"}
+        ListElement{ working: true;  action: "Start" ; arg:  0}
+        ListElement{ working: true;  action: "Stop"  ; arg:  1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: false;  action: "u/def"; arg: -1}
     }
     Rectangle{
         border.color: "#4d4aad"
