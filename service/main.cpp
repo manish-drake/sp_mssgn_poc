@@ -4,6 +4,7 @@
 #include "listener.h"
 #include <thread>
 #include "delegate.h"
+#include "messages.h"
 
 using namespace std;
 using namespace Messaging;
@@ -15,31 +16,28 @@ int main(int argc, char *argv[])
 
     Delegate worker;
 
-    FileMonitor monitor([&worker](const std::string &newVideo) {
-        worker.Notify(newVideo);
-    });
+    Messaging::Messages::Factory()->Register("tcp://localhost:8285");
 
-    std::thread tmonitor([&monitor]() {
-        while (1)
-        {
-            monitor.Watch();
-        }
-    });
+    // FileMonitor monitor([&worker](const std::string &newVideo) {
+    //     worker.Notify(newVideo);
+    // });
 
-    Listener prime([&worker](const std::string &msg) {
+    // std::thread tmonitor([&monitor]() {
+    //     while (1)
+    //     {
+    //         monitor.Watch();
+    //     }
+    // });
+
+    Listener listener("tcp://*:8285");
+    listener.Listen([&](const std::string &msg) {
+
         std::cout << "Received: " << msg << std::endl;
-        worker.Received(msg);
-    });
 
-    std::thread tprime([&prime]() {
-        while (1)
-        {
-            prime.Listen();
-        }
+        worker.OnReceived(msg);
     });
-
-    tprime.join();
-    tmonitor.join();
+    
+    // tmonitor.join();
     cin.ignore();
     return 0;
 }

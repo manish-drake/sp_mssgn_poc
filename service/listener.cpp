@@ -1,23 +1,52 @@
 #include "listener.h"
-Listener::Listener(std::function<void(const std::string&)> cb):m_cb{cb}
+#include "thread"
+//Listener::Listener(std::function<void(const std::string&)> cb):m_cb{cb}
+
+void Listener::init(zmq::context_t **argCtx, zmq::socket_t **argSock)
 {
-    m_ctx = new zmq::context_t(1);
-    m_sock = new zmq::socket_t(*m_ctx, ZMQ_REP);
-    m_sock->bind("tcp://*:8283");
+    *argCtx = new zmq::context_t(1);
+    *argSock = new zmq::socket_t(**argCtx, ZMQ_ROUTER);
+    (*argSock)->bind(m_endpoint.c_str());
+    m_isInitialized = true;
 }
 
-void Listener::Listen()
+Listener::Listener(const std::string &argEndpoint):
+    m_ctx{nullptr},
+    m_sock{nullptr},
+    m_close{0},
+    m_isInitialized{false},
+    m_endpoint{argEndpoint}
 {
-    zmq::message_t msg;
-    m_sock->recv(&msg);
-    m_cb(std::string((char*)msg.data()));
+
 }
 
+void Listener::Listen(std::function<void(const std::string&)> cb)
+{
+    std::thread background([this](std::function<void(const std::string&)> cb){
 
-Listener::~Listener()
+        if(!m_isInitialized) this->init(&this->m_ctx, &this->m_sock);
+
+        while (!m_close) {
+            zmq::message_t msg;
+            m_sock->recv(&msg);
+            m_sock->recv(&msg);
+            cb(std::string((char*)msg.data()));
+        }
+    }, cb);
+
+    background.detach();
+}
+
+void Listener::Close()
 {
     m_sock->close();
     m_ctx->close();
     delete m_sock;
     delete m_ctx;
+}
+
+
+Listener::~Listener()
+{
+    this->Close();
 }

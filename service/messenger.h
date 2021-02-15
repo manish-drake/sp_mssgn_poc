@@ -9,7 +9,7 @@ namespace Messaging
   private:
   public:
     Messenger();
-    void Send(const char *to, const std::string &msg);
+    void Send(std::string to, const std::string &msg);
     ~Messenger();
   };
 } // namespace Messaging

@@ -50,6 +50,7 @@ Window {
         }
 
     }
+    Component.onCompleted: vm.start()
 
 
 }

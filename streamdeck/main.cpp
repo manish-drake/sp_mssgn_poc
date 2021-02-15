@@ -14,7 +14,9 @@ int main(int argc, char *argv[])
     auto ctx = engine.rootContext();
     viewmodel _vm;
     ctx->setContextProperty("vm", &_vm);
-    Messaging::Messages::Factory()->Register("tcp://localhost");
+
+    Messaging::Messages::Factory()->Register("tcp://localhost:8283");
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

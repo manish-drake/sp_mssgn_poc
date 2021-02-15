@@ -40,6 +40,16 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "utility": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "cstring": "cpp",
+        "atomic": "cpp",
+        "complex": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "iterator": "cpp",
+        "map": "cpp",
+        "memory_resource": "cpp",
+        "random": "cpp",
+        "string": "cpp"
     }
 }

@@ -4,7 +4,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = 
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -g -MMD -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -g -MMD -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES) -DSRVC_MK
 INCPATH       = -I.
 VPATH	      = .
 LIBS          = -lreadline -pthread
@@ -32,7 +32,8 @@ STRIP         = strip
 
 OBJECTS_DIR   = ./build
 ####### Files
-SOURCES       = $(wildcard *.cpp)
+SOURCES1       = $(wildcard *.cpp)
+SOURCES       = $(filter-out ftpclient.cpp ftpdatachannel.cpp ftpcontrolchannel.cpp, $(SOURCES1))
 SOURCEO       = $(SOURCES:.cpp=.o) 
 OBJECTS       = $(addprefix $(OBJECTS_DIR)/,$(SOURCEO))
 DEPS          = $(OBJECTS:.o=.d)

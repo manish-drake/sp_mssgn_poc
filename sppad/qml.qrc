@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Medialist.qml</file>
+        <file>Metadata.qml</file>
+        <file>Preview_download.qml</file>
+        <file>Preview_stream.qml</file>
+        <file>Settings.qml</file>
+    </qresource>
+    <qresource prefix="/image">
+        <file>icons8-settings-384.png</file>
+        <file>left-arrow.png</file>
+    </qresource>
+</RCC>

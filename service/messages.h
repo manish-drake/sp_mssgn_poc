@@ -6,9 +6,9 @@ namespace Messaging
 {
     struct Message
     {
-        const char *from;
+        std::string from;
         int task;
-        const char *args;
+        std::string args;
     };
 
     class Messages
@@ -40,6 +40,7 @@ namespace Messaging
         std::string MSG_SCRB(const char* args);
         std::string MSG_STRT();
         std::string MSG_STOP();
+        std::string MSG_VFTP(const std::string &fileName);
     };
 } // namespace Messaging
 #endif //MESSAGES_H
