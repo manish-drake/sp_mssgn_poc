@@ -1,1 +1,1 @@
-build/listener.o: listener.cpp listener.h
+build/listener.o: listener.cpp listener.h messages.h

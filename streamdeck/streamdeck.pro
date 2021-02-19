@@ -48,7 +48,8 @@ HEADERS += \
     viewmodel.h \
     ftpclient.h \
     ftpcontrolchannel.h \
-    ftpdatachannel.h
+    ftpdatachannel.h \
+    idelegator.h
 
 unix:!macx: LIBS += -L$$PWD/../../libzmq-bin-x64/lib/ -lzmq
 

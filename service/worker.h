@@ -1,14 +1,18 @@
-#ifndef VIEWMODEL_H
-#define VIEWMODEL_H
-#include "messenger.h"
-#include "delegate.h"
-#include "listener.h"
+#ifndef WORKER_H
+#define WORKER_H
+#include <string>
 #include "idelegator.h"
-#include <QObject>
+#include <map>
+#include <vector>
+#include "messenger.h"
 
-class viewmodel : public QObject, IDelegator
+using std::string;
+enum MSG_EVENTS_ENUM {
+    NEW_VIDEO_AVAILABLE = 0,
+};
+class Worker:public IDelegator
 {
-    Q_OBJECT
+  private:
     void OnAcknowledgement(const char* from, const char* args) override;
     void OnException(const char* from, const char* args) override;
     void OnNewVideoAvailable(const char* from, const char* args) override;
@@ -17,17 +21,10 @@ class viewmodel : public QObject, IDelegator
     void OnStopRecording(const char* from, const char* args) override;
     void OnVideoFTPComplete(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
+    std::map<MSG_EVENTS_ENUM, std::vector<std::string>> m_subscriptions;
     Messaging::Messenger m_messenger;
-    int m_state; //0: [STA=0,STO=0], 1: [STA=1,STA=0], 2: [STA=1,STO=1]
-    Messaging::Delegate m_broker;
-    Messaging::Listener m_listener;
-public:
-    explicit viewmodel(QObject *parent = nullptr);
-    Q_INVOKABLE bool run(const int &argAction);
-    Q_INVOKABLE void start();
-signals:
-
-public slots:
+  public:
+    Worker();
+    ~Worker();
 };
-
-#endif // VIEWMODEL_H
+#endif //WORKER_H

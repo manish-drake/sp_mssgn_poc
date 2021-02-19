@@ -83,11 +83,11 @@ Item {
 
                         if(streambutton.checked)
                         {
-                            _tr.val=0
+                            vm.val=0
                         }
                         if(downloadbutton.checked)
                         {
-                            _tr.val=1
+                            vm.val=1
                         }
                         ml.source = "Medialist.qml"
                     }

@@ -31,5 +31,5 @@ Window {
         }
 
     }
-    Component.onCompleted: _tr.start()
+    Component.onCompleted: vm.start()
 }

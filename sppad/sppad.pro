@@ -13,10 +13,10 @@ SOURCES += \
         main.cpp \
         messages.cpp \
         messenger.cpp \
-        test.cpp \
     ftpclient.cpp \
     ftpcontrolchannel.cpp \
-    ftpdatachannel.cpp
+    ftpdatachannel.cpp \
+    viewmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,10 +38,10 @@ HEADERS += \
     messages.h \
     messaging_exceptions.h \
     messenger.h \
-    test.h \
     ftpclient.h \
     ftpcontrolchannel.h \
-    ftpdatachannel.h
+    ftpdatachannel.h \
+    viewmodel.h
 unix: {
     LIBS += -L$$PWD/../../libzmq-bin-x64/lib/ -lzmq
 

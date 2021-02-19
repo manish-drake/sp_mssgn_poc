@@ -4,12 +4,23 @@
 #include <QObject>
 #include "delegate.h"
 #include "listener.h"
+#include "idelegator.h"
+#include "ftpclient.h"
+#include "messenger.h"
 
 
-class viewmodel : public QObject
+class viewmodel : public QObject, IDelegator
 {
     Q_OBJECT
     QString m_header, m_body, m_footer;
+    void OnAcknowledgement(const char* from, const char* args) override;
+    void OnException(const char* from, const char* args) override;
+    void OnNewVideoAvailable(const char* from, const char* args) override;
+    void OnSubscription(const char* from, const char* args) override;
+    void OnStartRecording(const char* from, const char* args) override;
+    void OnStopRecording(const char* from, const char* args) override;
+    void OnVideoFTPComplete(const char* from, const char* args) override;
+    void OnUnknownMessage(const char* from, const char* args) override;
 public:
     explicit viewmodel(QObject *parent = nullptr);
     ~viewmodel();
@@ -30,8 +41,10 @@ signals:
     void bodyChanged();
     void footerChanged();
 private:
-    Messaging::Delegate m_worker;
-    Listener m_listener;
+    Messaging::Delegate m_broker;
+    Messaging::Listener m_listener;
+    Messaging::Messenger m_messenger;
+    FTPClient m_ftp;
     bool m_close = false;
 public slots:
 };

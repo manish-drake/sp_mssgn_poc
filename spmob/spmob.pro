@@ -54,7 +54,8 @@ HEADERS += \
     listener.h \
     messages.h \
     delegate.h \
-    ftpclient.h
+    ftpclient.h \
+    idelegator.h
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_EXTRA_LIBS = \

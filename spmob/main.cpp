@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     auto ctx = engine.rootContext();
-    Messaging::Messages::Register("tcp://localhost:8284");
+
     viewmodel _vm;
     ctx->setContextProperty("vm", &_vm);
 

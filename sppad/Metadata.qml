@@ -145,11 +145,11 @@ Item {
                     id: button
                     text: qsTr("Preview")
                     onClicked: {
-                        if(_tr.val == 0)
+                        if(vm.val == 0)
                         {
                             ml.source = "Preview_stream.qml"
                         }
-                        else if(_tr.val == 1)
+                        else if(vm.val == 1)
                         {
                             ml.source = "Preview_download.qml"
                         }

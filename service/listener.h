@@ -5,19 +5,25 @@
 #include <zmq.hpp>
 
 using std::string;
-class Listener
+namespace Messaging
 {
-private:
-  zmq::context_t *m_ctx;
-  zmq::socket_t *m_sock;
-  bool m_close, m_isInitialized;
-  std::string m_endpoint;
-private:
-  void init(zmq::context_t **argCtx, zmq::socket_t **argSock);
-public:
-  Listener(const std::string &argEndpoint);
-  void Listen(std::function<void(const std::string&)> cb);
-  void Close();
-  ~Listener();
-};
+  class Listener
+  {
+  private:
+    zmq::context_t *m_ctx;
+    zmq::socket_t *m_sock;
+    bool m_close, m_isInitialized;
+    std::string m_endpoint;
+    int m_port;
+
+  private:
+    void init(zmq::context_t **argCtx, zmq::socket_t **argSock);
+
+  public:
+    Listener(int port);
+    void Listen(std::function<void(const std::string &)> cb);
+    void Close();
+    ~Listener();
+  };
+} // namespace Messaging
 #endif //LISTENER_H

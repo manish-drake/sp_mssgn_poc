@@ -19,7 +19,7 @@ void FTPClient::Receive(const std::string& fileName, std::function<void(const bo
     commands.push_back({"RETR", "sample.mp4"} );       // send a file
     commands.push_back({"QUIT", ""} );       // send a file
 
-    QString server = QString::fromLocal8Bit("192.168.10.4");
+    QString server = QString::fromLocal8Bit("192.168.10.7");
 
     int post = 0;
     // Commands to be sent
@@ -138,7 +138,7 @@ void FTPClient::Send(const QString &file, std::function<void(const std::string &
     commands.push_back({"STOR", file} );       // send a file
     commands.push_back({"QUIT", ""} );       // send a file
 
-    QString server = QString::fromLocal8Bit("192.168.10.4");
+    QString server = QString::fromLocal8Bit("192.168.10.7");
 
     int post = 0;
     // Commands to be sent

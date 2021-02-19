@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 //#include <query.h>
 #include <QQmlContext>
-#include <test.h>
+#include <viewmodel.h>
 #include "listener.h"
 #include <thread>
 #include "delegate.h"
@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     QQmlContext* ctx = engine.rootContext();
     // query qr;
-    Messaging::Messages::Register("tcp://localhost:8286");
-    test tr;
-    ctx->setContextProperty("_tr", &tr);
+
+    viewmodel _vm;
+    ctx->setContextProperty("vm", &_vm);
 
 
     //   ctx->setContextProperty("_qr", &qr);

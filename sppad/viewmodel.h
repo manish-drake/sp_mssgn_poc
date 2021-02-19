@@ -1,10 +1,10 @@
-#ifndef VIEWMODEL_H
-#define VIEWMODEL_H
-#include "messenger.h"
-#include "delegate.h"
-#include "listener.h"
-#include "idelegator.h"
+#ifndef TEST_H
+#define TEST_H
 #include <QObject>
+#include "listener.h"
+#include "delegate.h"
+#include "idelegator.h"
+#include "ftpclient.h"
 
 class viewmodel : public QObject, IDelegator
 {
@@ -17,17 +17,25 @@ class viewmodel : public QObject, IDelegator
     void OnStopRecording(const char* from, const char* args) override;
     void OnVideoFTPComplete(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
-    Messaging::Messenger m_messenger;
-    int m_state; //0: [STA=0,STO=0], 1: [STA=1,STA=0], 2: [STA=1,STO=1]
-    Messaging::Delegate m_broker;
+    int m_val;
+    int val()
+    {
+        return m_val;
+    }
+    void setval(int val)
+    {
+        m_val=val;
+    }
+
+
     Messaging::Listener m_listener;
+    Messaging::Delegate m_broker;
+    FTPClient m_ftp;
 public:
     explicit viewmodel(QObject *parent = nullptr);
-    Q_INVOKABLE bool run(const int &argAction);
+    Q_PROPERTY(int val READ val WRITE setval )
     Q_INVOKABLE void start();
 signals:
-
 public slots:
 };
-
-#endif // VIEWMODEL_H
+#endif // TEST_H
