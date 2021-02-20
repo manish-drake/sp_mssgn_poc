@@ -46,4 +46,5 @@ libzmq_dist/
 libzmq_dist_ios/
 /benchmarks
 /build
+/3rdparty
 */*.map
