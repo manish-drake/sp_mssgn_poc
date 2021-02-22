@@ -59,7 +59,8 @@ viewmodel::viewmodel(QObject *parent) :
     m_body{""},
     m_footer{""},
     m_broker{this},
-    m_listener{8284}
+    m_listener{8284},
+    m_ftp{"192.168.10.7"}
 {
 }
 

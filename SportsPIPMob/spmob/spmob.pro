@@ -1,6 +1,6 @@
 QT += quick
 
-TEMPLATE = subdirs
+TEMPLATE = app
 
 CONFIG += c++11
 
@@ -38,19 +38,35 @@ HEADERS += \
     viewmodel.h
 
 android: {
-    LIBS += -L$$PWD/../libzmq-android-arm-bin/lib/ -lzmq
-    INCLUDEPATH += $$PWD/../libzmq-android-arm-bin/include
-    DEPENDPATH += $$PWD/../libzmq-android-arm-bin/include
+    LIBS += -L$$PWD/../../3rdparty/libzmq-android-arm-bin/lib/ -lzmq
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq-android-arm-bin/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq-android-arm-bin/include
+
 }
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_EXTRA_LIBS = \
-        Z:/git/sptest/../libzmq-android-arm-bin/lib/libzmq.so \
-        $$PWD/../../Users/manish/android-ndk-r14b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so
+        $$PWD/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
+        /home/manish/Android/android-ndk-r10e/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so
 }
 
-unix: {
-    LIBS += -L$$PWD/../../libzmq-bin-x64/lib/ -lzmq
 
-    INCLUDEPATH += $$PWD/../../libzmq-bin-x64/include
-    DEPENDPATH += $$PWD/../../libzmq-bin-x64/include
+unix:{ LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
+
+INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
 }
+
+unix|win32: LIBS += -L$$OUT_PWD/../../csvdb/ -lcsvdb
+
+INCLUDEPATH += $$PWD/../../csvdb
+DEPENDPATH += $$PWD/../../csvdb
+
+unix|win32: LIBS += -L$$OUT_PWD/../../ftpclient/ -lftpclient
+
+INCLUDEPATH += $$PWD/../../ftpclient
+DEPENDPATH += $$PWD/../../ftpclient
+
+unix|win32: LIBS += -L$$OUT_PWD/../../messaging/ -lmessaging
+
+INCLUDEPATH += $$PWD/../../messaging
+DEPENDPATH += $$PWD/../../messaging

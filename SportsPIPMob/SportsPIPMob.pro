@@ -2,7 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     ../csvdb \
-    ../messaging \
     ../ftpclient \
+    ../messaging \
     ./spmob
 

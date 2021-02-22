@@ -33,10 +33,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     viewmodel.h \
 
-unix:!macx: LIBS += -L$$PWD/../../libzmq-bin-x64/lib/ -lzmq
+unix:{ LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
 
-INCLUDEPATH += $$PWD/../../libzmq-bin-x64/include
-DEPENDPATH += $$PWD/../../libzmq-bin-x64/include
+INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+}
+
 
 unix|win32: LIBS += -L$$OUT_PWD/../../messaging/ -lmessaging
 
@@ -52,3 +54,5 @@ unix|win32: LIBS += -L$$OUT_PWD/../../csvdb/ -lcsvdb
 
 INCLUDEPATH += $$PWD/../../csvdb
 DEPENDPATH += $$PWD/../../csvdb
+
+
