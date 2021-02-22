@@ -31,19 +31,23 @@ STRIP         = strip
 ####### Output directory
 
 OBJECTS_DIR   = ./build
+DEP_OBJ_DIR   =  ./csvdb ./messaging
 ####### Files
-SOURCES1       = $(wildcard *.cpp)
-SOURCES       = $(filter-out ftpclient.cpp ftpdatachannel.cpp ftpcontrolchannel.cpp, $(SOURCES1))
+SOURCES_CSVDB		= $(wildcard ../csvdb/*.cpp)
+SOURCES_MESSAGING	= $(wildcard ../messaging/*.cpp)
+SOURCES_SERVICE		= $(wildcard *.cpp)
+SOURCES				= $(SOURCES_CSVDB) $(SOURCES_MESSAGING) $(SOURCES_SERVICE)
+$(warning $(SOURCES))
 SOURCEO       = $(SOURCES:.cpp=.o) 
 OBJECTS       = $(addprefix $(OBJECTS_DIR)/,$(SOURCEO))
 DEPS          = $(OBJECTS:.o=.d)
 DESTDIR       = .
 TARGET        = target
 ####### Customized Vars
-INCPATH	     += -I/home/manish/libzmq-bin-x64/include
+INCPATH	     += -I../3rdparty/libzmq-bin-x64/include -I../messaging -I../ftpclient -I../csvdb
 VPATH        +=	
-LIBS         += -L/home/manish/libzmq-bin-x64/lib -lzmq
-SOURCES	     += $(wildcard home/manish/git/csvdb/*.cpp)
+LIBS         += -L../3rdparty/libzmq-bin-x64/lib -lzmq
+SOURCES	     += 
 #########################################
 
 ####### Build rules
@@ -66,6 +70,7 @@ $(TARGET): Makefile  $(OBJECTS_DIR) $(OBJECTS)
 
 $(OBJECTS_DIR):
 	$(MKDIR) $(OBJECTS_DIR)
+	$(MKDIR) $(DEP_OBJ_DIR)
 
 clean: 
 	$(DEL_FILE) $(OBJECTS) $(DEPS) $(DESTDIR)/$(TARGET)

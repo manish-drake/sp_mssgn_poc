@@ -29,17 +29,18 @@ void viewmodel::OnSubscription(const char *from, const char *args)
 
 void viewmodel::OnStartRecording(const char *from, const char *args)
 {
-
+    setBody("Received: Start Recording");
 }
 
 void viewmodel::OnStopRecording(const char *from, const char *args)
 {
     static int num = 0;
+    setBody("Received: Stop Recording");
     QString filename = "sample.mp4";
 
-    m_ftp.Send(filename, [this](const std::string& file) {
-        m_messenger.Send("tcp://localhost:8285", Messages::Factory()->MSG_VFTP(file));
-    });
+    //m_ftp.Send(filename, [this](const std::string& file) {
+    //    m_messenger.Send("tcp://localhost:8285", Messages::Factory()->MSG_VFTP(file));
+    //});
 }
 
 void viewmodel::OnVideoFTPComplete(const char *from, const char *args)

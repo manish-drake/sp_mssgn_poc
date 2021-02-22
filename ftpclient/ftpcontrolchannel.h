@@ -85,7 +85,7 @@ signals:
 
 public slots:
     // Connect to an FTP server
-    void connectToServer(int server);
+    void connectToServer(QString server);
 private:
     void onReadyRead();
 

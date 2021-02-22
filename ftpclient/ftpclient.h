@@ -18,13 +18,13 @@ class FTPClient : public QObject
     FtpControlChannel controlChannel;
     QList<Command> commands;
     std::ofstream file1;
-    std::function<void(const bool &)> m_callback;
+    std::string m_server;
 public:
-    explicit FTPClient(QObject *parent = nullptr);
-    void Send(const QString &file, std::function<void(const std::string &)> cb);
-    void Receive(const std::string &fileName, std::function<void(const bool& completedOkay)> cb);
+    explicit FTPClient(const char* server, QObject *parent = nullptr);
+    void Send(const QString &file);
+    void Receive(const std::string &fileName);
 signals:
-    void connectToServer(int server);
+    void connectToServer(QString server);
     void videoFTPComplete();
 
 public slots:

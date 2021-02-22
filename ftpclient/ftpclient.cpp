@@ -3,22 +3,21 @@
 #include <QFile>
 
 
-FTPClient::FTPClient(QObject *parent) : QObject(parent)
+FTPClient::FTPClient(const char *server, QObject *parent) : QObject(parent), m_server{server}
 {
     QObject::connect(this, &FTPClient::connectToServer, &controlChannel, &FtpControlChannel::connectToServer);
 
 }
 
-void FTPClient::Receive(const std::string& fileName, std::function<void(const bool &)> cb)
+void FTPClient::Receive(const std::string& fileName)
 {
-    m_callback = cb;
     commands.push_back({"USER", "sportspip"});// login)
     commands.push_back({"PORT", ""}  );       // announce port for data connection, args added below.
     commands.push_back({"CWD", "videos"}  );
     commands.push_back({"RETR", "sample.mp4"} );       // send a file
     commands.push_back({"QUIT", ""} );       // send a file
 
-    QString server = QString::fromLocal8Bit("192.168.1.166");
+
 
     int post = 0;
     // Commands to be sent
@@ -33,7 +32,7 @@ void FTPClient::Receive(const std::string& fileName, std::function<void(const bo
     qDebug()<< "Post:" << 4;
     // Translate server replies into state machine events.
     QObject::connect(&controlChannel, &FtpControlChannel::reply,
-                     [this, &cb](int code, const QString &parameters) {
+                     [this](int code, const QString &parameters) {
         static int CMD = 0;
         auto cd = QString("reply.%1xx").arg(code / 100);
         qDebug() << "Code: " << cd;
@@ -98,7 +97,6 @@ void FTPClient::Receive(const std::string& fileName, std::function<void(const bo
             if((cd == "reply.2xx") || (cd == "reply.4xx"))
             {
                 file1.close();
-                cb(true);
             }
         }
         default:
@@ -131,7 +129,7 @@ void FTPClient::InvokeCallback()
 */
 }
 
-void FTPClient::Send(const QString &file, std::function<void(const std::string &)> cb)
+void FTPClient::Send(const QString &file)
 {
     connect(this, &FTPClient::videoFTPComplete, this, &FTPClient::InvokeCallback);
     commands.push_back({"USER", "sportspip"});// login)
@@ -140,7 +138,6 @@ void FTPClient::Send(const QString &file, std::function<void(const std::string &
     commands.push_back({"STOR", file} );       // send a file
     commands.push_back({"QUIT", ""} );       // send a file
 
-    QString server = QString::fromLocal8Bit("192.168.1.166");
 
     int post = 0;
     // Commands to be sent
@@ -154,7 +151,7 @@ void FTPClient::Send(const QString &file, std::function<void(const std::string &
     qDebug()<< "Post:" << 4;
     // Translate server replies into state machine events.
     QObject::connect(&controlChannel, &FtpControlChannel::reply,
-                     [this, &cb](int code, const QString &parameters) {
+                     [this](int code, const QString &parameters) {
         static int CMD = 0;
         auto cd = QString("reply.%1xx").arg(code / 100);
         qDebug() << "Code: " << cd;
@@ -206,7 +203,7 @@ void FTPClient::Send(const QString &file, std::function<void(const std::string &
             {
                 CMD = 5;
 
-                QObject::connect(&this->dataChannel, &FtpDataChannel::remoteSocketOpen, [&, &cb](){
+                QObject::connect(&this->dataChannel, &FtpDataChannel::remoteSocketOpen, [&](){
                     QFile file("/home/manish/git/sample.mp4");
                     if (!file.open(QIODevice::ReadOnly)) return;
                     QByteArray blob = file.readAll();
@@ -250,9 +247,10 @@ void FTPClient::Send(const QString &file, std::function<void(const std::string &
         dataChannel.listen(address);
         commands[1].args = dataChannel.portspec();
     });
+
     qDebug()<< "Post:" << 6;
     // Connect to our own local FTP server
-    //controlChannel.connectToServer(server);
-    emit connectToServer(0);
+    controlChannel.connectToServer(QString::fromStdString(m_server));
+//    emit connectToServer(0);
     qDebug()<< "Post:" << 7;
 }

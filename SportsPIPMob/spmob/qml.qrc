@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Home.qml</file>
+        <file>main.cpp</file>
+        <file>viewmodel.cpp</file>
+        <file>viewmodel.h</file>
     </qresource>
 </RCC>

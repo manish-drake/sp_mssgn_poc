@@ -62,9 +62,9 @@ FtpControlChannel::FtpControlChannel(QObject *parent) : QObject(parent)
     });
 }
 
-void FtpControlChannel::connectToServer(int server)
+void FtpControlChannel::connectToServer(QString server)
 {
-    m_socket.connectToHost("192.168.1.166", 21);
+    m_socket.connectToHost(server, 21);
 }
 
 void FtpControlChannel::command(const QByteArray &command, const QByteArray &params)
