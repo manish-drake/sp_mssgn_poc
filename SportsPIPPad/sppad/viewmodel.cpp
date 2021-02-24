@@ -14,10 +14,13 @@ void viewmodel::OnException(const char *from, const char *args)
 
 void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
 {
+    /*
     m_ftp.Receive(args, [](const bool& completedOkay)
     {
         std::cout << "Video fetch status: " << completedOkay << std::endl;
     });
+
+*/
 }
 
 void viewmodel::OnSubscription(const char *from, const char *args)
@@ -48,7 +51,8 @@ viewmodel::viewmodel(QObject *parent) :
     QObject(parent),
     m_val(-1),
     m_listener{8286},
-    m_broker{this}
+    m_broker{this},
+    m_ftp("192.168.1.5")
 {
 }
 

@@ -1,5 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    ./spmob
+    csvdb \
+    ftpclient \
+    messaging \
+    spmob
 

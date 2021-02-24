@@ -33,6 +33,23 @@ else:unix: LIBS += -L$$OUT_PWD/../csvdb/ -lcsvdb
 INCLUDEPATH += $$PWD/../../csvdb
 DEPENDPATH += $$PWD/../../csvdb
 
+#######################ZMQ REFERENCES######################
+android: {
+    LIBS += -L$$PWD/../../3rdparty/libzmq-android-arm-bin/lib/ -lzmq
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq-android-arm-bin/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq-android-arm-bin/include
+
+}
+
+
+unix:{
+    LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
+
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+}
+
+
 win32:{
     win32: LIBS += -L$$PWD/../../3rdparty/libzmq32/lib/ -lzmq
 
@@ -41,6 +58,7 @@ win32:{
 }
 
 
+###############################################################
 
 
 HEADERS += \

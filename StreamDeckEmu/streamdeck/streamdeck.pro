@@ -45,15 +45,6 @@ win32:{
 
     INCLUDEPATH += $$PWD/../../3rdparty/libzmq32/include
     DEPENDPATH += $$PWD/../../3rdparty/libzmq32/include
-
-
-
-    win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../build-messaging-Desktop/release/ -lmessaging
-    else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build-messaging-Desktop/debug/ -lmessaging
-
-    INCLUDEPATH += $$PWD/../../messaging
-    DEPENDPATH += $$PWD/../../messaging
-
 }
 
 
@@ -64,5 +55,12 @@ win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../csvdb/release/ -lcs
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../csvdb/debug/ -lcsvdb
 else:unix: LIBS += -L$$OUT_PWD/../csvdb/ -lcsvdb
 
-INCLUDEPATH += $$PWD/../csvdb
-DEPENDPATH += $$PWD/../csvdb
+INCLUDEPATH += $$PWD/../../csvdb
+DEPENDPATH += $$PWD/../../csvdb
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../messaging/release/ -lmessaging
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../messaging/debug/ -lmessaging
+else:unix: LIBS += -L$$OUT_PWD/../messaging/ -lmessaging
+
+INCLUDEPATH += $$PWD/../../messaging
+DEPENDPATH += $$PWD/../../messaging

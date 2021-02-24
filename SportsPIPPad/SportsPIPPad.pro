@@ -1,8 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    ../csvdb \
-    ../messaging \
-    ../ftpclient \
-    ./sppad
+    csvdb \
+    ftpclient \
+    messaging \
+    sppad
 

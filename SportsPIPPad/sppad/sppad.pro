@@ -25,34 +25,64 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     viewmodel.h
-unix: {
-    LIBS += -L$$PWD/../../libzmq-bin-x64/lib/ -lzmq
 
-    INCLUDEPATH += $$PWD/../../libzmq-bin-x64/include
-    DEPENDPATH += $$PWD/../../libzmq-bin-x64/include
+#######################ZMQ REFERENCES######################
+android: {
+    LIBS += -L$$PWD/../../3rdparty/libzmq-android-arm-bin/lib/ -lzmq
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq-android-arm-bin/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq-android-arm-bin/include
+
 }
 
 
+unix:{
+    LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
 
-    android:{ LIBS += -L$$PWD/../build-sptest-Qt_6_0_1_for_iOS-Debug/iOS-arm64/lib/ -lzmq
-
-    INCLUDEPATH += $$PWD/../build-sptest-Qt_6_0_1_for_iOS-Debug/iOS-arm64/include
-    DEPENDPATH += $$PWD/../build-sptest-Qt_6_0_1_for_iOS-Debug/iOS-arm64/include
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
 }
-#    win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../build-sptest-Qt_6_0_1_for_iOS-Debug/iOS-arm64/lib/zmq.lib
-#    else:unix|win32-g++: PRE_TARGETDEPS += $$PWD/../build-sptest-Qt_6_0_1_for_iOS-Debug/iOS-arm64/lib/libzmq.a
 
-unix|win32: LIBS += -L$$OUT_PWD/../../csvdb/ -lcsvdb
+
+win32:{
+    win32: LIBS += -L$$PWD/../../3rdparty/libzmq32/lib/ -lzmq
+
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq32/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq32/include
+}
+
+
+###############################################################
+
+
+
+#-------------------------------------------------------------------------------------------------------------------
+
+
+    contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+        ANDROID_EXTRA_LIBS = \
+        Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
+        Z:/Users/manish/android-ndk-r14b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so \
+    }
+
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../csvdb/release/ -lcsvdb
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../csvdb/debug/ -lcsvdb
+else:unix: LIBS += -L$$OUT_PWD/../csvdb/ -lcsvdb
 
 INCLUDEPATH += $$PWD/../../csvdb
 DEPENDPATH += $$PWD/../../csvdb
 
-unix|win32: LIBS += -L$$OUT_PWD/../../ftpclient/ -lftpclient
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/release/ -lftpclient
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/debug/ -lftpclient
+else:unix: LIBS += -L$$OUT_PWD/../ftpclient/ -lftpclient
 
 INCLUDEPATH += $$PWD/../../ftpclient
 DEPENDPATH += $$PWD/../../ftpclient
 
-unix|win32: LIBS += -L$$OUT_PWD/../../messaging/ -lmessaging
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../messaging/release/ -lmessaging
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../messaging/debug/ -lmessaging
+else:unix: LIBS += -L$$OUT_PWD/../messaging/ -lmessaging
 
 INCLUDEPATH += $$PWD/../../messaging
 DEPENDPATH += $$PWD/../../messaging

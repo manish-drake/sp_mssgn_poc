@@ -11,6 +11,7 @@
 *.dll
 *.dylib
 target
+target.exe
 
 # Qt-es
 

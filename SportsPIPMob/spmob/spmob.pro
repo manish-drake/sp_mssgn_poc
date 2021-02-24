@@ -52,35 +52,48 @@ unix:{
     INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
     DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
 }
+
+
+win32:{
+    win32: LIBS += -L$$PWD/../../3rdparty/libzmq32/lib/ -lzmq
+
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq32/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq32/include
+}
+
+
 ###############################################################
+
+
 
 #-------------------------------------------------------------------------------------------------------------------
 
-####################CSVDB REFERENCES##########################
-unix: {
-    LIBS += -L$$PWD/../../build-csvdb-Android/ -lcsvdb
 
-    INCLUDEPATH += $$PWD/../../csvdb
-    DEPENDPATH += $$PWD/../../csvdb
-
-    LIBS += -L$$PWD/../../build-ftpclient-Android/ -lftpclient
-
-    INCLUDEPATH += $$PWD/../../ftpclient
-    DEPENDPATH += $$PWD/../../ftpclient
-
-    LIBS += -L$$PWD/../../build-messaging-Android/ -lmessaging
-
-    INCLUDEPATH += $$PWD/../../messaging
-    DEPENDPATH += $$PWD/../../messaging
-}
-###############################################################
     contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
         ANDROID_EXTRA_LIBS = \
         Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
         Z:/Users/manish/android-ndk-r14b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so \
-        Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../build-csvdb-Android/libcsvdb.so \
-        Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../build-ftpclient-Android/libftpclient.so \
-        $$PWD/../../build-messaging-Android/libmessaging.so
     }
 
 
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../csvdb/release/ -lcsvdb
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../csvdb/debug/ -lcsvdb
+else:unix: LIBS += -L$$OUT_PWD/../csvdb/ -lcsvdb
+
+INCLUDEPATH += $$PWD/../../csvdb
+DEPENDPATH += $$PWD/../../csvdb
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/release/ -lftpclient
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/debug/ -lftpclient
+else:unix: LIBS += -L$$OUT_PWD/../ftpclient/ -lftpclient
+
+INCLUDEPATH += $$PWD/../../ftpclient
+DEPENDPATH += $$PWD/../../ftpclient
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../messaging/release/ -lmessaging
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../messaging/debug/ -lmessaging
+else:unix: LIBS += -L$$OUT_PWD/../messaging/ -lmessaging
+
+INCLUDEPATH += $$PWD/../../messaging
+DEPENDPATH += $$PWD/../../messaging

@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build-win",
             "program": "${workspaceFolder}/target",
             "args": [],
             "stopAtEntry": false,
