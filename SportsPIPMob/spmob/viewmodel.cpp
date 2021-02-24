@@ -30,6 +30,7 @@ void viewmodel::OnSubscription(const char *from, const char *args)
 void viewmodel::OnStartRecording(const char *from, const char *args)
 {
     setBody("Received: Start Recording");
+    setIsRecording(true);
 }
 
 void viewmodel::OnStopRecording(const char *from, const char *args)
@@ -37,6 +38,7 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
     static int num = 0;
     setBody("Received: Stop Recording");
     QString filename = "sample.mp4";
+    setIsRecording(false);
 
     //m_ftp.Send(filename, [this](const std::string& file) {
     //    m_messenger.Send("tcp://localhost:8285", Messages::Factory()->MSG_VFTP(file));
@@ -60,8 +62,10 @@ viewmodel::viewmodel(QObject *parent) :
     m_footer{""},
     m_broker{this},
     m_listener{8284},
-    m_ftp{"192.168.10.7"}
+    m_ftp{"192.168.10.7"},
+    m_isRecording{false}
 {
+
 }
 
 viewmodel::~viewmodel()
@@ -71,6 +75,7 @@ viewmodel::~viewmodel()
 
 void viewmodel::start()
 {
+    Messages::Factory()->Register("tcp://192.168.137.52:8284");
     m_listener.Listen([&](const std::string &msg) {
 
         std::cout << "Received: " << msg << std::endl;

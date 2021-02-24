@@ -6,8 +6,10 @@ Item {
     property string header: ""
     property string body: ""
     property string footer: "awaiting request.."
+    property bool isRecording
     Column{
         anchors.fill: parent
+        visible: !home.isRecording
         Text{
             id:title
             width: parent.width
@@ -48,4 +50,9 @@ Item {
             anchors.bottomMargin: 0
         }
     }
+    CamBox{
+            anchors.fill: parent
+            visible: home.isRecording
+        }
+
 }

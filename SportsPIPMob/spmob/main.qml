@@ -9,9 +9,11 @@ ApplicationWindow {
     title: qsTr("Stack")
 
     Home{
+        anchors.fill: parent
         header: vm.header
         body: vm.body
         footer: vm.footer
+        isRecording: vm.isRecording
     }
 
 

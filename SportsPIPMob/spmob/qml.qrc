@@ -5,5 +5,31 @@
         <file>main.cpp</file>
         <file>viewmodel.cpp</file>
         <file>viewmodel.h</file>
+        <file>camera-qml/images/camera_auto_mode.png</file>
+        <file>camera-qml/images/camera_camera_setting.png</file>
+        <file>camera-qml/images/camera_flash_auto.png</file>
+        <file>camera-qml/images/camera_flash_fill.png</file>
+        <file>camera-qml/images/camera_flash_off.png</file>
+        <file>camera-qml/images/camera_flash_redeye.png</file>
+        <file>camera-qml/images/camera_white_balance_cloudy.png</file>
+        <file>camera-qml/images/camera_white_balance_flourescent.png</file>
+        <file>camera-qml/images/camera_white_balance_incandescent.png</file>
+        <file>camera-qml/images/camera_white_balance_sunny.png</file>
+        <file>camera-qml/images/toolbutton.png</file>
+        <file>camera-qml/images/toolbutton.sci</file>
+        <file>camera-qml/CameraButton.qml</file>
+        <file>camera-qml/CameraListButton.qml</file>
+        <file>camera-qml/CameraListPopup.qml</file>
+        <file>camera-qml/CameraPropertyButton.qml</file>
+        <file>camera-qml/CameraPropertyPopup.qml</file>
+        <file>camera-qml/declarative-camera.qml</file>
+        <file>camera-qml/FocusButton.qml</file>
+        <file>camera-qml/PhotoCaptureControls.qml</file>
+        <file>camera-qml/PhotoPreview.qml</file>
+        <file>camera-qml/Popup.qml</file>
+        <file>camera-qml/VideoCaptureControls.qml</file>
+        <file>camera-qml/VideoPreview.qml</file>
+        <file>camera-qml/ZoomControl.qml</file>
+        <file>CamBox.qml</file>
     </qresource>
 </RCC>

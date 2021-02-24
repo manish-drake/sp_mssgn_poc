@@ -21,6 +21,18 @@ class viewmodel : public QObject, IDelegator
     void OnStopRecording(const char* from, const char* args) override;
     void OnVideoFTPComplete(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
+
+
+    bool m_isRecording;
+    bool isRecording() const
+    {
+        return m_isRecording;
+    }
+    void setIsRecording(bool isrecording)
+    {
+        m_isRecording = isrecording;
+        emit isRecordingChanged();
+    }
 public:
     explicit viewmodel(QObject *parent = nullptr);
     ~viewmodel();
@@ -28,6 +40,7 @@ public:
     Q_PROPERTY(QString header READ header WRITE setHeader NOTIFY headerChanged)
     Q_PROPERTY(QString body READ body WRITE setBody NOTIFY bodyChanged)
     Q_PROPERTY(QString footer READ footer WRITE setFooter NOTIFY footerChanged)
+    Q_PROPERTY(bool isRecording READ isRecording WRITE setIsRecording NOTIFY isRecordingChanged)
 
     QString header();
     QString body();
@@ -40,6 +53,7 @@ signals:
     void headerChanged();
     void bodyChanged();
     void footerChanged();
+    void isRecordingChanged();
 private:
     Messaging::Delegate m_broker;
     Messaging::Listener m_listener;
