@@ -33,26 +33,36 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     viewmodel.h \
 
-unix:{ LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
+unix:{
+    LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
 
-INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
-DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+}
+
+win32:{
+    win32: LIBS += -L$$PWD/../../3rdparty/libzmq32/lib/ -lzmq
+
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq32/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq32/include
+
+
+
+    win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../build-messaging-Desktop/release/ -lmessaging
+    else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build-messaging-Desktop/debug/ -lmessaging
+
+    INCLUDEPATH += $$PWD/../../messaging
+    DEPENDPATH += $$PWD/../../messaging
+
 }
 
 
-unix|win32: LIBS += -L$$OUT_PWD/../../messaging/ -lmessaging
-
-INCLUDEPATH += $$PWD/../../messaging
-DEPENDPATH += $$PWD/../../messaging
-
-unix|win32: LIBS += -L$$OUT_PWD/../../ftpclient/ -lftpclient
-
-INCLUDEPATH += $$PWD/../../ftpclient
-DEPENDPATH += $$PWD/../../ftpclient
-
-unix|win32: LIBS += -L$$OUT_PWD/../../csvdb/ -lcsvdb
-
-INCLUDEPATH += $$PWD/../../csvdb
-DEPENDPATH += $$PWD/../../csvdb
 
 
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../csvdb/release/ -lcsvdb
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../csvdb/debug/ -lcsvdb
+else:unix: LIBS += -L$$OUT_PWD/../csvdb/ -lcsvdb
+
+INCLUDEPATH += $$PWD/../csvdb
+DEPENDPATH += $$PWD/../csvdb

@@ -1,6 +1,7 @@
-QT += quick
+TEMPLATE=app
 
-TEMPLATE = app
+QT += quick qml multimedia network
+TARGET=SPIP
 
 CONFIG += c++11
 
@@ -36,37 +37,50 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     viewmodel.h
-
+#######################ZMQ REFERENCES######################
 android: {
     LIBS += -L$$PWD/../../3rdparty/libzmq-android-arm-bin/lib/ -lzmq
     INCLUDEPATH += $$PWD/../../3rdparty/libzmq-android-arm-bin/include
     DEPENDPATH += $$PWD/../../3rdparty/libzmq-android-arm-bin/include
 
 }
-contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    ANDROID_EXTRA_LIBS = \
-        $$PWD/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
-        /home/manish/Android/android-ndk-r10e/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so
+
+
+unix:{
+    LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
+
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
 }
+###############################################################
 
+#-------------------------------------------------------------------------------------------------------------------
 
-unix:{ LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
+####################CSVDB REFERENCES##########################
+unix: {
+    LIBS += -L$$PWD/../../build-csvdb-Android/ -lcsvdb
 
-INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
-DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
+    INCLUDEPATH += $$PWD/../../csvdb
+    DEPENDPATH += $$PWD/../../csvdb
+
+    LIBS += -L$$PWD/../../build-ftpclient-Android/ -lftpclient
+
+    INCLUDEPATH += $$PWD/../../ftpclient
+    DEPENDPATH += $$PWD/../../ftpclient
+
+    LIBS += -L$$PWD/../../build-messaging-Android/ -lmessaging
+
+    INCLUDEPATH += $$PWD/../../messaging
+    DEPENDPATH += $$PWD/../../messaging
 }
+###############################################################
+    contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+        ANDROID_EXTRA_LIBS = \
+        Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
+        Z:/Users/manish/android-ndk-r14b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so \
+        Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../build-csvdb-Android/libcsvdb.so \
+        Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../build-ftpclient-Android/libftpclient.so \
+        $$PWD/../../build-messaging-Android/libmessaging.so
+    }
 
-unix|win32: LIBS += -L$$OUT_PWD/../../csvdb/ -lcsvdb
 
-INCLUDEPATH += $$PWD/../../csvdb
-DEPENDPATH += $$PWD/../../csvdb
-
-unix|win32: LIBS += -L$$OUT_PWD/../../ftpclient/ -lftpclient
-
-INCLUDEPATH += $$PWD/../../ftpclient
-DEPENDPATH += $$PWD/../../ftpclient
-
-unix|win32: LIBS += -L$$OUT_PWD/../../messaging/ -lmessaging
-
-INCLUDEPATH += $$PWD/../../messaging
-DEPENDPATH += $$PWD/../../messaging

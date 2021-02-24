@@ -30,10 +30,10 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32: LIBS += -L$$PWD/../libzmq32/lib/ -lzmq
+win32: LIBS += -L$$PWD/../../3rdparty/libzmq32/lib/ -lzmq
 
-INCLUDEPATH += $$PWD/../libzmq32/include
-DEPENDPATH += $$PWD/../libzmq32/include
+INCLUDEPATH += $$PWD/../../3rdparty/libzmq32/include
+DEPENDPATH += $$PWD/../../3rdparty/libzmq32/include
 
 HEADERS += \
     viewmodel.h

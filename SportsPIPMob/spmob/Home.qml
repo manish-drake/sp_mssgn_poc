@@ -19,7 +19,7 @@ Item {
         }
         Text {
             id: hdr
-            anchors.top: title.bottom
+            anchors.topMargin: 0
             width: title.width
             color: "#5ac633"
             text: qsTr(home.header)
@@ -35,7 +35,7 @@ Item {
             font.italic: true
             font.pointSize: 12
             horizontalAlignment: Text.AlignHCenter
-            anchors.centerIn: parent
+            anchors.topMargin:  parent.height/2
         }
         Text {
             id: fdr
@@ -45,7 +45,7 @@ Item {
             font.italic: true
             font.pointSize: 12
             horizontalAlignment: Text.AlignHCenter
-            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 0
         }
     }
 }

@@ -60,7 +60,7 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
     case 0:{
         if(m_state == 0){
             auto start = Messaging::Messages::Factory()->MSG_STRT();
-            m_messenger.Send("tcp://localhost:8284", start);
+            m_messenger.Send("tcp://192.168.1.81:8284", "192.168.1.166:8283|203|");
             m_state = 1; valid = true;
         }
         break;
@@ -68,7 +68,7 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
     case 1:{
         if(m_state == 1){
             auto stop = Messaging::Messages::Factory()->MSG_STOP();
-            m_messenger.Send("tcp://localhost:8284", stop);
+            m_messenger.Send("tcp://192.168.1.81:8284", stop);
             m_state = 2; valid = true;
         }
         break;

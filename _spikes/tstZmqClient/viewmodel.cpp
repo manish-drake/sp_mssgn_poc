@@ -9,7 +9,7 @@ void ViewModel::send()
 {
     zmq::context_t ctx(1);
     zmq::socket_t sock(ctx, ZMQ_DEALER);
-    sock.connect("tcp://192.168.10.4:9001");
-    zmq::message_t msg("hello world", 12);
-    sock.send(&msg, 12);
+    sock.connect("tcp://10.21.17.37:8284");
+    zmq::message_t msg("136.232.44.46:8283|203|", 24);
+    sock.send(&msg, 24);
 }

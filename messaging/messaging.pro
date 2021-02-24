@@ -43,28 +43,51 @@ unix {
 }
 
 DISTFILES +=
-
+##############ZMQ REFERENCE##################
 unix:{ LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
 
 INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
 DEPENDPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
 }
 
-contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    ANDROID_EXTRA_LIBS = \
-        $$PWD/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
-        /home/manish/Android/android-ndk-r10e/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so
-}
-
-
-
-unix|win32: LIBS += -L$$OUT_PWD/../csvdb/ -lcsvdb
-
-INCLUDEPATH += $$PWD/../csvdb
-DEPENDPATH += $$PWD/../csvdb
-
 android:{ LIBS += -L$$PWD/../3rdparty/libzmq-android-arm-bin/lib/ -lzmq
 
 INCLUDEPATH += $$PWD/../3rdparty/libzmq-android-arm-bin/include
 DEPENDPATH += $$PWD/../3rdparty/libzmq-android-arm-bin/include
 }
+
+win32:{ LIBS += -L$$PWD/../3rdparty/libzmq32/lib/ -lzmq
+
+INCLUDEPATH += $$PWD/../3rdparty/libzmq32/include
+DEPENDPATH += $$PWD/../3rdparty/libzmq32/include
+}
+
+#---------------ANDROID DIST FILES-------------------
+    contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+        ANDROID_EXTRA_LIBS = \
+            $$PWD/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
+            /home/manish/Android/android-ndk-r10e/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so
+    }
+#----------------------------------------------------
+
+#############################################
+
+#>>>>>>>>>>>>>>>>>>>>CSVDB REFERENCES>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+win32: {
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-csvdb-Desktop/release/ -lcsvdb
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-csvdb-Desktop/debug/ -lcsvdb
+
+INCLUDEPATH += $$PWD/../csvdb
+DEPENDPATH += $$PWD/../csvdb
+}
+
+android:{
+    LIBS += -L$$PWD/../build-csvdb-Android/ -lcsvdb
+
+    INCLUDEPATH += $$PWD/../csvdb
+    DEPENDPATH += $$PWD/../csvdb
+}
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+

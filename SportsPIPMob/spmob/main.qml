@@ -14,5 +14,5 @@ ApplicationWindow {
         footer: vm.footer
     }
 
-    Component.onCompleted: vm.start()
+
 }
