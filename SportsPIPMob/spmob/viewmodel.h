@@ -33,6 +33,11 @@ class viewmodel : public QObject, IDelegator
         m_isRecording = isrecording;
         emit isRecordingChanged();
     }
+    QString m_fileName;
+    QString fileName() const
+    {
+        return m_fileName;
+    }
 public:
     explicit viewmodel(QObject *parent = nullptr);
     ~viewmodel();
@@ -41,6 +46,7 @@ public:
     Q_PROPERTY(QString body READ body WRITE setBody NOTIFY bodyChanged)
     Q_PROPERTY(QString footer READ footer WRITE setFooter NOTIFY footerChanged)
     Q_PROPERTY(bool isRecording READ isRecording WRITE setIsRecording NOTIFY isRecordingChanged)
+    Q_PROPERTY(QString fileName READ fileName CONSTANT)
 
     QString header();
     QString body();

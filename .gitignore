@@ -10,6 +10,8 @@
 *.so.*
 *.dll
 *.dylib
+*.obj
+*.d
 target
 target.exe
 

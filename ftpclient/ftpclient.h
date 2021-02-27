@@ -19,6 +19,7 @@ class FTPClient : public QObject
     QList<Command> commands;
     std::ofstream file1;
     std::string m_server;
+    QString m_fileName;
 public:
     explicit FTPClient(const char* server, QObject *parent = nullptr);
     void Send(const QString &file);

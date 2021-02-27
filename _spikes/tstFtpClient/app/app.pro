@@ -1,4 +1,4 @@
-QT += quick
+QT += quick network
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -35,3 +35,8 @@ DEPENDPATH += $$PWD/../../../ftpclient
 
 HEADERS += \
     viewmodel.h
+
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_EXTRA_LIBS = \
+        $$PWD/../../../ftpclient/libftpclient.so
+}

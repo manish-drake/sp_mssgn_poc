@@ -22,7 +22,7 @@ SOURCES += \
     ftpcontrolchannel.cpp \
     ftpdatachannel.cpp \
     #filemonitor.cpp \
-    client.cpp
+    #client.cpp
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -39,5 +39,5 @@ HEADERS += \
     ftpclient.h \
     ftpcontrolchannel.h \
     ftpdatachannel.h \
-    filemonitor.h \
-    client.h
+    #filemonitor.h \
+    #client.h
