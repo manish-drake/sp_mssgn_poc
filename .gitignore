@@ -49,3 +49,8 @@ libzmq_dist_ios/
 /build
 /3rdparty
 */*.map
+
+
+
+# Mac Files
+.DS_Store
