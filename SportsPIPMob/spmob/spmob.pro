@@ -73,8 +73,8 @@ win32:{
         ANDROID_EXTRA_LIBS = \
         Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
         Z:/Users/manish/android-ndk-r14b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so \
-    }
-
+        $$PWD/../../ftpclient/libftpclient.so
+}
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../csvdb/release/ -lcsvdb

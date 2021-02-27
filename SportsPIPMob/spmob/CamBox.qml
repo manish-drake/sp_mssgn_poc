@@ -69,6 +69,8 @@ Rectangle {
         videoRecorder {
              resolution: "640x480"
              frameRate: 30
+             outputLocation: vm.fileName
+
         }
     }
 

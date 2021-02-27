@@ -29,14 +29,14 @@ unix {
 }
 
 HEADERS += \
-    ../../ftpclient/client.h \
+    #../../ftpclient/client.h \
     #../../ftpclient/filemonitor.h \
     ../../ftpclient/ftpclient.h \
     ../../ftpclient/ftpcontrolchannel.h \
     ../../ftpclient/ftpdatachannel.h
 
 SOURCES += \
-    ../../ftpclient/client.cpp \
+    #../../ftpclient/client.cpp \
     #../../ftpclient/filemonitor.cpp \
     ../../ftpclient/ftpclient.cpp \
     ../../ftpclient/ftpcontrolchannel.cpp \

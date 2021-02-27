@@ -5,6 +5,11 @@
 #include <iostream>
 #include <thread>
 #include "messages.h"
+#include <QStandardPaths>
+#include <QDir>
+
+
+
 using namespace Messaging;
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
@@ -40,9 +45,8 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
     QString filename = "sample.mp4";
     setIsRecording(false);
 
-    //m_ftp.Send(filename, [this](const std::string& file) {
-    //    m_messenger.Send("tcp://localhost:8285", Messages::Factory()->MSG_VFTP(file));
-    //});
+    setBody("File found");
+    m_ftp.Send(m_fileName);
 }
 
 void viewmodel::OnVideoFTPComplete(const char *from, const char *args)
@@ -60,12 +64,18 @@ viewmodel::viewmodel(QObject *parent) :
     m_header{""},
     m_body{""},
     m_footer{""},
+    m_isRecording{false},
     m_broker{this},
     m_listener{8284},
-    m_ftp{"192.168.10.7"},
-    m_isRecording{false}
-{
-
+    m_ftp{"192.168.1.2"}
+{    
+    QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
+    QString appMediaFolder = localPath.append("/SportsPIP/Videos");
+    QDir dAppMediaFolder(appMediaFolder);
+    if (!dAppMediaFolder.exists()) {
+        dAppMediaFolder.mkpath(".");
+    }
+    m_fileName = appMediaFolder.append("/video1.mp4");
 }
 
 viewmodel::~viewmodel()
@@ -75,7 +85,7 @@ viewmodel::~viewmodel()
 
 void viewmodel::start()
 {
-    Messages::Factory()->Register("tcp://192.168.137.52:8284");
+    Messages::Factory()->Register("tcp://192.168.1.3:8284");
     m_listener.Listen([&](const std::string &msg) {
 
         std::cout << "Received: " << msg << std::endl;
