@@ -67,7 +67,7 @@ viewmodel::viewmodel(QObject *parent) :
     m_isRecording{false},
     m_broker{this},
     m_listener{8284},
-    m_ftp{"192.168.1.2"}
+    m_ftp{"192.168.1.166"}
 {    
     QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
     QString appMediaFolder = localPath.append("/SportsPIP/Videos");
@@ -85,7 +85,7 @@ viewmodel::~viewmodel()
 
 void viewmodel::start()
 {
-    Messages::Factory()->Register("tcp://192.168.1.3:8284");
+    Messages::Factory()->Register("tcp://192.168.1.113:8284");
     m_listener.Listen([&](const std::string &msg) {
 
         std::cout << "Received: " << msg << std::endl;

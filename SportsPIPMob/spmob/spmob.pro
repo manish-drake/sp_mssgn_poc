@@ -46,7 +46,7 @@ android: {
 }
 
 
-unix:{
+unix:!ios{
     LIBS += -L$$PWD/../../3rdparty/libzmq-bin-x64/lib/ -lzmq
 
     INCLUDEPATH += $$PWD/../../3rdparty/libzmq-bin-x64/include
@@ -61,6 +61,13 @@ win32:{
     DEPENDPATH += $$PWD/../../3rdparty/libzmq32/include
 }
 
+ios: {
+    LIBS += -L$$PWD/../../3rdparty/libzmq-ios/lib/ -lzmq
+
+    INCLUDEPATH += $$PWD/../../3rdparty/libzmq-ios/include
+    DEPENDPATH += $$PWD/../../3rdparty/libzmq-ios/include
+}
+ios: PRE_TARGETDEPS += $$PWD/../../3rdparty/libzmq-ios/lib/libzmq.a
 
 ###############################################################
 
