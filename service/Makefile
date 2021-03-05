@@ -31,8 +31,9 @@ STRIP         = strip
 ####### Output directory
 
 OBJECTS_DIR   = ./build
-DEP_OBJ_DIR   =  ./csvdb ./messaging
+DEP_OBJ_DIR   =  ./csvdb ./messaging ./logging
 ####### Files
+SOURCES_CSVDB		= $(wildcard ../logging/*.cpp)
 SOURCES_CSVDB		= $(wildcard ../csvdb/*.cpp)
 SOURCES_MESSAGING	= $(wildcard ../messaging/*.cpp)
 SOURCES_SERVICE		= $(wildcard *.cpp)
@@ -44,7 +45,7 @@ DEPS          = $(OBJECTS:.o=.d)
 DESTDIR       = .
 TARGET        = target
 ####### Customized Vars
-INCPATH	     += -I../3rdparty/libzmq-bin-x64/include -I../messaging -I../ftpclient -I../csvdb
+INCPATH	     += -I../3rdparty/libzmq-bin-x64/include -I../messaging -I../ftpclient -I../csvdb -I../logging
 VPATH        +=	
 LIBS         += -L../3rdparty/libzmq-bin-x64/lib -lzmq
 SOURCES	     += 

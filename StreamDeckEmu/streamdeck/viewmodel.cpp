@@ -2,6 +2,8 @@
 #include "messages.h"
 #include <iostream>
 #include "messaging_exceptions.h"
+#include "logger.h"
+
 
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
@@ -49,18 +51,20 @@ viewmodel::viewmodel(QObject *parent) :
     m_listener{8283},
     m_broker{this}
 {
-
+    LOGINFO("Initializing");
 }
 
 bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
 {
     //m_state = {0: [STA=0,STO=0], 1: [STA=1,STA=0], 2: [STA=1,STO=1]}
     bool valid = false;
+    LOGINFOZ("Pressed: %d", argAction);
+
     switch (argAction) {
     case 0:{
         if(m_state == 0){
             auto start = Messaging::Messages::Factory()->MSG_STRT();
-            m_messenger.Send("tcp://192.168.1.3:8284", start);
+            m_messenger.Send("tcp://192.168.1.94:8284", start);
             m_state = 1; valid = true;
         }
         break;
@@ -68,7 +72,7 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
     case 1:{
         if(m_state == 1){
             auto stop = Messaging::Messages::Factory()->MSG_STOP();
-            m_messenger.Send("tcp://192.168.1.3:8284", stop);
+            m_messenger.Send("tcp://192.168.1.94:8284", stop);
             m_state = 2; valid = true;
         }
         break;
@@ -87,12 +91,10 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
 
 void viewmodel::start()
 {
+    LOGINFO("Statring listener.");
 
-    Messaging::Messages::Factory()->Register("tcp://192.168.1.2:8283");
+    Messaging::Messages::Factory()->Register("tcp://192.168.1.166:8283");
     m_listener.Listen([&](const std::string &msg) {
-
-        std::cout << "Received: " << msg << std::endl;
-
         m_broker.OnReceived(msg);
     });
 }

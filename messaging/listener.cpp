@@ -1,5 +1,6 @@
 #include "listener.h"
 #include "thread"
+#include "logger.h"
 
 //Listener::Listener(std::function<void(const std::string&)> cb):m_cb{cb}
 
@@ -9,6 +10,7 @@ void Messaging::Listener::init(zmq::context_t **argCtx, zmq::socket_t **argSock)
     sprintf(endpoint, "tcp://*:%d", m_port);
     m_endpoint = endpoint;
 
+    LOGINFOZ("Starting listener at: %s", m_endpoint.c_str());
 
     *argCtx = new zmq::context_t(1);
     *argSock = new zmq::socket_t(**argCtx, ZMQ_ROUTER);
@@ -28,7 +30,6 @@ Messaging::Listener::Listener(int port):
 
 void Messaging::Listener::Listen(std::function<void(const std::string&)> cb)
 {
-
     std::thread background([this](std::function<void(const std::string&)> cb){
 
         if(!m_isInitialized) this->init(&this->m_ctx, &this->m_sock);
@@ -37,7 +38,9 @@ void Messaging::Listener::Listen(std::function<void(const std::string&)> cb)
             zmq::message_t msg;
             m_sock->recv(&msg);
             m_sock->recv(&msg);
-            cb(std::string((char*)msg.data()));
+            auto received = (char*)msg.data();
+            LOGINFOZ("Received: %s", received);
+            cb(received);
         }
     }, cb);
 

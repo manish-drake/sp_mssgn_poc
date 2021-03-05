@@ -2,16 +2,17 @@
 #include <iostream>
 #include <QFile>
 #include <QFileInfo>
-
+#include "logger.h"
 
 FTPClient::FTPClient(const char *server, QObject *parent) : QObject(parent), m_server{server}
 {
     QObject::connect(this, &FTPClient::connectToServer, &controlChannel, &FtpControlChannel::connectToServer);
-
+    LOGINFO("FTP client initialized");
 }
 
 void FTPClient::Receive(const std::string& fileName)
 {
+    LOGINFO("Receiving file");
     commands.push_back({"USER", "sportspip"});// login)
     commands.push_back({"PORT", ""}  );       // announce port for data connection, args added below.
     commands.push_back({"CWD", "videos"}  );
@@ -26,7 +27,7 @@ void FTPClient::Receive(const std::string& fileName)
     file1.open("/home/manish/git/sp_mssgn_poc/sppad/receive.mp4", std::ios::out | std::ios::binary);
     // Print all data retrieved from the server on the console.
     QObject::connect(&dataChannel, &FtpDataChannel::dataReceived, [&](const QByteArray &data) {
-
+        LOGINFO("Received data...");
         file1.write(data.constData(), data.size());
     });
 
@@ -132,6 +133,7 @@ void FTPClient::InvokeCallback()
 
 void FTPClient::Send(const QString &fileName)
 {
+    LOGINFO("Sending file " + fileName.toLatin1());
     m_fileName = fileName;
     QFileInfo fInfo(m_fileName);
     QString bname = fInfo.baseName();
@@ -149,6 +151,7 @@ void FTPClient::Send(const QString &fileName)
 
     // Print all data retrieved from the server on the console.
     QObject::connect(&dataChannel, &FtpDataChannel::dataReceived, [](const QByteArray &data) {
+        LOGINFO("Received data...");
         std::cout << data.constData();
     });
 

@@ -1,6 +1,8 @@
 #include "viewmodel.h"
 #include <iostream>
 #include "messaging_exceptions.h"
+#include "logger.h"
+#include "messages.h"
 
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
@@ -9,11 +11,13 @@ void viewmodel::OnAcknowledgement(const char *from, const char *args)
 
 void viewmodel::OnException(const char *from, const char *args)
 {
+    LOGERRZ("%d>> %s", from, args);
     throw Messaging::UnknownMessageException();
 }
 
 void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
 {
+    LOGERRZ("%d>> %s", from, args);
     /*
     m_ftp.Receive(args, [](const bool& completedOkay)
     {
@@ -54,10 +58,15 @@ viewmodel::viewmodel(QObject *parent) :
     m_broker{this},
     m_ftp("192.168.1.5")
 {
+
 }
 
 void viewmodel::start()
 {
+    const char * localEP = "tcp://192.168.1.113:8284";
+    LOGINFOZ("Local endpoint: %s", localEP);
+    Messaging::Messages::Factory()->Register(localEP);
+
     m_listener.Listen([&](const std::string &msg) {
 
         std::cout << "Received: " << msg << std::endl;

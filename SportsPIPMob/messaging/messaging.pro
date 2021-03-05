@@ -84,3 +84,9 @@ SOURCES += \
     ../../messaging/messages.cpp \
     ../../messaging/messenger.cpp
 
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../logging/release/ -llogging
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../logging/debug/ -llogging
+else:unix: LIBS += -L$$OUT_PWD/../logging/ -llogging
+
+INCLUDEPATH += $$PWD/../../logging
+DEPENDPATH += $$PWD/../../logging

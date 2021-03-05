@@ -7,9 +7,7 @@
 #include "messenger.h"
 
 using std::string;
-enum MSG_EVENTS_ENUM {
-    NEW_VIDEO_AVAILABLE = 0,
-};
+
 class Worker:public IDelegator
 {
   private:

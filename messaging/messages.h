@@ -1,6 +1,7 @@
 #ifndef MESSAGES_H
 #define MESSAGES_H
 #include <string>
+#include "logger.h"
 using std::string;
 namespace Messaging
 {
@@ -31,6 +32,7 @@ namespace Messaging
         }
         static void Register(const char *endpoint)
         {
+            LOGINFOZ("Messages regitered at endpoint: %s", endpoint);
             s_singleton.m_endpoint = endpoint;
         }
         Message Parse(const char *argMsg);

@@ -1,9 +1,12 @@
 #include "delegate.h"
 #include "messages.h"
 #include <iostream>
+#include "logger.h"
 
 void Messaging::Delegate::OnReceived(const std::string &argMsg)
 {
+    LOGINFO(argMsg.c_str());
+
     Messaging::Message msg = Messaging::Messages::Factory()->Parse(argMsg.c_str());
     switch (msg.task)
     {

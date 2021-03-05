@@ -29,15 +29,22 @@ unix {
 }
 
 HEADERS += \
-    ../../ftpclient/client.h \
+    #../../ftpclient/client.h \
     #../../ftpclient/filemonitor.h \
     ../../ftpclient/ftpclient.h \
     ../../ftpclient/ftpcontrolchannel.h \
     ../../ftpclient/ftpdatachannel.h
 
 SOURCES += \
-    ../../ftpclient/client.cpp \
+    #../../ftpclient/client.cpp \
     #../../ftpclient/filemonitor.cpp \
     ../../ftpclient/ftpclient.cpp \
     ../../ftpclient/ftpcontrolchannel.cpp \
     ../../ftpclient/ftpdatachannel.cpp
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../logging/release/ -llogging
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../logging/debug/ -llogging
+else:unix: LIBS += -L$$OUT_PWD/../logging/ -llogging
+
+INCLUDEPATH += $$PWD/../../logging
+DEPENDPATH += $$PWD/../../logging
