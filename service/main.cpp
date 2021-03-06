@@ -61,7 +61,6 @@ int main(int argc, char *argv[])
         broker.OnReceived(msg);
     });
     
-    // tmonitor.join();
-    cin.ignore();
+    // cin.ignore();
     return 0;
 }

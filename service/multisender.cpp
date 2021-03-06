@@ -14,15 +14,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "multisender.h"
-#include <thread>
 
-MultiSender::MultiSender()
+MultiSender::MultiSender() : m_pth{nullptr}
 {
 }
 
-void MultiSender::Start(const std::string& broadcast)
+void MultiSender::Start(const std::string &broadcast)
 {
-    std::thread t([](const std::string& broadcastRef) -> int {
+    m_pth.reset(new std::thread([](const std::string &broadcastRef) -> int {
         char *group = "239.255.255.250"; // e.g. 239.255.255.250 for SSDP
         int port = 7755;                 // 0 if error, which is an invalid port
                                          // !!! If test requires, make these configurable via args
@@ -85,20 +84,18 @@ void MultiSender::Start(const std::string& broadcast)
         }
 
 #ifdef _WIN32
-        //
-        // Program never actually gets here due to infinite loop that has to be
-        // canceled, but since people on the internet wind up using examples
-        // they find at random in their own code it's good to show what shutting
-        // down cleanly would look like.
-        //
         WSACleanup();
 #endif
 
         return 0;
-    }, broadcast);
-    t.detach();
+    },
+                                broadcast));
 }
 
 MultiSender::~MultiSender()
 {
+    if ((m_pth) && (m_pth->joinable()))
+    {
+        m_pth->join();
+    }
 }

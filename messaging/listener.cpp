@@ -23,14 +23,15 @@ Messaging::Listener::Listener(int port):
     m_sock{nullptr},
     m_close{0},
     m_isInitialized{false},
-    m_port{port}
+    m_port{port},
+    m_pth{nullptr}
 {
     
 }
 
 void Messaging::Listener::Listen(std::function<void(const std::string&)> cb)
 {
-    std::thread background([this](std::function<void(const std::string&)> cb){
+     m_pth.reset(new std::thread([this](std::function<void(const std::string&)> cb){
 
         if(!m_isInitialized) this->init(&this->m_ctx, &this->m_sock);
 
@@ -42,9 +43,8 @@ void Messaging::Listener::Listen(std::function<void(const std::string&)> cb)
             LOGINFOZ("Received: %s", received);
             cb(received);
         }
-    }, cb);
+    }, cb));
 
-    background.detach();
 }
 
 void Messaging::Listener::Close()
@@ -58,5 +58,9 @@ void Messaging::Listener::Close()
 
 Messaging::Listener::~Listener()
 {
+    if ((m_pth) && (m_pth->joinable()))
+    {
+        m_pth->join();
+    }
     this->Close();
 }

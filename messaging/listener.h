@@ -3,6 +3,8 @@
 #include <string>
 #include <functional>
 #include <zmq.hpp>
+#include <thread>
+#include <memory>
 
 using std::string;
 namespace Messaging
@@ -15,6 +17,7 @@ namespace Messaging
     bool m_close, m_isInitialized;
     std::string m_endpoint;
     int m_port;
+    std::unique_ptr<std::thread> m_pth;
 
   private:
     void init(zmq::context_t **argCtx, zmq::socket_t **argSock);
