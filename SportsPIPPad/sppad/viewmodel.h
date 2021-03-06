@@ -9,6 +9,7 @@
 class viewmodel : public QObject, IDelegator
 {
     Q_OBJECT
+    const int PORT = 8286;
     void OnAcknowledgement(const char* from, const char* args) override;
     void OnException(const char* from, const char* args) override;
     void OnNewVideoAvailable(const char* from, const char* args) override;
@@ -17,6 +18,7 @@ class viewmodel : public QObject, IDelegator
     void OnStopRecording(const char* from, const char* args) override;
     void OnVideoFTPComplete(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
+    void OnSourceIdle(const char* from, const char* args) override;
     int m_val;
     int val()
     {
@@ -37,5 +39,6 @@ public:
     Q_INVOKABLE void start();
 signals:
 public slots:
+    void ipSelected(QString ip);
 };
 #endif // TEST_H

@@ -19,6 +19,7 @@ class Worker:public IDelegator
     void OnStopRecording(const char* from, const char* args) override;
     void OnVideoFTPComplete(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
+    void OnSourceIdle(const char* from, const char* args) override;
     std::map<MSG_EVENTS_ENUM, std::vector<std::string>> m_subscriptions;
     Messaging::Messenger m_messenger;
   public:

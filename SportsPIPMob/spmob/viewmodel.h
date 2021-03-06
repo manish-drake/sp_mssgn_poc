@@ -12,6 +12,8 @@
 class viewmodel : public QObject, IDelegator
 {
     Q_OBJECT
+
+    const int PORT = 8284;
     QString m_header, m_body, m_footer;
     void OnAcknowledgement(const char* from, const char* args) override;
     void OnException(const char* from, const char* args) override;
@@ -21,6 +23,7 @@ class viewmodel : public QObject, IDelegator
     void OnStopRecording(const char* from, const char* args) override;
     void OnVideoFTPComplete(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
+    void OnSourceIdle(const char* from, const char* args) override;
 
 
     bool m_isRecording;
@@ -67,6 +70,7 @@ private:
     FTPClient m_ftp;
     bool m_close = false;
 public slots:
+    void ipSelected(QString ip);
 };
 
 #endif // VIEWMODEL_H

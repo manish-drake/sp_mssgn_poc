@@ -8,6 +8,7 @@
 #include "logger.h"
 #include "loggerf.h"
 #include "loggerc.h"
+#include "multisender.h"
 
 
 
@@ -27,9 +28,9 @@ void initLog()
     }
     else
     {
-        Logger::Instance()->Add(new LoggerC("____________________STREAM-DECK EMU____________________"));
+        Logger::Instance()->Add(new LoggerC("____________________SPORTSPIP SERVICE____________________"));
         //#ifndef Q_OS_IOS
-        Logger::Instance()->Add(new LoggerF("____________________STREAM-DECK EMU____________________"));
+        Logger::Instance()->Add(new LoggerF("____________________SPORTSPIP SERVICE____________________"));
         //#endif
     }
 }
@@ -44,12 +45,14 @@ int main(int argc, char *argv[])
     UNUSED(argv);
     initLog();
     
+    MultiSender broadcaster;
+    broadcaster.Start("192.168.10.10");
     
     Worker worker;
 
     Delegate broker(&worker);
 
-    
+
     Listener listener(8285);
     listener.Listen([&](const std::string &msg) {
 

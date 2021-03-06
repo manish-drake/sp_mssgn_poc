@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build-win",
             "program": "${workspaceFolder}/target",
-            "args": [],
+            "args": ["192.168.1.166"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

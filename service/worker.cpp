@@ -37,7 +37,7 @@ void Worker::OnStopRecording(const char *from, const char *args)
 void Worker::OnVideoFTPComplete(const char *from, const char *args)
 {
     LOGINFO("Sending notifcation to all subscribers...");
-    
+
     m_messenger.Send("tcp://localhost:8286", Messaging::Messages::Factory()->MSG_NWVA(args));
     return;
 
@@ -50,6 +50,11 @@ void Worker::OnVideoFTPComplete(const char *from, const char *args)
 void Worker::OnUnknownMessage(const char *from, const char *args)
 {
 }
+
+void Worker::OnSourceIdle(const char *from, const char *args)
+{
+}
+
 Worker::Worker()
 {
 }

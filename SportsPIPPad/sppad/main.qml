@@ -23,6 +23,8 @@ Window {
         anchors.fill: parent
 //        height: 400
 //        width: 600
+
+
         Loader{
             id: ml
             anchors.fill: parent

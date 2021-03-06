@@ -15,9 +15,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+    ../../common/network.cpp \
+    multilistener.cpp \
     viewmodel.cpp \
 
 RESOURCES += qml.qrc
+
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -31,6 +34,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    ../../common/network.h \
+    multilistener.h \
     viewmodel.h \
 
 unix:{
@@ -67,3 +72,5 @@ else:unix: LIBS += -L$$OUT_PWD/../logging/ -llogging
 
 INCLUDEPATH += $$PWD/../../logging
 DEPENDPATH += $$PWD/../../logging
+
+LIBS += -lws2_32

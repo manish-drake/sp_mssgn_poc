@@ -6,12 +6,29 @@ Rectangle {
     property bool pressed: false
     property bool defined: false
     property int clickAction: -1
+    property int modelState: vm.state
+
+    onModelStateChanged: {
+        if(modelState == 0)
+        {
+            pressed = false;
+        }
+    }
+
     id: buttTemplate
     height: size
     width: size
     color: "lightgray"
     border.color: "black"
     radius: size/10
+    onPressedChanged: {
+        lbl.color="#73f188"
+        if(buttTemplate.pressed)
+            buttTemplate.color="gray"
+        else
+            buttTemplate.color="lightgray"
+    }
+
     Text {
         id: lbl
         color: "#939994"
@@ -41,15 +58,9 @@ Rectangle {
         }
         onClicked: {
             valid = vm.run(buttTemplate.clickAction)
-            if(valid)
+            if((valid) && (buttTemplate.clickAction != 2))
             {
                 buttTemplate.pressed = !buttTemplate.pressed
-                lbl.color="#73f188"
-                if(buttTemplate.pressed)
-                    buttTemplate.color="gray"
-                else
-                    buttTemplate.color="lightgray"
-
             }
 
         }

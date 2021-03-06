@@ -5,6 +5,7 @@
 #include "messages.h"
 #include "loggerf.h"
 #include "loggerc.h"
+#include "../common/network.h"
 
 
 void initLog()
@@ -39,6 +40,11 @@ int main(int argc, char *argv[])
     auto ctx = engine.rootContext();
     viewmodel _vm;
     ctx->setContextProperty("vm", &_vm);
+
+    network _net;
+    ctx->setContextProperty("net", &_net);
+    QObject::connect(&_net, &network::ipSelected, &_vm, &viewmodel::ipSelected);
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

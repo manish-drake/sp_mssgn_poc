@@ -10,6 +10,10 @@ Item {
     Column{
         anchors.fill: parent
         visible: !home.isRecording
+        Network{
+            width: parent.width
+        }
+
         Text{
             id:title
             width: parent.width

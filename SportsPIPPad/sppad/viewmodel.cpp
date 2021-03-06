@@ -51,10 +51,15 @@ void viewmodel::OnUnknownMessage(const char *from, const char *args)
 {
 
 }
+
+void viewmodel::OnSourceIdle(const char *from, const char *args)
+{
+
+}
 viewmodel::viewmodel(QObject *parent) :
     QObject(parent),
     m_val(-1),
-    m_listener{8286},
+    m_listener{PORT},
     m_broker{this},
     m_ftp("192.168.1.5")
 {
@@ -63,14 +68,18 @@ viewmodel::viewmodel(QObject *parent) :
 
 void viewmodel::start()
 {
-    const char * localEP = "tcp://192.168.1.113:8284";
-    LOGINFOZ("Local endpoint: %s", localEP);
-    Messaging::Messages::Factory()->Register(localEP);
-
     m_listener.Listen([&](const std::string &msg) {
 
         std::cout << "Received: " << msg << std::endl;
 
         m_broker.OnReceived(msg);
     });
+}
+
+void viewmodel::ipSelected(QString ip)
+{
+    char localAddress[64] = {0};
+    sprintf(localAddress, "tcp://%s:%d", ip.toStdString().c_str(), PORT);
+    Messaging::Messages::Factory()->Register(localAddress);
+    LOGINFOZ("Local address set to %s", localAddress);
 }

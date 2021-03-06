@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>SDButton.qml</file>
         <file>SDPanel.qml</file>
+        <file>Network.qml</file>
     </qresource>
 </RCC>

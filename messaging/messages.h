@@ -43,6 +43,7 @@ namespace Messaging
         std::string MSG_STRT();
         std::string MSG_STOP();
         std::string MSG_VFTP(const std::string &fileName);
+        std::string MSG_SRID();
     };
 } // namespace Messaging
 #endif //MESSAGES_H

@@ -14,6 +14,9 @@ Item {
     }
 
     Column{
+        Network{
+            width: parent.width
+        }
         Rectangle{
             color: "#1E90FF"
             height: ml.height/12

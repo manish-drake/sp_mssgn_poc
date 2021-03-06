@@ -31,5 +31,6 @@
         <file>camera-qml/VideoPreview.qml</file>
         <file>camera-qml/ZoomControl.qml</file>
         <file>CamBox.qml</file>
+        <file>Network.qml</file>
     </qresource>
 </RCC>

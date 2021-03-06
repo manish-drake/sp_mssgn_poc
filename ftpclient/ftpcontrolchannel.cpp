@@ -73,7 +73,7 @@ void FtpControlChannel::command(const QByteArray &command, const QByteArray &par
     QByteArray sendData = command;
     if (!params.isEmpty())
         sendData += " " + params;
-    LOGINFOZ("sending: %s", sendData.data());
+    LOGINFOZ("sending: %s", sendData.toStdString().c_str());
     m_socket.write(sendData + "\r\n");
 }
 
@@ -85,7 +85,7 @@ void FtpControlChannel::onReadyRead()
         QByteArray received = m_buffer.mid(0, rn);
         m_buffer = m_buffer.mid(rn + 2);
         int space = received.indexOf(' ');
-        LOGINFOZ("Received: %s", received.data());
+        LOGINFOZ("Received: %s", received.toStdString().c_str());
         if (space != -1) {
             int code = received.mid(0, space).toInt();
             if (code == 0)

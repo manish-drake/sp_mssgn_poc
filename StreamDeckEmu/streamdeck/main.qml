@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 
-
 Window {
     visible: true
     width: 1440
@@ -26,22 +25,28 @@ Window {
         border.color: "#4d4aad"
         color: "darkgray"
         anchors.centerIn: parent
-        height: 800
+        height: 850
         width: 800
         radius: 5
         Column{
             width: parent.width
             height: parent.height - 50
             anchors.bottom: parent.bottom
+
+           Network{
+               width: parent.width
+           }
+
             Text {
                 id: title
                 color: "#ffffff"
                 width: parent.width
                 anchors.topMargin: 50
                 text: qsTr("Stream Deck Emulator")
-                font.family: "HoloLens MDL2 Assets"
+                font.family: "Arial"
+                font.bold: true
                 horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 50
+                font.pointSize: 40
             }
             SDPanel{
                 size: 800

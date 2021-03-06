@@ -90,6 +90,15 @@ std::string Messaging::Messages::MSG_VFTP(const std::string &fileName)
                      });
 }
 
+string Messaging::Messages::MSG_SRID()
+{
+    return construct({
+                         m_endpoint,
+                         206,
+                         ""
+                     });
+}
+
 Messaging::Messages::~Messages()
 {
 }
