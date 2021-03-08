@@ -39,6 +39,18 @@ void Messaging::Delegate::OnReceived(const std::string &argMsg)
         m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_RCVD());
         m_delegator->OnSourceIdle(msg.from.c_str(), msg.args.c_str());
         break;
+    case 207: //Hand-shake with the service informing about the role
+        m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_RCVD());
+        m_delegator->OnHandshake(msg.from.c_str(), msg.args.c_str());
+        break;
+    case 208: //Hand-shake with the service informing about the role
+        m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_RCVD());
+        m_delegator->OnRequestSources(msg.from.c_str(), msg.args.c_str());
+        break;
+    case 209: //Hand-shake with the service informing about the role
+        m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_RCVD());
+        m_delegator->OnReplySources(msg.from.c_str(), msg.args.c_str());
+        break;
     default:  //unknown message
         m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_UNKN());
         m_delegator->OnUnknownMessage(msg.from.c_str(), msg.args.c_str());

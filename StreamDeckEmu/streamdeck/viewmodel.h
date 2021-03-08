@@ -5,9 +5,9 @@
 #include "listener.h"
 #include "idelegator.h"
 #include <QObject>
-#include "multilistener.h"
+#include "../../common/multilistener.h"
 
-const int PORT = 8283;
+#define PORT 8283
 class viewmodel : public QObject, IDelegator
 {
     Q_OBJECT
@@ -20,11 +20,19 @@ class viewmodel : public QObject, IDelegator
     void OnVideoFTPComplete(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
     void OnSourceIdle(const char* from, const char* args) override;
+    void OnHandshake(const char* from, const char* args) override;
+    void OnRequestSources(const char* from, const char* args) override;
+    void OnReplySources(const char* from, const char* args) override;
+
+
     Messaging::Messenger m_messenger;
     int m_state; //0: [STA=0,STO=0], 1: [STA=1,STA=0], 2: [STA=1,STO=1]
     Messaging::Listener m_listener;
     Messaging::Delegate m_broker;
     MultiListener m_multListener;
+
+    std::string m_epSrv;
+    std::vector<std::string> m_epSrcs;
 private:
     int state() const
     {

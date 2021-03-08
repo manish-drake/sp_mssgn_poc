@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include "messenger.h"
+#include "messages.h"
 
 using std::string;
 
@@ -20,7 +21,11 @@ class Worker:public IDelegator
     void OnVideoFTPComplete(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
     void OnSourceIdle(const char* from, const char* args) override;
-    std::map<MSG_EVENTS_ENUM, std::vector<std::string>> m_subscriptions;
+    void OnHandshake(const char* from, const char* args) override;
+    void OnRequestSources(const char* from, const char* args) override;
+    void OnReplySources(const char* from, const char* args) override;
+    
+    std::map<Messaging::MSG_ROLES_ENUM, std::vector<std::string>> m_subscribers;
     Messaging::Messenger m_messenger;
   public:
     Worker();

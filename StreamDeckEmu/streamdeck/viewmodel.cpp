@@ -4,6 +4,7 @@
 #include "messaging_exceptions.h"
 #include "logger.h"
 #include "../common/network.h"
+#include "csvlist.h"
 
 
 
@@ -52,6 +53,29 @@ void viewmodel::OnSourceIdle(const char *from, const char *args)
 {
     m_state = 0;
 }
+
+void viewmodel::OnHandshake(const char *from, const char *args)
+{
+
+}
+
+void viewmodel::OnRequestSources(const char *from, const char *args)
+{
+
+}
+
+void viewmodel::OnReplySources(const char *from, const char *args)
+{
+    if(sizeof (args) > 0)
+    {
+        CSVList::row list;
+        CSVList::split(args, ",", &list);
+        if(list.size() > 0)
+        {
+            m_epSrcs.insert(m_epSrcs.begin(), list.begin(), list.end());
+        }
+    }
+}
 viewmodel::viewmodel(QObject *parent) :
     QObject(parent),
     m_state{0},
@@ -61,6 +85,7 @@ viewmodel::viewmodel(QObject *parent) :
     LOGINFO("Initializing");
     m_multListener.Start([&](std::string& broadcast){
         LOGINFOZ("Broadcast received %s", broadcast.c_str());
+        m_epSrv = broadcast;
     });
 }
 
@@ -74,7 +99,10 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
     case 0:{
         if(m_state == 0){
             auto start = Messaging::Messages::Factory()->MSG_STRT();
-            //            m_messenger.Send("tcp://192.168.1.94:8284", start);
+            for(auto& src: m_epSrcs)
+            {
+                 m_messenger.Send(src, start);
+            }
             setState(1);
             valid = true;
         }
@@ -83,7 +111,10 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
     case 1:{
         if(m_state == 1){
             auto stop = Messaging::Messages::Factory()->MSG_STOP();
-            //            m_messenger.Send("tcp://192.168.1.94:8284", stop);
+            for(auto& src: m_epSrcs)
+            {
+                 m_messenger.Send(src, stop);
+            }
             setState(2);
             valid = true;
         }

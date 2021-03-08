@@ -30,6 +30,7 @@ Messaging::Message Messaging::Messages::Parse(const char *argMsg)
     };
 }
 
+//acknowledgement received for last sent message
 std::string Messaging::Messages::MSG_RCVD()
 {
     return construct({
@@ -38,6 +39,8 @@ std::string Messaging::Messages::MSG_RCVD()
                          ""
                      });
 }
+
+//last message you sent was unknown
 std::string Messaging::Messages::MSG_UNKN()
 {
     return construct({
@@ -46,6 +49,8 @@ std::string Messaging::Messages::MSG_UNKN()
                          ""
                      });
 }
+
+//notification that the new video is available on server
 std::string Messaging::Messages::MSG_NWVA(const char* args/*name of the new video available*/)
 {
     return construct({
@@ -54,6 +59,8 @@ std::string Messaging::Messages::MSG_NWVA(const char* args/*name of the new vide
                          args
                      });
 }
+
+//request for subscription
 std::string Messaging::Messages::MSG_SCRB(const char* args/*event*/)
 {
     return construct({
@@ -63,6 +70,7 @@ std::string Messaging::Messages::MSG_SCRB(const char* args/*event*/)
                      });
 }
 
+//request for starting the recording
 std::string Messaging::Messages::MSG_STRT()
 {
     return construct({
@@ -72,6 +80,7 @@ std::string Messaging::Messages::MSG_STRT()
                      });
 }
 
+//request for stopping the recording
 std::string Messaging::Messages::MSG_STOP()
 {
     return construct({
@@ -81,6 +90,7 @@ std::string Messaging::Messages::MSG_STOP()
                      });
 }
 
+//notification that the video has been FTPed
 std::string Messaging::Messages::MSG_VFTP(const std::string &fileName)
 {
     return construct({
@@ -90,12 +100,41 @@ std::string Messaging::Messages::MSG_VFTP(const std::string &fileName)
                      });
 }
 
+//notification that the source is idle
 string Messaging::Messages::MSG_SRID()
 {
     return construct({
                          m_endpoint,
                          206,
                          ""
+                     });
+}
+
+//Hand-shake with the service informing about the role
+string Messaging::Messages::MSG_HDSK(Messaging::MSG_ROLES_ENUM role)
+{
+    return construct({
+                         m_endpoint,
+                         207,
+                         std::to_string(role)
+                     });
+}
+
+string Messaging::Messages::MSG_RQSR()
+{
+    return construct({
+                         m_endpoint,
+                         208,
+                         ""
+                     });
+}
+
+string Messaging::Messages::MSG_RPSR(const std::string& csvSources)
+{
+    return construct({
+                         m_endpoint,
+                         209,
+                         csvSources.c_str()
                      });
 }
 
