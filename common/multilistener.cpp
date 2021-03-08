@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <thread>
+#include <map>
+#include "logger.h"
 
 #define MSGBUFSIZE 256
 
@@ -26,21 +28,23 @@ void MultiListener::Start(std::function<void (std::string &)> cb)
 {
     std::thread t([](std::function<void(std::string&)> cbref)->int{
 
+        std::map<std::string,std::string> castsTimestamp;
+
         char* group = "239.255.255.250"; // e.g. 239.255.255.250 for SSDP
         int port = 7755;
-
+        LOGINFOZ("Listening for broadcasts on %s:%d", group, port);
 
 #ifdef _WIN32
         WSADATA wsaData;
         if (WSAStartup(0x0101, &wsaData)) {
-            perror("WSAStartup");
+            LOGERR("WSAStartup, quitting..");
             return 1;
         }
 #endif
 
         int fd = socket(AF_INET, SOCK_DGRAM, 0);
         if (fd < 0) {
-            perror("socket");
+            LOGERR("Socket, quitting..");
             return 1;
         }
 
@@ -50,7 +54,7 @@ void MultiListener::Start(std::function<void (std::string &)> cb)
                     fd, SOL_SOCKET, SO_REUSEADDR, (char*) &yes, sizeof(yes)
                     ) < 0
                 ){
-            perror("Reusing ADDR failed");
+            LOGERR("Reusing ADDR failed, quitting..");
             return 1;
         }
 
@@ -61,7 +65,7 @@ void MultiListener::Start(std::function<void (std::string &)> cb)
         addr.sin_port = htons(port);
 
         if (bind(fd, (struct sockaddr*) &addr, sizeof(addr)) < 0) {
-            perror("bind");
+            LOGERR("Binding, quitting..");
             return 1;
         }
 
@@ -73,7 +77,7 @@ void MultiListener::Start(std::function<void (std::string &)> cb)
                     fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char*) &mreq, sizeof(mreq)
                     ) < 0
                 ){
-            perror("setsockopt");
+            LOGERR("Setsockopt, quiting..");
             return 1;
         }
 
@@ -89,12 +93,21 @@ void MultiListener::Start(std::function<void (std::string &)> cb)
                         &addrlen
                         );
             if (nbytes < 0) {
-                perror("recvfrom");
+                LOGERR("Recvfrom, quitting..");
                 return 1;
             }
             msgbuf[nbytes] = '\0';
+
             std::string msg{msgbuf};
-            cbref(msg);
+            auto idAndTp = msg.substr(0, 2);
+            auto ts = msg.substr(2, 2);
+            if(castsTimestamp[idAndTp] != ts)
+            {
+                castsTimestamp[idAndTp] = ts;
+                auto payload = msg.substr(4, msg.size() - 4);
+                cbref(payload);
+            }
+
         }
 
 #ifdef _WIN32

@@ -16,7 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     ../../common/network.cpp \
-    multilistener.cpp \
+    ../../common/multilistener.cpp \
     viewmodel.cpp \
 
 RESOURCES += qml.qrc
@@ -35,7 +35,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     ../../common/network.h \
-    multilistener.h \
+    ../../common/multilistener.h \
     viewmodel.h \
 
 unix:{

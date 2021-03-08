@@ -1,0 +1,14 @@
+____________________SPORTSPIP SERVICE____________________
+3-8 14:8:25:0 [GetLocalIP::GetLocalIP] Getting local IP addresses..
+3-8 14:8:32:0 [GetLocalIP::Run] Host name is LAPTOP-8VRI4IJJ.
+3-8 14:8:32:0 [GetLocalIP::Run] IP Address ìüw
+____________________SPORTSPIP SERVICE____________________
+3-8 14:9:10:0 [GetLocalIP::GetLocalIP] Getting local IP addresses..
+3-8 14:9:12:0 [GetLocalIP::Run] Host name is LAPTOP-8VRI4IJJ.
+3-8 14:9:12:0 [GetLocalIP::Run] IP Address ìüw
+3-8 14:9:29:0 [Messaging::Listener::init] Starting listener at: tcp://*:8285
+____________________SPORTSPIP SERVICE____________________
+3-8 14:20:2:0 [GetLocalIP::GetLocalIP] Getting local IP addresses..
+3-8 14:20:8:0 [GetLocalIP::Run] Host name is LAPTOP-8VRI4IJJ.
+3-8 14:20:9:0 [GetLocalIP::Run] IP Address ¬üw
+3-8 14:20:12:0 [char**)] Selecting 192.168.10.10 for all further communication.

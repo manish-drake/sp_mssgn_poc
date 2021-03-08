@@ -2,7 +2,6 @@
 #define MULTILISTENER_H
 #include <iostream>
 #include <functional>
-
 class MultiListener
 {
 public:

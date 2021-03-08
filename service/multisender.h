@@ -6,7 +6,7 @@
 
 class MultiSender
 {
-    std::unique_ptr<std::thread> m_pth;
+    std::unique_ptr<std::thread> m_pth;    
 public:
     MultiSender();
 

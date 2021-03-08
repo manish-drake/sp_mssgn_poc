@@ -60,7 +60,7 @@ viewmodel::viewmodel(QObject *parent) :
 {
     LOGINFO("Initializing");
     m_multListener.Start([&](std::string& broadcast){
-        LOGINFO(broadcast);
+        LOGINFOZ("Broadcast received %s", broadcast.c_str());
     });
 }
 

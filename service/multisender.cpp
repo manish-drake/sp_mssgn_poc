@@ -14,25 +14,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "multisender.h"
+#include "logger.h"
 
 MultiSender::MultiSender() : m_pth{nullptr}
 {
+    LOGINFO("Starting multicast service..");
 }
 
 void MultiSender::Start(const std::string &broadcast)
 {
     m_pth.reset(new std::thread([](const std::string &broadcastRef) -> int {
         char *group = "239.255.255.250"; // e.g. 239.255.255.250 for SSDP
-        int port = 7755;                 // 0 if error, which is an invalid port
-                                         // !!! If test requires, make these configurable via args
-        //
+        int port = 7755;                 
+
         const int delay_secs = 2;
         const char *message = broadcastRef.c_str();
+        
+        LOGINFOZ("New thread broadcasting %s on %s:%d at a delay of %d secs", message, group, port, delay_secs);
 
 #ifdef _WIN32
-        //
-        // Initialize Windows Socket API with given VERSION.
-        //
         WSADATA wsaData;
         if (WSAStartup(0x0101, &wsaData))
         {
@@ -41,8 +41,6 @@ void MultiSender::Start(const std::string &broadcast)
         }
 #endif
 
-        // create what looks like an ordinary UDP socket
-        //
         int fd = socket(AF_INET, SOCK_DGRAM, 0);
         if (fd < 0)
         {
@@ -50,16 +48,12 @@ void MultiSender::Start(const std::string &broadcast)
             return 1;
         }
 
-        // set up destination address
-        //
         struct sockaddr_in addr;
         memset(&addr, 0, sizeof(addr));
         addr.sin_family = AF_INET;
         addr.sin_addr.s_addr = inet_addr(group);
         addr.sin_port = htons(port);
 
-        // now just sendto() our destination!
-        //
         while (1)
         {
             char ch = 0;
@@ -77,9 +71,9 @@ void MultiSender::Start(const std::string &broadcast)
             }
 
 #ifdef _WIN32
-            Sleep(delay_secs * 1000); // Windows Sleep is milliseconds
+            Sleep(delay_secs * 1000); 
 #else
-            sleep(delay_secs); // Unix sleep is seconds
+            sleep(delay_secs); 
 #endif
         }
 
@@ -96,6 +90,7 @@ MultiSender::~MultiSender()
 {
     if ((m_pth) && (m_pth->joinable()))
     {
+        LOGINFO("Joining in with main..");
         m_pth->join();
     }
 }
