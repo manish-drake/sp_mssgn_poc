@@ -12,6 +12,7 @@
 #include "multisender.h"
 #include "broadcast.h"
 #include "getlocalip.h"
+#include "messaging_exceptions.h"
 
 void initLog()
 {
@@ -50,17 +51,17 @@ int main(int argc, char *argv[])
     glip->Run(localIps);
     glip.release();
 
+    MultiSender broadcaster;
     if (localIps.size() <= 0)
     {
         LOGWARN("Unabe to find any IP address! Many features will not work without that information");
     }
     else
     {
+
         const std::string &selectedIP = localIps[0];
         LOGINFOZ("Selecting %s for all further communication.", selectedIP.c_str());
-
-        Broadcast::Instance()->Create("0", "0", "00", const_cast<char*>(selectedIP.c_str()));
-        MultiSender broadcaster;
+        Broadcast::Instance()->Create("0", "0", "00", const_cast<char *>(selectedIP.c_str()));
         broadcaster.Start(Broadcast::Instance()->data());
 
         char ep[24] = {};
@@ -75,8 +76,14 @@ int main(int argc, char *argv[])
     Listener listener(PORT);
     listener.Listen([&](const std::string &msg) {
         std::cout << "Received: " << msg << std::endl;
-
-        broker.OnReceived(msg);
+        try
+        {
+            broker.OnReceived(msg);
+        }
+        catch (Messaging::UnknownMessageException &ex)
+        {
+            LOGERRZ("err: %s", ex.what());
+        }
     });
 
     // cin.ignore();

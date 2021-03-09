@@ -8,29 +8,20 @@
 #include <QStandardPaths>
 #include <QDir>
 #include "logger.h"
+#include "csvlist.h"
 
 
 
 using namespace Messaging;
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
-
+    LOGINFOZ("%s -ack-> %s", from, args);
 }
 
 void viewmodel::OnException(const char *from, const char *args)
 {
-    LOGERRZ("%d>> %s", from, args);
+    LOGERRZ("%s -err-> %s", from, args);
     throw Messaging::UnknownMessageException();
-}
-
-void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
-{
-
-}
-
-void viewmodel::OnSubscription(const char *from, const char *args)
-{
-
 }
 
 void viewmodel::OnStartRecording(const char *from, const char *args)
@@ -50,22 +41,25 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
 
     LOGINFOZ("Sending %s to server..", m_fileName.data());
     setBody("File found");
-    m_ftp.Send(m_fileName);
-}
-
-void viewmodel::OnVideoFTPComplete(const char *from, const char *args)
-{
-
+    m_ftp.Send(m_fileName, QString::fromStdString(m_epSrv));
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
 {
-
+    LOGWARNZ("%s -ukn-> %s", from, args);
 }
 
-void viewmodel::OnSourceIdle(const char *from, const char *args)
+void viewmodel::OnReplySources(const char *from, const char *args)
 {
-
+    if(sizeof (args) > 0)
+    {
+        CSVList::row list;
+        CSVList::split(args, ",", &list);
+        if(list.size() > 0)
+        {
+            m_epSrcs.insert(m_epSrcs.begin(), list.begin(), list.end());
+        }
+    }
 }
 
 viewmodel::viewmodel(QObject *parent) :
@@ -75,8 +69,7 @@ viewmodel::viewmodel(QObject *parent) :
     m_footer{""},
     m_isRecording{false},
     m_broker{this},
-    m_listener{PORT},
-    m_ftp{"192.168.1.166"}
+    m_listener{PORT}
 {    
     LOGINFO("Initializing local storage..");
     QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
@@ -93,6 +86,13 @@ viewmodel::viewmodel(QObject *parent) :
     }
     m_fileName = appMediaFolder.append("/video1.mp4");
     LOGINFOZ("Target media file: %s", m_fileName.data());
+    LOGINFO("Initializing");
+
+    m_multListener.Start([&](const std::string & serverId, const std::string &msgType, const std::string & broadcast){
+        LOGINFOZ("Broadcast received %s", broadcast.c_str());
+        m_epSrv = "tcp://" + broadcast + ":8285";
+        m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
+    });
 }
 
 viewmodel::~viewmodel()

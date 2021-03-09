@@ -12,9 +12,11 @@ void Messaging::Messenger::Send(std::string to, const std::string &argMsg)
 
     zmq::context_t ctx(1);
     zmq::socket_t sock(ctx, ZMQ_DEALER);
-    zmq::message_t msg(argMsg.begin(), argMsg.end());
+    zmq::message_t msg(argMsg.c_str(), argMsg.size());
     sock.connect(to.c_str());
-    sock.send(msg);
+    sock.send(msg, zmq::send_flags::dontwait);
+    sock.close();
+    ctx.close();
 }
 
 

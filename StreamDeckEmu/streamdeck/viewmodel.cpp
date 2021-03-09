@@ -10,58 +10,23 @@
 
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
-
+    LOGINFOZ("%s -ack-> %s", from, args);
 }
 
 void viewmodel::OnException(const char *from, const char *args)
 {
-
+    LOGERRZ("%s -err-> %s", from, args);
     throw Messaging::UnknownMessageException();
-}
-
-void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
-{
-
-}
-
-void viewmodel::OnSubscription(const char *from, const char *args)
-{
-
-}
-
-void viewmodel::OnStartRecording(const char *from, const char *args)
-{
-
-}
-
-void viewmodel::OnStopRecording(const char *from, const char *args)
-{
-
-}
-
-void viewmodel::OnVideoFTPComplete(const char *from, const char *args)
-{
-
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
 {
-
+    LOGWARNZ("%s -ukn-> %s", from, args);
 }
 
 void viewmodel::OnSourceIdle(const char *from, const char *args)
 {
     m_state = 0;
-}
-
-void viewmodel::OnHandshake(const char *from, const char *args)
-{
-
-}
-
-void viewmodel::OnRequestSources(const char *from, const char *args)
-{
-
 }
 
 void viewmodel::OnReplySources(const char *from, const char *args)
@@ -83,9 +48,11 @@ viewmodel::viewmodel(QObject *parent) :
     m_broker{this}
 {
     LOGINFO("Initializing");
-    m_multListener.Start([&](std::string& broadcast){
+    m_multListener.Start([&](const std::string & serverId, const std::string &msgType, const std::string & broadcast){
         LOGINFOZ("Broadcast received %s", broadcast.c_str());
-        m_epSrv = broadcast;
+
+        m_epSrv = "tcp://" + broadcast + ":8285";
+        m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
     });
 }
 

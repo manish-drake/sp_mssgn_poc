@@ -3,7 +3,7 @@ QT += network
 
 TARGET = messaging
 TEMPLATE = lib
-CONFIG += c++11
+CONFIG += c++14
 
 DEFINES += MESSAGING_LIBRARY
 

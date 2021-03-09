@@ -3,6 +3,7 @@
 #include <string.h>
 #include <string>     // std::string, std::stoi
 #include <sstream>
+#include "../common/patch.h"
 
 Messaging::Messages Messaging::Messages::s_singleton;
 
@@ -116,7 +117,7 @@ string Messaging::Messages::MSG_HDSK(Messaging::MSG_ROLES_ENUM role)
     return construct({
                          m_endpoint,
                          207,
-                         std::to_string(role)
+                         patch::to_string(role)
                      });
 }
 

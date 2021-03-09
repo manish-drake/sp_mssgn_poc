@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ../../common/multilistener.cpp \
     ../../common/network.cpp \
         main.cpp \
         viewmodel.cpp \
@@ -37,6 +38,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 
 HEADERS += \
+    ../../common/multilistener.h \
     ../../common/network.h \
     viewmodel.h
 #######################ZMQ REFERENCES######################

@@ -6,64 +6,36 @@
 
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
-
+    LOGINFOZ("%s -ack-> %s", from, args);
 }
 
 void viewmodel::OnException(const char *from, const char *args)
 {
-    LOGERRZ("%d>> %s", from, args);
+    LOGERRZ("%s -err-> %s", from, args);
     throw Messaging::UnknownMessageException();
 }
 
 void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
-{
-    LOGERRZ("%d>> %s", from, args);
-    /*
-    m_ftp.Receive(args, [](const bool& completedOkay)
-    {
-        std::cout << "Video fetch status: " << completedOkay << std::endl;
-    });
-
-*/
-}
-
-void viewmodel::OnSubscription(const char *from, const char *args)
-{
-
-}
-
-void viewmodel::OnStartRecording(const char *from, const char *args)
-{
-
-}
-
-void viewmodel::OnStopRecording(const char *from, const char *args)
-{
-
-}
-
-void viewmodel::OnVideoFTPComplete(const char *from, const char *args)
 {
 
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
 {
-
+    LOGWARNZ("%s -ukn-> %s", from, args);
 }
 
-void viewmodel::OnSourceIdle(const char *from, const char *args)
-{
-
-}
 viewmodel::viewmodel(QObject *parent) :
     QObject(parent),
     m_val(-1),
     m_listener{PORT},
-    m_broker{this},
-    m_ftp("192.168.1.5")
+    m_broker{this}
 {
-
+    m_multListener.Start([&](const std::string & serverId, const std::string &msgType, const std::string & broadcast){
+        LOGINFOZ("Broadcast received %s", broadcast.c_str());
+        m_epSrv = "tcp://" + broadcast + ":8285";
+        m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
+    });
 }
 
 void viewmodel::start()

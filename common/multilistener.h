@@ -7,7 +7,7 @@ class MultiListener
 public:
     MultiListener();
 
-    void Start(std::function<void(std::string&)> cb);
+    void Start(std::function<void(const std::string &, const std::string &, const std::string &)> cb);
     ~MultiListener();
 };
 

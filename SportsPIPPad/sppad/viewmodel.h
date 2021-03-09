@@ -5,21 +5,22 @@
 #include "delegate.h"
 #include "idelegator.h"
 #include "ftpclient.h"
+#include "messenger.h"
+#include "../../common/multilistener.h"
 
+#define PORT 8286
 class viewmodel : public QObject, IDelegator
 {
     Q_OBJECT
-    const int PORT = 8286;
     void OnAcknowledgement(const char* from, const char* args) override;
     void OnException(const char* from, const char* args) override;
     void OnNewVideoAvailable(const char* from, const char* args) override;
-    void OnSubscription(const char* from, const char* args) override;
-    void OnStartRecording(const char* from, const char* args) override;
-    void OnStopRecording(const char* from, const char* args) override;
-    void OnVideoFTPComplete(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
-    void OnSourceIdle(const char* from, const char* args) override;
     int m_val;
+    MultiListener m_multListener;
+
+    std::string m_epSrv;
+    std::vector<std::string> m_epSrcs;
     int val()
     {
         return m_val;
@@ -32,6 +33,7 @@ class viewmodel : public QObject, IDelegator
 
     Messaging::Listener m_listener;
     Messaging::Delegate m_broker;
+    Messaging::Messenger m_messenger;
     FTPClient m_ftp;
 public:
     explicit viewmodel(QObject *parent = nullptr);

@@ -4,6 +4,7 @@
 #include <cstring>
 #include "logger.h"
 #include <algorithm>
+#include "messages.h"
 
 
 const char* MsgRoleStr(Messaging::MSG_ROLES_ENUM role)
@@ -14,16 +15,13 @@ const char* MsgRoleStr(Messaging::MSG_ROLES_ENUM role)
 
 void Worker::OnAcknowledgement(const char *from, const char *args)
 {
+    LOGINFOZ("%s -ack-> %s", from, args);
 }
 
 void Worker::OnException(const char *from, const char *args)
 {
-    LOGERRZ("%d>> %s", from, args);
+    LOGERRZ("%s -err-> %s", from, args);
     throw Messaging::UnknownMessageException();
-}
-
-void Worker::OnNewVideoAvailable(const char *from, const char *args)
-{
 }
 
 void Worker::OnSubscription(const char *from, const char *args)
@@ -32,29 +30,18 @@ void Worker::OnSubscription(const char *from, const char *args)
     auto event = std::stoi(args);
 }
 
-void Worker::OnStartRecording(const char *from, const char *args)
-{
-    
-}
-
-void Worker::OnStopRecording(const char *from, const char *args)
-{
-}
-
 void Worker::OnVideoFTPComplete(const char *from, const char *args)
 {
     LOGINFO("Sending notifcation to all subscribers...");
-
-    m_messenger.Send("tcp://localhost:8286", Messaging::Messages::Factory()->MSG_NWVA(args));
+    for(auto& src: m_subscribers[Messaging::MSG_ROLES_ENUM::CONSUMER])
+        m_messenger.Send(src, Messaging::Messages::Factory()->MSG_NWVA(args));
 }
 
 void Worker::OnUnknownMessage(const char *from, const char *args)
 {
+    LOGWARNZ("%s -ukn-> %s", from, args);
 }
 
-void Worker::OnSourceIdle(const char *from, const char *args)
-{
-}
 
 void Worker::OnHandshake(const char *from, const char *args)
 {
@@ -81,10 +68,6 @@ void Worker::OnRequestSources(const char *from, const char *args)
     m_messenger.Send(from, csvSources);
 }
 
-void Worker::OnReplySources(const char *from, const char *args)
-{
-
-}
 Worker::Worker()
 {
 }

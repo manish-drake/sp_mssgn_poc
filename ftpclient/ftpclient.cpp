@@ -4,13 +4,14 @@
 #include <QFileInfo>
 #include "logger.h"
 
-FTPClient::FTPClient(const char *server, QObject *parent) : QObject(parent), m_server{server}
+FTPClient::FTPClient(QObject *parent)
 {
     QObject::connect(this, &FTPClient::connectToServer, &controlChannel, &FtpControlChannel::connectToServer);
     LOGINFO("FTP client initialized");
 }
 
-void FTPClient::Receive(const std::string& fileName)
+
+void FTPClient::Receive(const std::string& fileName, const QString &server)
 {
     LOGINFO("Receiving file");
     commands.push_back({"USER", "sportspip"});// login)
@@ -116,7 +117,7 @@ void FTPClient::Receive(const std::string& fileName)
     });
     qDebug()<< "Post:" << 6;
     // Connect to our own local FTP server
-    emit connectToServer(0);
+    emit connectToServer(server);
     qDebug()<< "Post:" << 7;
 
 }
@@ -131,7 +132,7 @@ void FTPClient::InvokeCallback()
 */
 }
 
-void FTPClient::Send(const QString &fileName)
+void FTPClient::Send(const QString &fileName, const QString &server)
 {
     LOGINFO("Sending file " + fileName.toLatin1());
     m_fileName = fileName;
@@ -275,6 +276,6 @@ void FTPClient::Send(const QString &fileName)
     qDebug()<< "Post:" << 6;
     // Connect to our own local FTP server
     //controlChannel.connectToServer(QString::fromStdString(m_server));
-    emit connectToServer(QString::fromStdString(m_server));
+    emit connectToServer(server);
     qDebug()<< "Post:" << 7;
 }

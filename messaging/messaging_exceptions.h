@@ -7,6 +7,7 @@ namespace Messaging
 {
     class UnknownMessageException: public std::exception
     {
+    public:
         const char* what() const noexcept
         {
             return "Unknown message.";

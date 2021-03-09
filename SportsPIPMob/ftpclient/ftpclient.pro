@@ -31,6 +31,7 @@ unix {
 HEADERS += \
     #../../ftpclient/client.h \
     #../../ftpclient/filemonitor.h \
+    ../../common/patch.h \
     ../../ftpclient/ftpclient.h \
     ../../ftpclient/ftpcontrolchannel.h \
     ../../ftpclient/ftpdatachannel.h

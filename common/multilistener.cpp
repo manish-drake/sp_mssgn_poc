@@ -24,9 +24,9 @@ MultiListener::MultiListener()
 {
 }
 
-void MultiListener::Start(std::function<void (std::string &)> cb)
+void MultiListener::Start(std::function<void (const std::string &, const std::string &, const std::string &)> cb)
 {
-    std::thread t([](std::function<void(std::string&)> cbref)->int{
+    std::thread t([](std::function<void(const std::string &, const std::string &, const std::string &)> cbref)->int{
 
         std::map<std::string,std::string> castsTimestamp;
 
@@ -105,7 +105,10 @@ void MultiListener::Start(std::function<void (std::string &)> cb)
             {
                 castsTimestamp[idAndTp] = ts;
                 auto payload = msg.substr(4, msg.size() - 4);
-                cbref(payload);
+                auto id = msg.substr(0, 1);
+                auto tp = msg.substr(1, 1);
+
+                cbref(id, tp, payload);
             }
 
         }
