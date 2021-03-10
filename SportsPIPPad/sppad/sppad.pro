@@ -98,3 +98,5 @@ else:unix: LIBS += -L$$OUT_PWD/../logging/ -llogging
 
 INCLUDEPATH += $$PWD/../../logging
 DEPENDPATH += $$PWD/../../logging
+
+win32: LIBS += -lws2_32

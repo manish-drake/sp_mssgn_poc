@@ -34,7 +34,10 @@ viewmodel::viewmodel(QObject *parent) :
     m_multListener.Start([&](const std::string & serverId, const std::string &msgType, const std::string & broadcast){
         LOGINFOZ("Broadcast received %s", broadcast.c_str());
         m_epSrv = "tcp://" + broadcast + ":8285";
-        m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
+        if(Messaging::Messages::IsRegistered())
+            m_messenger.Send(m_epSrv,
+                             Messaging::Messages::Factory()->
+                             MSG_HDSK(Messaging::MSG_ROLES_ENUM::CONSUMER));
     });
 }
 
@@ -54,4 +57,8 @@ void viewmodel::ipSelected(QString ip)
     sprintf(localAddress, "tcp://%s:%d", ip.toStdString().c_str(), PORT);
     Messaging::Messages::Factory()->Register(localAddress);
     LOGINFOZ("Local address set to %s", localAddress);
+    if(!m_epSrv.empty())
+        m_messenger.Send(m_epSrv,
+                         Messaging::Messages::Factory()->
+                         MSG_HDSK(Messaging::MSG_ROLES_ENUM::CONSUMER));
 }
