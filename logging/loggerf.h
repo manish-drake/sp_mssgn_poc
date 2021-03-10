@@ -18,7 +18,7 @@ class LoggerF : public Logger
     FILE *m_fp;
   public:
     LoggerF();
-    LoggerF(const char* logHead);
+    LoggerF(const char* logHead, string path = "");
     ~LoggerF();
 };
 

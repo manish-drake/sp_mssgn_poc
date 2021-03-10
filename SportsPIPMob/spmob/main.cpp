@@ -7,16 +7,18 @@
 #include "loggerf.h"
 #include "loggerc.h"
 #include "../common/network.h"
+#include <QStandardPaths>
+#include <QDir>
 
 
-void initLog()
+void initLog(std::string path = "")
 {
     const char *logOut = getenv("LOG_OUT");
     if(logOut)
     {
         if (strcmp(logOut, "0") == 0)
         {
-            Logger::Instance()->Add(new LoggerF);
+            Logger::Instance()->Add(new LoggerF("____________________SPORTSPIP SOURCE____________________", path));
         }
         else
         {
@@ -27,7 +29,7 @@ void initLog()
     {
         Logger::Instance()->Add(new LoggerC("____________________SPORTSPIP SOURCE____________________"));
         //#ifndef Q_OS_IOS
-        Logger::Instance()->Add(new LoggerF("____________________SPORTSPIP SOURCE____________________"));
+        Logger::Instance()->Add(new LoggerF("____________________SPORTSPIP SOURCE____________________", path));
         //#endif
     }
 }
@@ -38,7 +40,20 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
-    initLog();
+
+    /***********Initializing Log Location************/
+    QString localPath = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation );
+
+    QString appLogFolder = localPath.append("/SportsPIP/Logs");
+
+    QDir dAppMediaFolder(appLogFolder);
+    if (!dAppMediaFolder.exists())
+    {
+        dAppMediaFolder.mkpath(".");
+    }
+    /************************************************/
+
+    initLog(appLogFolder.toStdString());
 
     QQmlApplicationEngine engine;
     auto ctx = engine.rootContext();
