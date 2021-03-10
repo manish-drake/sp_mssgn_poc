@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include <algorithm>
+#include <sstream>
 
 CSVList::CSVList()
 {
@@ -10,22 +12,20 @@ CSVList::CSVList()
 CSVList::CSVList(const char *fields) : CSVList()
 {
     std::cout << "CSV List Created" << std::endl;
-    split(fields, DL, &m_fields); 
+    split(fields, DL, &m_fields);
 }
 
 void CSVList::split(const char *str, const char *delimitter, row *collection)
 {
     collection->clear();
-    char workingCopy[MAX_ROW_SZ] = {0};
-    strcpy(workingCopy, str);
-    char *ptr = strtok(workingCopy, delimitter);
-    while (ptr)
+    std::stringstream ss(str);
+    std::string elem;
+    while (std::getline(ss, elem, delimitter[0]))
     {
-        collection->push_back(ptr);
-        ptr = strtok(nullptr, delimitter);
+        collection->push_back(std::move(elem));
     }
 }
- 
+
 std::string *CSVList::get(const row::size_type &row, const row::size_type &col)
 {
     return &m_rows[row][col];
@@ -72,13 +72,33 @@ void CSVList::Open(const char *filename)
     }
     fclose(fp);
 }
+CSVList::prows CSVList::Filter(const filter &filter, CSVList::prows &rows)
+{
+    CSVList::prows newProws;
+    switch (filter.operand)
+    {
+    case filterOperand::EqualTo:
+        for (auto &pcsv : rows)
+        {
+            auto &csv = *pcsv;
+            if (*csv[filter.lhs] == filter.rhs)
+            {
+                newProws.push_back(&csv);
+            }
+        }
+        break;
+    default:
+        break;
+    }
+    return newProws;
+}
 
-CSVList::prows &CSVList::Filter(const filter &filter)
+CSVList::prows &CSVList::Filter(const filter &filter, CSVList::rows &rows)
 {
     switch (filter.operand)
     {
     case filterOperand::EqualTo:
-        for (auto &csv : m_rows)
+        for (auto &csv : rows)
         {
             if (*csv[filter.lhs] == filter.rhs)
             {
@@ -91,12 +111,22 @@ CSVList::prows &CSVList::Filter(const filter &filter)
     }
     return m_filteredList;
 }
+
 CSVList::prows &CSVList::Filter(const std::vector<filter> &filters)
 {
+    bool init = false;
     m_filteredList.clear();
     for (auto &fltr : filters)
     {
-        Filter(fltr);
+        if (init)
+        {
+            m_filteredList = Filter(fltr, m_filteredList);
+        }
+        else
+        {
+            init = true;
+            Filter(fltr, m_rows);
+        }
     }
     return m_filteredList;
 }

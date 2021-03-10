@@ -31,6 +31,7 @@ void viewmodel::OnSourceIdle(const char *from, const char *args)
 
 void viewmodel::OnReplySources(const char *from, const char *args)
 {
+    m_epSrcs.clear();
     if(sizeof (args) > 0)
     {
         CSVList::row list;
@@ -40,6 +41,9 @@ void viewmodel::OnReplySources(const char *from, const char *args)
             m_epSrcs.insert(m_epSrcs.begin(), list.begin(), list.end());
         }
     }
+
+    if(m_epSrcs.size() > 0) setState(1);
+    emit sourecesChanged();
 }
 viewmodel::viewmodel(QObject *parent) :
     QObject(parent),
@@ -52,7 +56,10 @@ viewmodel::viewmodel(QObject *parent) :
         LOGINFOZ("Broadcast received %s", broadcast.c_str());
 
         m_epSrv = "tcp://" + broadcast + ":8285";
-        m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
+        if(Messaging::Messages::IsRegistered())
+            m_messenger.Send(m_epSrv,
+                             Messaging::Messages::Factory()->
+                             MSG_HDSK(Messaging::MSG_ROLES_ENUM::CONTROLLER));
     });
 }
 
@@ -64,34 +71,40 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
 
     switch (argAction) {
     case 0:{
-        if(m_state == 0){
+        if(m_state == 1){
             auto start = Messaging::Messages::Factory()->MSG_STRT();
             for(auto& src: m_epSrcs)
             {
                  m_messenger.Send(src, start);
-            }
-            setState(1);
-            valid = true;
-        }
-        break;
-    }
-    case 1:{
-        if(m_state == 1){
-            auto stop = Messaging::Messages::Factory()->MSG_STOP();
-            for(auto& src: m_epSrcs)
-            {
-                 m_messenger.Send(src, stop);
             }
             setState(2);
             valid = true;
         }
         break;
     }
-    case 2:{
+    case 1:{
         if(m_state == 2){
+            auto stop = Messaging::Messages::Factory()->MSG_STOP();
+            for(auto& src: m_epSrcs)
+            {
+                 m_messenger.Send(src, stop);
+            }
+            setState(3);
+            valid = true;
+        }
+        break;
+    }
+    case 2:{
+        if(m_state == 3){
             setState(0);
             valid = true;
         }
+        break;
+    }        
+    case 100:{
+        setState(0);
+        m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_RQSR());
+        valid = true;
         break;
     }
     default:
@@ -114,4 +127,8 @@ void viewmodel::ipSelected(QString ip)
     sprintf(localAddress, "tcp://%s:%d", ip.toStdString().c_str(), PORT);
     Messaging::Messages::Factory()->Register(localAddress);
     LOGINFOZ("Local address set to %s", localAddress);
+    if(!m_epSrv.empty())
+        m_messenger.Send(m_epSrv,
+                         Messaging::Messages::Factory()->
+                         MSG_HDSK(Messaging::MSG_ROLES_ENUM::CONTROLLER));
 }

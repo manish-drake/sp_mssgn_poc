@@ -15,7 +15,7 @@ Messaging::Messages::Messages()
 std::string Messaging::Messages::construct(Messaging::Message argMsg)
 {
     std::stringstream ss;
-    ss << argMsg.from << DLM << argMsg.task << DLM << argMsg.args;
+    ss << argMsg.from << DLM << argMsg.task << DLM << argMsg.args ;
     return ss.str();
 }
 Messaging::Message Messaging::Messages::Parse(const char *argMsg)

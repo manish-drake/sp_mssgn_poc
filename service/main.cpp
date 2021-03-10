@@ -59,13 +59,13 @@ int main(int argc, char *argv[])
     else
     {
 
-        const std::string &selectedIP = localIps[0];
+        const std::string &selectedIP = localIps[1];
         LOGINFOZ("Selecting %s for all further communication.", selectedIP.c_str());
         Broadcast::Instance()->Create("0", "0", "00", const_cast<char *>(selectedIP.c_str()));
         broadcaster.Start(Broadcast::Instance()->data());
 
         char ep[24] = {};
-        sprintf(ep, "%s:%d", selectedIP.c_str(), PORT);
+        sprintf(ep, "tcp://%s:%d", selectedIP.c_str(), PORT);
         Messaging::Messages::Register(ep);
     }
 

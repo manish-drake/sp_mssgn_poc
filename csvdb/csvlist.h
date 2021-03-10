@@ -27,12 +27,11 @@ class CSVList
 {
 public:
     using row = std::vector<std::string>;
-
 private:
     struct csv
     {
         row m_row;
-        row *m_fields;
+        row* m_fields;
         std::string toString()
         {
             std::string strRow = "";
@@ -84,9 +83,21 @@ private:
             else
                 return nullptr;
         }
+        bool trySet(const char* fieldName, const char* value)
+        {
+            int index = colIndex(fieldName);
+            if (index >= 0)
+            {
+                m_row[index] = value;
+                return true;
+            }
+            else
+                return false;
+        }
     };
     using rows = std::vector<csv>;
     using const_row_iterator = rows::const_iterator;
+    using row_iterator = rows::iterator;
 
     row m_fields;
     rows m_rows;
@@ -111,23 +122,28 @@ public:
 
 private:
     prows m_filteredList;
+    prows Filter(const filter &filter, CSVList::prows &rows);
+    prows &Filter(const filter &filter, CSVList::rows &rows);
 
 public:
     CSVList();
     CSVList(const char *fields);
     void Add(const char *data);
-    const_row_iterator begin() const
-    {
-        return m_rows.cbegin();
-    }
-    const_row_iterator end() const
-    {
-        return m_rows.cend();
-    }
+    // const_row_iterator begin() const
+    // {
+    //     return m_rows.cbegin();
+    // }
+    // const_row_iterator end() const
+    // {
+    //     return m_rows.cend();
+    // }
+    csv* begin() { return &m_rows[0]; }
+    const csv* begin() const { return &m_rows[0]; }
+    csv* end() { return &m_rows[m_rows.size()]; }
+    const csv* end() const { return &m_rows[m_rows.size()]; }
 
     void Save(const char *filename);
     void Open(const char *filename);
-    prows &Filter(const filter &filter);
     prows &Filter(const std::vector<filter> &filters);
 
     std::string *operator[](const std::string &fieldName)

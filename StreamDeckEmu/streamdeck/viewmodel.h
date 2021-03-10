@@ -48,6 +48,7 @@ public:
 
 signals:
     void stateChanged();
+    void sourecesChanged();
 public slots:
     void ipSelected(QString ip);
 };

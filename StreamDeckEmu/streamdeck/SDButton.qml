@@ -7,11 +7,18 @@ Rectangle {
     property bool defined: false
     property int clickAction: -1
     property int modelState: vm.state
+    property int actvState: 5
 
     onModelStateChanged: {
-        if(modelState == 0)
+        if(buttTemplate.actvState <= modelState)
         {
             pressed = false;
+            buttTemplate.defined = true;
+        }
+        else
+        {
+            pressed = false;
+            buttTemplate.defined = false;
         }
     }
 
@@ -58,7 +65,7 @@ Rectangle {
         }
         onClicked: {
             valid = vm.run(buttTemplate.clickAction)
-            if((valid) && (buttTemplate.clickAction != 2))
+            if((valid) && (buttTemplate.clickAction != 100) && (buttTemplate.clickAction != 2))
             {
                 buttTemplate.pressed = !buttTemplate.pressed
             }

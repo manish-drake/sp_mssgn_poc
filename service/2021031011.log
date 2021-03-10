@@ -1,0 +1,28 @@
+____________________SPORTSPIP SERVICE____________________
+3-10 11:49:9:0 [GetLocalIP::GetLocalIP] Getting local IP addresses..
+3-10 11:49:9:0 [GetLocalIP::Run] Host name is LAPTOP-8VRI4IJJ.
+3-10 11:49:9:0 [GetLocalIP::Run] IP Address 192.168.10.10
+3-10 11:49:9:0 [MultiSender::MultiSender] Starting multicast service..
+3-10 11:49:9:0 [char**)] Selecting 192.168.10.10 for all further communication.
+3-10 11:49:9:0 [Messaging::Messages::Register] Messages regitered at endpoint: 192.168.10.10:8285
+3-10 11:49:9:0 [MultiSender::Start(const string&)::<lambda] New thread broadcasting 0000192.168.10.10 on 239.255.255.250:7755 at a delay of 2 secs
+3-10 11:49:9:0 [Messaging::Listener::init] Starting listener at: tcp://*:8285
+3-10 11:49:24:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|207|0
+3-10 11:49:30:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|207|0
+3-10 11:50:10:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: 192.168.10.10:8285|200|
+3-10 11:50:42:0 [Worker::OnHandshake] tcp://192.168.10.10:8283 added to the role Source
+3-10 11:51:35:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: |207|0
+3-10 11:51:38:0 [Messaging::Delegate::OnReceived] |207|0
+3-10 11:52:7:1 [OnReceived] The message sender is missing. Disposing of the message.
+3-10 11:52:14:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|207|0
+3-10 11:52:25:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|207|0
+3-10 11:52:36:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: 192.168.10.10:8285|200|
+____________________SPORTSPIP SERVICE____________________
+3-10 11:55:5:0 [GetLocalIP::GetLocalIP] Getting local IP addresses..
+3-10 11:55:5:0 [GetLocalIP::Run] Host name is LAPTOP-8VRI4IJJ.
+3-10 11:55:5:0 [GetLocalIP::Run] IP Address 192.168.10.10
+3-10 11:55:5:0 [MultiSender::MultiSender] Starting multicast service..
+3-10 11:55:5:0 [char**)] Selecting 192.168.10.10 for all further communication.
+3-10 11:55:5:0 [Messaging::Messages::Register] Messages regitered at endpoint: 192.168.10.10:8285
+3-10 11:55:5:0 [MultiSender::Start(const string&)::<lambda] New thread broadcasting 0000192.168.10.10 on 239.255.255.250:7755 at a delay of 2 secs
+3-10 11:55:5:0 [Messaging::Listener::init] Starting listener at: tcp://*:8285

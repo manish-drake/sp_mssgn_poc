@@ -8,18 +8,18 @@ Window {
     title: qsTr("Emulator - Stream Deck")
     ListModel{
         id: pnlModel
-        ListElement{ working: true;  action: "Start" ; arg:  0}
-        ListElement{ working: true;  action: "Stop"  ; arg:  1}
-        ListElement{ working: true;  action: "Reset"; arg: 2}
-        ListElement{ working: false;  action: "u/def"; arg: -1}
-        ListElement{ working: false;  action: "u/def"; arg: -1}
-        ListElement{ working: false;  action: "u/def"; arg: -1}
-        ListElement{ working: false;  action: "u/def"; arg: -1}
-        ListElement{ working: false;  action: "u/def"; arg: -1}
-        ListElement{ working: false;  action: "u/def"; arg: -1}
-        ListElement{ working: false;  action: "u/def"; arg: -1}
-        ListElement{ working: false;  action: "u/def"; arg: -1}
-        ListElement{ working: false;  action: "u/def"; arg: -1}
+        ListElement{ working: true;  action: "Req.\nSrcs."; activeState:0  ; arg: 100}
+        ListElement{ working: false;  action: "Start"     ; activeState:1  ; arg: 0}
+        ListElement{ working: false;  action: "Stop"      ; activeState:2  ; arg: 1}
+        ListElement{ working: false;  action: "u/def"     ; activeState:5  ; arg: -1}
+        ListElement{ working: false;  action: "u/def"     ; activeState:5  ; arg: -1}
+        ListElement{ working: false;  action: "u/def"     ; activeState:5  ; arg: -1}
+        ListElement{ working: false;  action: "u/def"     ; activeState:5  ; arg: -1}
+        ListElement{ working: false;  action: "u/def"     ; activeState:5  ; arg: -1}
+        ListElement{ working: false;  action: "u/def"     ; activeState:5  ; arg: -1}
+        ListElement{ working: false;  action: "u/def"     ; activeState:5  ; arg: -1}
+        ListElement{ working: false;  action: "u/def"     ; activeState:5  ; arg: -1}
+        ListElement{ working: false;  action: "reset"     ; activeState:3  ; arg: 2}
     }
     Rectangle{
         border.color: "#4d4aad"

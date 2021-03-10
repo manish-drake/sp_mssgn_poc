@@ -91,7 +91,10 @@ viewmodel::viewmodel(QObject *parent) :
     m_multListener.Start([&](const std::string & serverId, const std::string &msgType, const std::string & broadcast){
         LOGINFOZ("Broadcast received %s", broadcast.c_str());
         m_epSrv = "tcp://" + broadcast + ":8285";
-        m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
+        if(Messaging::Messages::IsRegistered())
+            m_messenger.Send(m_epSrv,
+                             Messaging::Messages::Factory()->
+                             MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
     });
 }
 
@@ -103,9 +106,7 @@ viewmodel::~viewmodel()
 void viewmodel::start()
 {
     m_listener.Listen([&](const std::string &msg) {
-
         std::cout << "Received: " << msg << std::endl;
-
         m_broker.OnReceived(msg);
     });
 }
@@ -149,4 +150,8 @@ void viewmodel::ipSelected(QString ip)
     sprintf(localAddress, "tcp://%s:%d", ip.toStdString().c_str(), PORT);
     Messaging::Messages::Factory()->Register(localAddress);
     LOGINFOZ("Local address set to %s", localAddress);
+    if(!m_epSrv.empty())
+        m_messenger.Send(m_epSrv,
+                         Messaging::Messages::Factory()->
+                         MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
 }

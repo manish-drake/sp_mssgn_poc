@@ -84,7 +84,8 @@ ios: PRE_TARGETDEPS += $$PWD/../../3rdparty/libzmq-ios/lib/libzmq.a
         ANDROID_EXTRA_LIBS = \
         Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
         Z:/Users/manish/android-ndk-r14b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so \
-        $$PWD/../../ftpclient/libftpclient.so
+        Z:/git/sp_mssgn_poc/SportsPIPMob/spmob/../../ftpclient/libftpclient.so \
+        $$PWD/../../build-SportsPIPMob-Android/logging/liblogging.so
 }
 
 

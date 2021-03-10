@@ -40,6 +40,11 @@ public:
     {
         return &s_singleton;
     }
+
+    static bool IsRegistered()
+    {
+        return !s_singleton.m_endpoint.empty();
+    }
     static void Register(const char *endpoint)
     {
         LOGINFOZ("Messages regitered at endpoint: %s", endpoint);

@@ -53,8 +53,10 @@ void Worker::OnHandshake(const char *from, const char *args)
     if(it == list.end())
     {
         list.push_back(subscriber);
-        LOGINFOZ("%s added to the role %s", from, MsgRoleStr(role));
+        LOGINFOZ("%s added to the [%s] role", from, MsgRoleStr(role));
     }
+    else
+        LOGWARNZ("%s already subscrbed to [%s] role.", from, MsgRoleStr(role));
 }
 
 void Worker::OnRequestSources(const char *from, const char *args)
@@ -65,7 +67,7 @@ void Worker::OnRequestSources(const char *from, const char *args)
     {
         csvSources += src + ",";
     }
-    m_messenger.Send(from, csvSources);
+    m_messenger.Send(from, Messaging::Messages::Factory()->MSG_RPSR(csvSources));
 }
 
 Worker::Worker()

@@ -37,10 +37,10 @@ void Messaging::Listener::Listen(std::function<void(const std::string&)> cb)
 
         while (!m_close) {
             zmq::message_t msg;
-            m_sock->recv(&msg);
-            m_sock->recv(&msg);
-            auto received = (char*)msg.data();
-            LOGINFOZ("Received: %s", received);
+            size_t sz = m_sock->recv(&msg);
+            sz = m_sock->recv(&msg);
+            std::string received{static_cast<char *>(msg.data()), msg.size()};
+            LOGINFOZ("Received: %s", received.c_str());
             cb(received);
         }
     }, cb));

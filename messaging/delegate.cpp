@@ -8,6 +8,11 @@ void Messaging::Delegate::OnReceived(const std::string &argMsg)
     LOGINFO(argMsg.c_str());
 
     Messaging::Message msg = Messaging::Messages::Factory()->Parse(argMsg.c_str());
+    if(msg.from.empty())
+    {
+        LOGWARN("The message sender is missing. Disposing of the message.");
+        return;
+    }
     switch (msg.task)
     {
     case 200: //acknowledgement received for last sent message

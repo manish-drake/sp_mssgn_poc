@@ -19,6 +19,7 @@ Grid{
             lable: action
             defined: working
             clickAction: arg
+            actvState: activeState
         }
     }
 }
