@@ -9,7 +9,17 @@
 #include <QDir>
 #include "logger.h"
 #include "csvlist.h"
+#include <ctime>
 
+QString viewmodel::getUniqueFileName()
+{
+    time_t t = time(nullptr);
+    tm *ltm = localtime(&t);
+    char buffer[32];
+    size_t sz = strftime(buffer, 32, "%Y%m%d%H%M%S.mp4", ltm);
+    buffer[sz] = '\0';
+    return QString(buffer);
+}
 
 
 using namespace Messaging;
@@ -26,6 +36,10 @@ void viewmodel::OnException(const char *from, const char *args)
 
 void viewmodel::OnStartRecording(const char *from, const char *args)
 {
+    auto name = getUniqueFileName();
+    name = m_appMediaFolder.append(name);
+    setFileName(name);
+    LOGINFOZ("Target media file: %s", fileName().toStdString().c_str());
     LOGINFO("Starting recording..");
     setBody("Received: Start Recording");
     setIsRecording(true);
@@ -36,7 +50,6 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
     LOGINFO("Stopping recording..");
     static int num = 0;
     setBody("Received: Stop Recording");
-    QString filename = "sample.mp4";
     setIsRecording(false);
 
     LOGINFOZ("Sending %s to server..", m_fileName.data());
@@ -74,10 +87,10 @@ viewmodel::viewmodel(QObject *parent) :
 {    
     LOGINFO("Initializing local storage..");
     QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
-    LOGINFOZ("Storage root: %s", localPath.data());
+    LOGINFOZ("Storage root: %s", localPath.toStdString().c_str());
 
     QString appMediaFolder = localPath.append("/SportsPIP/Videos");
-    LOGINFOZ("Media folder: %s", appMediaFolder.data());
+    LOGINFOZ("Media folder: %s", appMediaFolder.toStdString().c_str());
 
     QDir dAppMediaFolder(appMediaFolder);
     if (!dAppMediaFolder.exists())
@@ -85,9 +98,8 @@ viewmodel::viewmodel(QObject *parent) :
         LOGINFO("Creating media folder");
         dAppMediaFolder.mkpath(".");
     }
-    m_fileName = appMediaFolder.append("/video1.mp4");
-    LOGINFOZ("Target media file: %s", m_fileName.data());
-    LOGINFO("Initializing");
+    m_appMediaFolder = appMediaFolder;
+    LOGINFOZ("Media folder %s", m_appMediaFolder.toStdString().c_str());
 
     m_multListener.Start([&](const std::string & serverId, const std::string &msgType, const std::string & broadcast){
         LOGINFOZ("Broadcast received %s", broadcast.c_str());

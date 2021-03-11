@@ -35,6 +35,7 @@ class viewmodel : public QObject, IDelegator
     Messaging::Delegate m_broker;
     Messaging::Messenger m_messenger;
     FTPClient m_ftp;
+    QString m_appMediaFolder;
 public:
     explicit viewmodel(QObject *parent = nullptr);
     Q_PROPERTY(int val READ val WRITE setval )
@@ -42,5 +43,6 @@ public:
 signals:
 public slots:
     void ipSelected(QString ip);
+    void videoFetchComplete(const QString& vid);
 };
 #endif // TEST_H

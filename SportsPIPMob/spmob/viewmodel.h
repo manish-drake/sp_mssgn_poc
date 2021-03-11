@@ -40,10 +40,19 @@ class viewmodel : public QObject, IDelegator
         emit isRecordingChanged();
     }
     QString m_fileName;
+    void setFileName(const QString& name)
+    {
+        if(name != m_fileName)
+        {
+            m_fileName = name;
+            emit fileNameChanged();
+        }
+    }
     QString fileName() const
     {
         return m_fileName;
     }
+    QString m_appMediaFolder;
 public:
     explicit viewmodel(QObject *parent = nullptr);
     ~viewmodel();
@@ -52,7 +61,7 @@ public:
     Q_PROPERTY(QString body READ body WRITE setBody NOTIFY bodyChanged)
     Q_PROPERTY(QString footer READ footer WRITE setFooter NOTIFY footerChanged)
     Q_PROPERTY(bool isRecording READ isRecording WRITE setIsRecording NOTIFY isRecordingChanged)
-    Q_PROPERTY(QString fileName READ fileName CONSTANT)
+    Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
 
     QString header();
     QString body();
@@ -66,12 +75,14 @@ signals:
     void bodyChanged();
     void footerChanged();
     void isRecordingChanged();
+    void fileNameChanged();
 private:
     Messaging::Delegate m_broker;
     Messaging::Listener m_listener;
     Messaging::Messenger m_messenger;
     FTPClient m_ftp;
     bool m_close = false;
+    QString getUniqueFileName();
 public slots:
     void ipSelected(QString ip);
     void videoFTPComplete(const QString& vid);

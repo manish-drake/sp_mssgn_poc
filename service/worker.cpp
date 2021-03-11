@@ -35,6 +35,9 @@ void Worker::OnVideoFTPComplete(const char *from, const char *args)
     LOGINFO("Sending notifcation to all subscribers...");
     for(auto& src: m_subscribers[Messaging::MSG_ROLES_ENUM::CONSUMER])
         m_messenger.Send(src, Messaging::Messages::Factory()->MSG_NWVA(args));
+
+    for(auto& src: m_subscribers[Messaging::MSG_ROLES_ENUM::CONTROLLER])
+        m_messenger.Send(src, Messaging::Messages::Factory()->MSG_SRID());
 }
 
 void Worker::OnUnknownMessage(const char *from, const char *args)

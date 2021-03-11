@@ -84,14 +84,14 @@ void MultiListener::Start(std::function<void (const std::string &, const std::st
 
         while (1) {
             char msgbuf[MSGBUFSIZE];
-            unsigned int addrlen = sizeof(addr);
+            int addrlen = sizeof(addr);
             long nbytes = recvfrom(
                         fd,
                         msgbuf,
                         MSGBUFSIZE,
                         0,
                         (struct sockaddr *) &addr,
-                        &addrlen
+                        static_cast<socklen_t*>(&addrlen)
                         );
             if (nbytes < 0) {
                 LOGERR("Recvfrom, quitting..");

@@ -26,7 +26,7 @@ void viewmodel::OnUnknownMessage(const char *from, const char *args)
 
 void viewmodel::OnSourceIdle(const char *from, const char *args)
 {
-    m_state = 0;
+    setState(1);
 }
 
 void viewmodel::OnReplySources(const char *from, const char *args)

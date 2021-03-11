@@ -4,6 +4,7 @@
 #include <QFileInfo>
 #include "logger.h"
 
+
 FTPClient::FTPClient(QObject *parent)
 {
     QObject::connect(this, &FTPClient::connectToServer, &controlChannel, &FtpControlChannel::connectToServer);
@@ -11,21 +12,23 @@ FTPClient::FTPClient(QObject *parent)
 }
 
 
-void FTPClient::Receive(const std::string& fileName, const QString &server)
+void FTPClient::Fetch(const std::string& fileName, const QString &server, const std::string& mediaFolder)
 {
     LOGINFO("Receiving file");
+    commands.push_back({"OPTS", "UTF8 ON"});// login)
     commands.push_back({"USER", "sportspip"});// login)
     commands.push_back({"PORT", ""}  );       // announce port for data connection, args added below.
-    commands.push_back({"CWD", "videos"}  );
+//    commands.push_back({"CWD", "videos"}  );
     commands.push_back({"RETR", fileName.c_str()} );       // send a file
     commands.push_back({"QUIT", ""} );       // send a file
 
 
 
-    int post = 0;
     // Commands to be sent
+    std::string filePath = mediaFolder + "/" + fileName;
+    LOGINFOZ("Opening file at %s", filePath.c_str());
 
-    file1.open("/home/manish/git/sp_mssgn_poc/sppad/receive.mp4", std::ios::out | std::ios::binary);
+    file1.open(filePath, std::ios::out | std::ios::binary);
     // Print all data retrieved from the server on the console.
     QObject::connect(&dataChannel, &FtpDataChannel::dataReceived, [&](const QByteArray &data) {
         LOGINFO("Received data...");
@@ -36,15 +39,25 @@ void FTPClient::Receive(const std::string& fileName, const QString &server)
     // Translate server replies into state machine events.
     QObject::connect(&controlChannel, &FtpControlChannel::reply,
                      [this](int code, const QString &parameters) {
-        static int CMD = 0;
+        static int CMDF = -1;
         auto cd = QString("reply.%1xx").arg(code / 100);
         qDebug() << "Code: " << cd;
-        switch (CMD) {
+        switch (CMDF) {
+        case -1:
+        {
+            if(cd == "reply.2xx")
+            {
+                CMDF = 0;
+                Command command = commands.takeFirst();
+                controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
+            }
+            break;
+        }
         case 0:
         {
             if(cd == "reply.2xx")
             {
-                CMD = 1;
+                CMDF = 1;
                 Command command = commands.takeFirst();
                 controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
             }
@@ -54,7 +67,7 @@ void FTPClient::Receive(const std::string& fileName, const QString &server)
         {
             if(cd == "reply.3xx")
             {
-                CMD = 2;
+                CMDF = 2;
                 QString c = "PASS";
                 QString a = "drake8283";
                 controlChannel.command(c.toLatin1(), a.toUtf8());
@@ -65,17 +78,31 @@ void FTPClient::Receive(const std::string& fileName, const QString &server)
         {
             if(cd == "reply.2xx")
             {
-                CMD = 3;
+                CMDF = 3;
                 Command command = commands.takeFirst();
                 controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
             }
             break;
         }
+//        case 3:
+//        {
+//            if(cd == "reply.2xx")
+//            {
+//                CMDF = 4;
+//                Command command = commands.takeFirst();
+//                controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
+//            }
+//            break;
+//        }
         case 3:
         {
             if(cd == "reply.2xx")
             {
-                CMD = 4;
+                CMDF = 4;
+
+                QObject::connect(&this->dataChannel, &FtpDataChannel::remoteSocketOpen, [&](){
+                    std::cout << "Socket open!" << std::endl;
+                });
                 Command command = commands.takeFirst();
                 controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
             }
@@ -83,22 +110,9 @@ void FTPClient::Receive(const std::string& fileName, const QString &server)
         }
         case 4:
         {
-            if(cd == "reply.2xx")
-            {
-                CMD = 5;
-
-                QObject::connect(&this->dataChannel, &FtpDataChannel::remoteSocketOpen, [&](){
-                    std::cout << "Socket ope!" << std::endl;
-                });
-                Command command = commands.takeFirst();
-                controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
-            }
-            break;
-        }
-        case 5:
-        {
             if((cd == "reply.2xx") || (cd == "reply.4xx"))
             {
+                LOGINFOZ("Fetch complete with %s. Closing File..", cd.toStdString().c_str());
                 file1.close();
             }
         }
@@ -160,15 +174,15 @@ void FTPClient::Send(const QString &fileName, const QString &server)
     // Translate server replies into state machine events.
     QObject::connect(&controlChannel, &FtpControlChannel::reply,
                      [this, &fileName, &fname](int code, const QString &parameters) {
-        static int CMD = -1;
+        static int CMDS = -1;
         auto cd = QString("reply.%1xx").arg(code / 100);
         qDebug() << "Code: " << cd;
-        switch (CMD) {
+        switch (CMDS) {
         case -1:
         {
             if(cd == "reply.2xx")
             {
-                CMD = 0;
+                CMDS = 0;
                 Command command = commands.takeFirst();
                 controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
             }
@@ -178,7 +192,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
         {
             if(cd == "reply.2xx")
             {
-                CMD = 1;
+                CMDS = 1;
                 Command command = commands.takeFirst();
                 controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
             }
@@ -188,7 +202,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
         {
             if(cd == "reply.3xx")
             {
-                CMD = 2;
+                CMDS = 2;
                 QString c = "PASS";
                 QString a = "drake8283";
                 controlChannel.command(c.toLatin1(), a.toUtf8());
@@ -199,7 +213,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
         {
             if(cd == "reply.2xx")
             {
-                CMD = 3;
+                CMDS = 3;
                 Command command = commands.takeFirst();
                 controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
             }
@@ -219,7 +233,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
         {
             if(cd == "reply.2xx")
             {
-                CMD = 4;
+                CMDS = 4;
 
                 QObject::connect(&this->dataChannel, &FtpDataChannel::remoteSocketOpen, [&](){
 //                    QFile file(fileName);
@@ -239,7 +253,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
         {
             if(cd == "reply.1xx")
             {
-                CMD = 5;
+                CMDS = 5;
                 std::cout << "Sending file now" << std::endl;
                 QFile file(m_fileName);
                 if (!file.open(QIODevice::ReadOnly)) return;
@@ -254,7 +268,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
         {
             if(cd == "reply.1xx")
             {
-                CMD = 6;
+                CMDS = 6;
 
             }
         }

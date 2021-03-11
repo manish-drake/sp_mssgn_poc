@@ -22,10 +22,11 @@ class FTPClient : public QObject
 public:
     explicit FTPClient(QObject *parent = nullptr);
     void Send(const QString &file, const QString &server);
-    void Receive(const std::string &fileName, const QString &server);
+    void Fetch(const std::string &fileName, const QString &server, const std::string &mediaFolder);
 signals:
     void connectToServer(QString server);
     void videoFTPComplete(const QString& vid);
+    void videoFetchComplete(const QString& vid);
 
 public slots:
     void InvokeCallback();
