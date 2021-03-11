@@ -19,7 +19,7 @@ class viewmodel : public QObject, IDelegator
     int m_val;
     MultiListener m_multListener;
 
-    std::string m_epSrv;
+    std::string m_epSrv, m_epFTP;
     std::vector<std::string> m_epSrcs;
     int val()
     {

@@ -64,7 +64,8 @@ void MultiListener::Start(std::function<void (const std::string &, const std::st
         addr.sin_addr.s_addr = htonl(INADDR_ANY);
         addr.sin_port = htons(port);
 
-        if (bind(fd, (struct sockaddr*) &addr, sizeof(addr)) < 0) {
+        if (::bind(fd, (struct sockaddr*) &addr, sizeof(addr)) < 0)
+        {
             LOGERR("Binding, quitting..");
             return 1;
         }
@@ -83,8 +84,8 @@ void MultiListener::Start(std::function<void (const std::string &, const std::st
 
         while (1) {
             char msgbuf[MSGBUFSIZE];
-            int addrlen = sizeof(addr);
-            int nbytes = recvfrom(
+            unsigned int addrlen = sizeof(addr);
+            long nbytes = recvfrom(
                         fd,
                         msgbuf,
                         MSGBUFSIZE,

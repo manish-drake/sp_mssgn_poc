@@ -25,7 +25,7 @@ class viewmodel : public QObject, IDelegator
 
     MultiListener m_multListener;
 
-    std::string m_epSrv;
+    std::string m_epSrv, m_epFTP;
     std::vector<std::string> m_epSrcs;
 
 
@@ -74,6 +74,7 @@ private:
     bool m_close = false;
 public slots:
     void ipSelected(QString ip);
+    void videoFTPComplete(const QString& vid);
 };
 
 #endif // VIEWMODEL_H

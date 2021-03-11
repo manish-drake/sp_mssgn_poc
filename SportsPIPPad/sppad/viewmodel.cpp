@@ -17,7 +17,9 @@ void viewmodel::OnException(const char *from, const char *args)
 
 void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
 {
-
+    LOGINFOZ("Fetching video from FTP server %s", args);
+    QString serverIP{m_epFTP.c_str()};
+    m_ftp.Receive(args, serverIP);
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
@@ -34,6 +36,7 @@ viewmodel::viewmodel(QObject *parent) :
     m_multListener.Start([&](const std::string & serverId, const std::string &msgType, const std::string & broadcast){
         LOGINFOZ("Broadcast received %s", broadcast.c_str());
         m_epSrv = "tcp://" + broadcast + ":8285";
+        m_epFTP = broadcast;
         if(Messaging::Messages::IsRegistered())
             m_messenger.Send(m_epSrv,
                              Messaging::Messages::Factory()->
@@ -44,9 +47,7 @@ viewmodel::viewmodel(QObject *parent) :
 void viewmodel::start()
 {
     m_listener.Listen([&](const std::string &msg) {
-
         std::cout << "Received: " << msg << std::endl;
-
         m_broker.OnReceived(msg);
     });
 }

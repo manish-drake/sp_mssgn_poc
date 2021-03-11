@@ -41,7 +41,8 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
 
     LOGINFOZ("Sending %s to server..", m_fileName.data());
     setBody("File found");
-    m_ftp.Send(m_fileName, QString::fromStdString(m_epSrv));
+    QString serverIP{m_epFTP.c_str()};
+    m_ftp.Send(m_fileName, serverIP);
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
@@ -91,11 +92,14 @@ viewmodel::viewmodel(QObject *parent) :
     m_multListener.Start([&](const std::string & serverId, const std::string &msgType, const std::string & broadcast){
         LOGINFOZ("Broadcast received %s", broadcast.c_str());
         m_epSrv = "tcp://" + broadcast + ":8285";
+        m_epFTP = broadcast;
         if(Messaging::Messages::IsRegistered())
             m_messenger.Send(m_epSrv,
                              Messaging::Messages::Factory()->
                              MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
     });
+
+    connect(&m_ftp, &FTPClient::videoFTPComplete, this, &viewmodel::videoFTPComplete);
 }
 
 viewmodel::~viewmodel()
@@ -154,4 +158,9 @@ void viewmodel::ipSelected(QString ip)
         m_messenger.Send(m_epSrv,
                          Messaging::Messages::Factory()->
                          MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
+}
+
+void viewmodel::videoFTPComplete(const QString &vid)
+{
+    m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_VFTP(vid.toStdString().c_str()));
 }

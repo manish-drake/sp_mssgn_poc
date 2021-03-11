@@ -25,7 +25,7 @@ public:
     void Receive(const std::string &fileName, const QString &server);
 signals:
     void connectToServer(QString server);
-    void videoFTPComplete();
+    void videoFTPComplete(const QString& vid);
 
 public slots:
     void InvokeCallback();
