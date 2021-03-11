@@ -17,7 +17,7 @@ void FTPClient::Receive(const std::string& fileName, const QString &server)
     commands.push_back({"USER", "sportspip"});// login)
     commands.push_back({"PORT", ""}  );       // announce port for data connection, args added below.
     commands.push_back({"CWD", "videos"}  );
-    commands.push_back({"RETR", "sample.mp4"} );       // send a file
+    commands.push_back({"RETR", fileName.c_str()} );       // send a file
     commands.push_back({"QUIT", ""} );       // send a file
 
 

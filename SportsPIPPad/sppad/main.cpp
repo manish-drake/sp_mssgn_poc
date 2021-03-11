@@ -11,6 +11,8 @@
 #include <fstream>
 #include "messages.h"
 #include "../common/network.h"
+#include <QStandardPaths>
+#include <QDir>
 
 using namespace std;
 using namespace Messaging;
@@ -19,14 +21,14 @@ using namespace Messaging;
 #include "loggerc.h"
 
 
-void initLog()
+void initLog(std::string path = "")
 {
     const char *logOut = getenv("LOG_OUT");
     if(logOut)
     {
         if (strcmp(logOut, "0") == 0)
         {
-            Logger::Instance()->Add(new LoggerF);
+            Logger::Instance()->Add(new LoggerF("____________________SPORTSPIP SOURCE____________________", path));
         }
         else
         {
@@ -35,19 +37,32 @@ void initLog()
     }
     else
     {
-        Logger::Instance()->Add(new LoggerC("____________________SPORTSPIP COACH____________________"));
+        Logger::Instance()->Add(new LoggerC("____________________SPORTSPIP SOURCE____________________"));
         //#ifndef Q_OS_IOS
-        Logger::Instance()->Add(new LoggerF("____________________SPORTSPIP COACH____________________"));
+        Logger::Instance()->Add(new LoggerF("____________________SPORTSPIP SOURCE____________________", path));
         //#endif
     }
 }
+
 int main(int argc, char *argv[])
 
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-    initLog();
+
+    /***********Initializing Log Location************/
+    QString localPath = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation );
+
+    QString appLogFolder = localPath.append("/SportsPIP/Logs");
+
+    QDir dAppMediaFolder(appLogFolder);
+    if (!dAppMediaFolder.exists())
+    {
+        dAppMediaFolder.mkpath(".");
+    }
+    /************************************************/
+    initLog(appLogFolder.toStdString());
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
