@@ -173,7 +173,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
     qDebug()<< "Post:" << 4;
     // Translate server replies into state machine events.
     QObject::connect(&controlChannel, &FtpControlChannel::reply,
-                     [this, &fileName, &fname](int code, const QString &parameters) {
+                     [this, fileName, fname](int code, const QString &parameters) {
         static int CMDS = -1;
         auto cd = QString("reply.%1xx").arg(code / 100);
         qDebug() << "Code: " << cd;
@@ -260,6 +260,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
                 QByteArray blob = file.readAll();
                 dataChannel.sendData(blob);
                 dataChannel.close();
+                LOGINFOZ("FTP complete %s", fname.toStdString().c_str());
                 emit videoFTPComplete(fname);
             }
         }
