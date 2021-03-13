@@ -83,29 +83,25 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
         break;
     }
     case 1:{
-        if(m_state == 1){
-            auto start = Messaging::Messages::Factory()->MSG_STRT();
-            for(auto& src: m_epSrcs)
-            {                
-                 m_messenger.Send(src, start);
-                 setStatus("Recording started..");
-            }
-            setState(2);
-            valid = true;
+        auto start = Messaging::Messages::Factory()->MSG_STRT();
+        for(auto& src: m_epSrcs)
+        {
+             m_messenger.Send(src, start);
+             setStatus("Recording started..");
         }
+        setState(2);
+        valid = true;
         break;
     }
     case 2:{
-        if(m_state == 2){
-            auto stop = Messaging::Messages::Factory()->MSG_STOP();
-            for(auto& src: m_epSrcs)
-            {
-                 m_messenger.Send(src, stop);
-                 setStatus("Recording stopped..");
-            }
-            setState(3);
-            valid = true;
+        auto stop = Messaging::Messages::Factory()->MSG_STOP();
+        for(auto& src: m_epSrcs)
+        {
+             m_messenger.Send(src, stop);
+             setStatus("Recording stopped..");
         }
+        setState(3);
+        valid = true;
         break;
     }
     default:
