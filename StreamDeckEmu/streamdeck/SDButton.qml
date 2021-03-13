@@ -9,32 +9,12 @@ Rectangle {
     property int modelState: vm.state
     property int actvState: 5
 
-    onModelStateChanged: {
-        if(buttTemplate.actvState <= modelState)
-        {
-            pressed = false;
-            buttTemplate.defined = true;
-        }
-        else
-        {
-            pressed = false;
-            buttTemplate.defined = false;
-        }
-    }
-
     id: buttTemplate
     height: size
     width: size
     color: "lightgray"
     border.color: "black"
     radius: size/10
-    onPressedChanged: {
-        lbl.color="#73f188"
-        if(buttTemplate.pressed)
-            buttTemplate.color="gray"
-        else
-            buttTemplate.color="lightgray"
-    }
 
     Text {
         id: lbl
@@ -42,7 +22,6 @@ Rectangle {
         anchors.centerIn: parent
         text: qsTr(buttTemplate.lable)
         font.family: "Arial"
-        font.bold: true
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         style: Text.Raised
@@ -55,21 +34,14 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
-            lbl.color="#73f188"
+            lbl.color="#76db1d"
         }
-        onExited: {
-            if(buttTemplate.pressed)
-                lbl.color="#73f188"
-            else
-                lbl.color="#939994"
-        }
+        onExited: lbl.color="#939994"
+        onReleased: buttTemplate.color="lightgray"
+        onPressed: buttTemplate.color="gray"
+
         onClicked: {
             valid = vm.run(buttTemplate.clickAction)
-            if((valid) && (buttTemplate.clickAction != 100) && (buttTemplate.clickAction != 2))
-            {
-                buttTemplate.pressed = !buttTemplate.pressed
-            }
-
         }
     }
 }

@@ -32,6 +32,7 @@ void viewmodel::OnSourceIdle(const char *from, const char *args)
 void viewmodel::OnReplySources(const char *from, const char *args)
 {
     m_epSrcs.clear();
+    setIdent("No sources available!");
     if(sizeof (args) > 0)
     {
         CSVList::row list;
@@ -39,6 +40,10 @@ void viewmodel::OnReplySources(const char *from, const char *args)
         if(list.size() > 0)
         {
             m_epSrcs.insert(m_epSrcs.begin(), list.begin(), list.end());
+            QString srcs{"Sources: "};
+            srcs.append(args);
+            setIdent(srcs);
+            setStatus("Ready to start recording..");
         }
     }
 
@@ -71,40 +76,36 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
 
     switch (argAction) {
     case 0:{
+        setState(0);
+        m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_RQSR());
+        setStatus("Identif sources..");
+        valid = true;
+        break;
+    }
+    case 1:{
         if(m_state == 1){
             auto start = Messaging::Messages::Factory()->MSG_STRT();
             for(auto& src: m_epSrcs)
-            {
+            {                
                  m_messenger.Send(src, start);
+                 setStatus("Recording started..");
             }
             setState(2);
             valid = true;
         }
         break;
     }
-    case 1:{
+    case 2:{
         if(m_state == 2){
             auto stop = Messaging::Messages::Factory()->MSG_STOP();
             for(auto& src: m_epSrcs)
             {
                  m_messenger.Send(src, stop);
+                 setStatus("Recording stopped..");
             }
             setState(3);
             valid = true;
         }
-        break;
-    }
-    case 2:{
-        if(m_state == 3){
-            setState(0);
-            valid = true;
-        }
-        break;
-    }        
-    case 100:{
-        setState(0);
-        m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_RQSR());
-        valid = true;
         break;
     }
     default:

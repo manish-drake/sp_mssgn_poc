@@ -39,16 +39,45 @@ private:
             emit stateChanged();
         }
     }
-
+    QString m_ident, m_status;
+    QString ident() const
+    {
+        return m_ident;
+    }
+    QString status() const
+    {
+        return m_status;
+    }
+    void setIdent(QString id)
+    {
+        if(m_ident != id)
+        {
+            m_ident = id;
+            emit identChanged();
+        }
+    }
+    void setStatus(QString sts)
+    {
+        if(m_status != sts)
+        {
+            m_status = sts;
+            emit statusChanged();
+        }
+    }
 public:
     explicit viewmodel(QObject *parent = nullptr);
     Q_INVOKABLE bool run(const int &argAction);
     Q_INVOKABLE void start();
     Q_PROPERTY(int state READ state WRITE setState NOTIFY stateChanged)
+    Q_PROPERTY(QString ident READ ident WRITE setIdent NOTIFY identChanged)
+    Q_PROPERTY(QString status READ status WRITE setStatus NOTIFY statusChanged)
 
 signals:
     void stateChanged();
     void sourecesChanged();
+    void identChanged();
+    void statusChanged();
+
 public slots:
     void ipSelected(QString ip);
 };
