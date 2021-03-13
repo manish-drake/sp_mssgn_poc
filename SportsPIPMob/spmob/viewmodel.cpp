@@ -36,8 +36,8 @@ void viewmodel::OnException(const char *from, const char *args)
 
 void viewmodel::OnStartRecording(const char *from, const char *args)
 {
-    auto name = getUniqueFileName();
-    name = m_appMediaFolder.append(name);
+    auto name = m_appMediaFolder;
+    name = name.append(getUniqueFileName());
     setFileName(name);
     LOGINFOZ("Target media file: %s", fileName().toStdString().c_str());
     LOGINFO("Starting recording..");

@@ -1,0 +1,68 @@
+____________________SPORTSPIP SERVICE____________________
+3-11 16:58:31:0 [GetLocalIP::GetLocalIP] Getting local IP addresses..
+3-11 16:58:31:0 [GetLocalIP::Run] Host name is LAPTOP-8VRI4IJJ.
+3-11 16:58:31:0 [GetLocalIP::Run] IP Address 192.168.1.3
+3-11 16:58:31:0 [MultiSender::MultiSender] Starting multicast service..
+3-11 16:58:31:0 [char**)] Selecting 192.168.1.3 for all further communication.
+3-11 16:58:31:0 [Messaging::Messages::Register] Messages regitered at endpoint: tcp://192.168.1.3:8285
+3-11 16:58:31:0 [MultiSender::Start(const string&)::<lambda] New thread broadcasting 0000192.168.1.3 on 239.255.255.250:7755 at a delay of 2 secs
+3-11 16:58:31:0 [Messaging::Listener::init] Starting listener at: tcp://*:8285
+3-11 16:59:27:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.1.6:8284|207|0
+3-11 16:59:27:0 [Messaging::Delegate::OnReceived] tcp://192.168.1.6:8284|207|0
+3-11 16:59:27:0 [Messaging::Messenger::Send] tcp://192.168.1.6:8284: tcp://192.168.1.3:8285|200|
+3-11 16:59:35:0 [Worker::OnHandshake] tcp://192.168.1.6:8284 added to the [Source] role
+3-11 17:8:12:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.1.7:8286|207|1
+3-11 17:8:12:0 [Messaging::Delegate::OnReceived] tcp://192.168.1.7:8286|207|1
+3-11 17:8:12:0 [Messaging::Messenger::Send] tcp://192.168.1.7:8286: tcp://192.168.1.3:8285|200|
+3-11 17:8:12:0 [Worker::OnHandshake] tcp://192.168.1.7:8286 added to the [Consumer] role
+3-11 17:9:1:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.1.6:8284|207|0
+3-11 17:9:1:0 [Messaging::Delegate::OnReceived] tcp://192.168.1.6:8284|207|0
+3-11 17:9:1:0 [Messaging::Messenger::Send] tcp://192.168.1.6:8284: tcp://192.168.1.3:8285|200|
+3-11 17:9:1:1 [OnHandshake] tcp://192.168.1.6:8284 already subscrbed to [Source] role.
+3-11 17:11:0:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|207|2
+3-11 17:11:0:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|207|2
+3-11 17:11:0:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: tcp://192.168.1.3:8285|200|
+3-11 17:11:3:0 [Worker::OnHandshake] tcp://192.168.10.10:8283 added to the [Controller] role
+3-11 17:11:13:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|208|
+3-11 17:11:13:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|208|
+3-11 17:11:13:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: tcp://192.168.1.3:8285|200|
+3-11 17:11:13:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: tcp://192.168.1.3:8285|209|tcp://192.168.1.6:8284,
+3-11 17:11:13:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|200|
+3-11 17:11:13:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|200|
+3-11 17:11:13:0 [Worker::OnAcknowledgement] tcp://192.168.10.10:8283 -ack-> 
+3-11 17:11:59:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|208|
+3-11 17:11:59:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|208|
+3-11 17:11:59:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: tcp://192.168.1.3:8285|200|
+3-11 17:11:59:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: tcp://192.168.1.3:8285|209|tcp://192.168.1.6:8284,
+3-11 17:11:59:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|200|
+3-11 17:11:59:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|200|
+3-11 17:11:59:0 [Worker::OnAcknowledgement] tcp://192.168.10.10:8283 -ack-> 
+3-11 17:12:55:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.1.6:8284|207|0
+3-11 17:12:55:0 [Messaging::Delegate::OnReceived] tcp://192.168.1.6:8284|207|0
+3-11 17:12:55:0 [Messaging::Messenger::Send] tcp://192.168.1.6:8284: tcp://192.168.1.3:8285|200|
+3-11 17:12:55:1 [OnHandshake] tcp://192.168.1.6:8284 already subscrbed to [Source] role.
+3-11 17:13:6:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|208|
+3-11 17:13:6:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|208|
+3-11 17:13:6:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: tcp://192.168.1.3:8285|200|
+3-11 17:13:6:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: tcp://192.168.1.3:8285|209|tcp://192.168.1.6:8284,
+3-11 17:13:6:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|200|
+3-11 17:13:6:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|200|
+3-11 17:13:6:0 [Worker::OnAcknowledgement] tcp://192.168.10.10:8283 -ack-> 
+3-11 17:14:19:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|208|
+3-11 17:14:19:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|208|
+3-11 17:14:19:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: tcp://192.168.1.3:8285|200|
+3-11 17:14:19:0 [Messaging::Messenger::Send] tcp://192.168.10.10:8283: tcp://192.168.1.3:8285|209|tcp://192.168.1.6:8284,
+3-11 17:14:19:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.10.10:8283|200|
+3-11 17:14:19:0 [Messaging::Delegate::OnReceived] tcp://192.168.10.10:8283|200|
+3-11 17:14:19:0 [Worker::OnAcknowledgement] tcp://192.168.10.10:8283 -ack-> 
+3-11 17:14:51:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.1.3:8283|207|2
+3-11 17:14:51:0 [Messaging::Delegate::OnReceived] tcp://192.168.1.3:8283|207|2
+3-11 17:14:51:0 [Messaging::Messenger::Send] tcp://192.168.1.3:8283: tcp://192.168.1.3:8285|200|
+3-11 17:14:51:0 [Worker::OnHandshake] tcp://192.168.1.3:8283 added to the [Controller] role
+3-11 17:15:9:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.1.3:8283|208|
+3-11 17:15:9:0 [Messaging::Delegate::OnReceived] tcp://192.168.1.3:8283|208|
+3-11 17:15:9:0 [Messaging::Messenger::Send] tcp://192.168.1.3:8283: tcp://192.168.1.3:8285|200|
+3-11 17:15:9:0 [Messaging::Messenger::Send] tcp://192.168.1.3:8283: tcp://192.168.1.3:8285|209|tcp://192.168.1.6:8284,
+3-11 17:15:9:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: tcp://192.168.1.3:8283|200|
+3-11 17:15:9:0 [Messaging::Delegate::OnReceived] tcp://192.168.1.3:8283|200|
+3-11 17:15:9:0 [Worker::OnAcknowledgement] tcp://192.168.1.3:8283 -ack-> 
