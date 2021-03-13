@@ -84,7 +84,7 @@ void MultiListener::Start(std::function<void (const std::string &, const std::st
 
         while (1) {
             char msgbuf[MSGBUFSIZE];
-            int addrlen = sizeof(addr);
+            unsigned int addrlen = sizeof(addr);
             long nbytes = recvfrom(
                         fd,
                         msgbuf,
