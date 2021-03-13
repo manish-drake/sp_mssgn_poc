@@ -227,9 +227,12 @@ void FTPClient::Send(const QString &fileName, const QString &server)
                 LOGINFOZ("FTP complete %s", fname.toStdString().c_str());
                 emit videoFTPComplete(fname);
             }
-            else  if(cd == "reply.2xx")
+            else  if((isConnected()) && (cd == "reply.2xx"))
             {
                 LOGINFO("Transfer complete.");
+                Command command = commands.takeFirst();
+                m_isConnected = false;
+                controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
             }
             else {
                 LOGERRZ("Error transferring the file, %s", cd.toStdString().c_str());
@@ -256,6 +259,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
         /*4*/commands.push_back({"USER", "sportspip"});// login)
         /*3*/commands.push_back({"PORT", ""}  );
         /*2*/commands.push_back({"STOR", fname} );       // send a file
+        /*1*/commands.push_back({"QUIT", ""} );       // send a file
 
         emit connectToServer(server);
     }
