@@ -56,9 +56,6 @@ FtpControlChannel::FtpControlChannel(QObject *parent) : QObject(parent)
     connect(&m_socket, &QIODevice::readyRead, this, &FtpControlChannel::onReadyRead);
     connect(&m_socket, &QAbstractSocket::disconnected, this, &FtpControlChannel::closed);
     connect(&m_socket, &QAbstractSocket::connected, this, [this]() {
-        auto add = m_socket.localAddress();
-        auto prt = m_socket.localPort();
-        qDebug() << add.toString() << ":" << prt;
         emit opened(m_socket.localAddress(), m_socket.localPort());
     });
 }
@@ -75,6 +72,13 @@ void FtpControlChannel::command(const QByteArray &command, const QByteArray &par
         sendData += " " + params;
     LOGINFOZ("sending: %s", sendData.toStdString().c_str());
     m_socket.write(sendData + "\r\n");
+}
+
+void FtpControlChannel::command(const string &command, const string &params)
+{
+    QByteArray cmd(command.c_str(), command.size());
+    QByteArray args(params.c_str(), params.size());
+    this->command(cmd, args);
 }
 
 void FtpControlChannel::onReadyRead()

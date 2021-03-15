@@ -29,18 +29,32 @@ unix {
 }
 
 HEADERS += \
-    #../../ftpclient/client.h \
-    #../../ftpclient/filemonitor.h \
+    ../../ftpclient/commandbase.h \
+    ../../ftpclient/commandopts.h \
+    ../../ftpclient/commandport.h \
+    ../../ftpclient/commandstor.h \
+    ../../ftpclient/commanddata.h \
+    ../../ftpclient/commandquit.h \
+    ../../ftpclient/commandpwd.h \
     ../../ftpclient/ftpclient.h \
+    ../../ftpclient/pipeline.h \
     ../../ftpclient/ftpcontrolchannel.h \
-    ../../ftpclient/ftpdatachannel.h
+    ../../ftpclient/ftpdatachannel.h \
+    ../../ftpclient/commanduser.h
 
 SOURCES += \
-    #../../ftpclient/client.cpp \
-    #../../ftpclient/filemonitor.cpp \
+    ../../ftpclient/commandbase.cpp \
+    ../../ftpclient/pipeline.cpp \
     ../../ftpclient/ftpclient.cpp \
     ../../ftpclient/ftpcontrolchannel.cpp \
-    ../../ftpclient/ftpdatachannel.cpp
+    ../../ftpclient/ftpdatachannel.cpp \
+    ../../ftpclient/commandport.cpp \
+    ../../ftpclient/commandstor.cpp \
+    ../../ftpclient/commanddata.cpp \
+    ../../ftpclient/commandquit.cpp \
+    ../../ftpclient/commandpwd.cpp \
+    ../../ftpclient/commandopts.cpp \
+    ../../ftpclient/commanduser.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../logging/release/ -llogging
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../logging/debug/ -llogging
