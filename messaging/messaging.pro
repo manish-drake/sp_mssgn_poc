@@ -3,7 +3,7 @@ QT += network
 
 TARGET = messaging
 TEMPLATE = lib
-CONFIG += c++11
+CONFIG += c++14
 
 DEFINES += MESSAGING_LIBRARY
 
@@ -69,39 +69,33 @@ INCLUDEPATH += $$PWD/../3rdparty/libzmq32/include
 DEPENDPATH += $$PWD/../3rdparty/libzmq32/include
 }
 ios: {
-    LIBS += -L$$PWD/../../3rdparty/libzmq-ios/lib/ -lzmq
+    LIBS += -L$$PWD/../3rdparty/libzmq-ios/lib/ -lzmq
 
-    INCLUDEPATH += $$PWD/../../3rdparty/libzmq-ios/include
-    DEPENDPATH += $$PWD/../../3rdparty/libzmq-ios/include
+    INCLUDEPATH += $$PWD/../3rdparty/libzmq-ios/include
+    DEPENDPATH += $$PWD/../3rdparty/libzmq-ios/include
 }
-ios: PRE_TARGETDEPS += $$PWD/../../3rdparty/libzmq-ios/lib/libzmq.a
+ios: PRE_TARGETDEPS += $$PWD/../3rdparty/libzmq-ios/lib/libzmq.a
 
 #---------------ANDROID DIST FILES-------------------
     contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
         ANDROID_EXTRA_LIBS = \
-            $$PWD/../../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
+            $$PWD/../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
             /home/manish/Android/android-ndk-r10e/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so
     }
 #----------------------------------------------------
 
 #############################################
 
-#>>>>>>>>>>>>>>>>>>>>CSVDB REFERENCES>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../logging/release/ -llogging
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../logging/debug/ -llogging
+else:unix: LIBS += -L$$OUT_PWD/../logging/ -llogging
 
-win32: {
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-csvdb-Desktop/release/ -lcsvdb
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-csvdb-Desktop/debug/ -lcsvdb
+INCLUDEPATH += $$PWD/../logging
+DEPENDPATH += $$PWD/../logging
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../csvdb/release/ -lcsvdb
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../csvdb/debug/ -lcsvdb
+else:unix: LIBS += -L$$OUT_PWD/../csvdb/ -lcsvdb
 
 INCLUDEPATH += $$PWD/../csvdb
 DEPENDPATH += $$PWD/../csvdb
-}
-
-android:{
-    LIBS += -L$$PWD/../build-csvdb-Android/ -lcsvdb
-
-    INCLUDEPATH += $$PWD/../csvdb
-    DEPENDPATH += $$PWD/../csvdb
-}
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-

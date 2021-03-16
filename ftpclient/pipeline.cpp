@@ -45,7 +45,7 @@ int Pipeline::Process(const QString &lastReply)
             return (*cmd)->Run(m_controlChannel, m_dataChannel);
         }
         else {
-            return -2;
+            return 1;
         }
     }
     else {

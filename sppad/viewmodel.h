@@ -6,7 +6,7 @@
 #include "idelegator.h"
 #include "ftpclient.h"
 #include "messenger.h"
-#include "../../common/multilistener.h"
+#include "../common/multilistener.h"
 
 #define PORT 8286
 class viewmodel : public QObject, IDelegator

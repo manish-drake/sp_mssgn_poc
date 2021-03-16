@@ -1,9 +1,9 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    logging \
     csvdb \
     ftpclient \
-    logging \
     messaging \
     streamdeck
 

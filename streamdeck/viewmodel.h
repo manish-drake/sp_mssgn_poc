@@ -5,7 +5,7 @@
 #include "listener.h"
 #include "idelegator.h"
 #include <QObject>
-#include "../../common/multilistener.h"
+#include "../common/multilistener.h"
 
 #define PORT 8283
 class viewmodel : public QObject, IDelegator
