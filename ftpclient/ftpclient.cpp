@@ -58,7 +58,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
                          [&](int code, const QString &parameters) {
             auto cd = QString("reply.%1xx").arg(code / 100);
             auto result = m_pipeline.Process(cd);
-            if(result < 0)
+            if(result != 0)
                 m_cv.notify_one();
         });
 
