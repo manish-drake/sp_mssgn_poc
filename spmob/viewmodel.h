@@ -80,7 +80,6 @@ private:
     Messaging::Delegate m_broker;
     Messaging::Listener m_listener;
     Messaging::Messenger m_messenger;
-    FTPClient m_ftp;
     bool m_close = false;
     QString getUniqueFileName();
 public slots:

@@ -96,8 +96,8 @@ else:unix: LIBS += -L$$OUT_PWD/../csvdb/ -lcsvdb
 INCLUDEPATH += $$PWD/../csvdb
 DEPENDPATH += $$PWD/../csvdb
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/ -lftpclient
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/ -lftpclient
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/release -lftpclient
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/debug -lftpclient
 else:unix: LIBS += -L$$OUT_PWD/../ftpclient/ -lftpclient
 
 INCLUDEPATH += $$PWD/../ftpclient

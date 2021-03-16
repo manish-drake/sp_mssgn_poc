@@ -52,10 +52,14 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
     setBody("Received: Stop Recording");
     setIsRecording(false);
 
-    LOGINFOZ("Sending %s to server..", m_fileName.data());
+    LOGINFOZ("Sending %s to server..", m_fileName.toStdString().c_str());
     setBody("File found");
     QString serverIP{m_epFTP.c_str()};
-    m_ftp.Send(m_fileName, serverIP);
+//    m_ftp.Send(m_fileName, serverIP);
+
+    FTPClient ftp;
+    connect(&ftp, &FTPClient::videoFTPComplete, this, &viewmodel::videoFTPComplete);
+    ftp.Send("Z:\\git\\samples\\videos\\video1.mp4", serverIP);
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
@@ -111,7 +115,6 @@ viewmodel::viewmodel(QObject *parent) :
                              MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
     });
 
-    connect(&m_ftp, &FTPClient::videoFTPComplete, this, &viewmodel::videoFTPComplete);
 }
 
 viewmodel::~viewmodel()

@@ -16,17 +16,16 @@
 class FTPClient : public QObject
 {
     Q_OBJECT
-    FtpDataChannel dataChannel;
-    FtpControlChannel controlChannel;
+
     bool m_isConnected;
-    Pipeline m_pipeline;
     bool isConnected() const
     {
         return m_isConnected;
     }
+
     std::mutex m_mtx;
     std::condition_variable m_cv;
-    std::unique_ptr<std::thread> m_pth;
+    std::thread m_th;
     void send_worker(const QString &fileName, const QString &server);
 public:
     explicit FTPClient(QObject *parent = nullptr);
@@ -37,7 +36,6 @@ signals:
     void connectToServer(QString server);
     void videoFTPComplete(const QString& vid);
     void videoFetchComplete(const QString& vid);
-
 };
 
 #endif // FTPCLIENT_H
