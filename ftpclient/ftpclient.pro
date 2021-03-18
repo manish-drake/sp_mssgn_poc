@@ -21,7 +21,9 @@ unix {
     target.path = /usr/lib
     INSTALLS += target
 }
-
+win32:{
+    LIBS += -lws2_32
+}
 HEADERS += \
     commandbase.h \
     commandopts.h \
@@ -30,14 +32,17 @@ HEADERS += \
     commanddata.h \
     commandquit.h \
     commandpwd.h \
+    ftp.h \
     ftpclient.h \
     pipeline.h \
     ftpcontrolchannel.h \
     ftpdatachannel.h \
-    commanduser.h
+    commanduser.h \
+    socket.h
 
 SOURCES += \
     commandbase.cpp \
+    ftp.cpp \
     pipeline.cpp \
     ftpclient.cpp \
     ftpcontrolchannel.cpp \
@@ -48,7 +53,8 @@ SOURCES += \
     commandquit.cpp \
     commandpwd.cpp \
     commandopts.cpp \
-    commanduser.cpp
+    commanduser.cpp \
+    socket.cpp
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -62,4 +68,5 @@ else:unix: LIBS += -L$$OUT_PWD/../logging/ -llogging
 
 INCLUDEPATH += $$PWD/../logging
 DEPENDPATH += $$PWD/../logging
+
 

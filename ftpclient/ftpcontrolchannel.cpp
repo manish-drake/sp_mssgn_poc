@@ -63,6 +63,7 @@ FtpControlChannel::FtpControlChannel(QObject *parent) : QObject(parent)
 void FtpControlChannel::connectToServer(QString server)
 {
     m_socket.connectToHost(server, 21);
+    m_socket.waitForConnected();
 }
 
 void FtpControlChannel::command(const QByteArray &command, const QByteArray &params)
@@ -72,6 +73,7 @@ void FtpControlChannel::command(const QByteArray &command, const QByteArray &par
         sendData += " " + params;
     LOGINFOZ("sending: %s", sendData.toStdString().c_str());
     m_socket.write(sendData + "\r\n");
+    m_socket.waitForReadyRead();
 }
 
 void FtpControlChannel::command(const string &command, const string &params)

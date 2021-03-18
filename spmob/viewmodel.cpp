@@ -10,6 +10,8 @@
 #include "logger.h"
 #include "csvlist.h"
 #include <ctime>
+#include "ftp.h"
+#include "socket.h"
 
 QString viewmodel::getUniqueFileName()
 {
@@ -57,9 +59,14 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
     QString serverIP{m_epFTP.c_str()};
 //    m_ftp.Send(m_fileName, serverIP);
 
-    FTPClient ftp;
-    connect(&ftp, &FTPClient::videoFTPComplete, this, &viewmodel::videoFTPComplete);
-    ftp.Send("Z:\\git\\samples\\videos\\video1.mp4", serverIP);
+    std::thread t([this, &serverIP](){
+        ftp_t ftp("192.168.10.10", 21);
+            ftp.login("sportspip", "drake8283");
+            // ftp.get_file_list();
+            // ftp.get_file(ftp.m_file_nslt.at(0).c_str());
+            ftp.put_file(this->m_fileName.toStdString().c_str());
+    });
+    t.join();
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
