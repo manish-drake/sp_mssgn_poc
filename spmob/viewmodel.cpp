@@ -60,7 +60,7 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
 //    m_ftp.Send(m_fileName, serverIP);
 
     std::thread t([this, &serverIP](){
-        ftp_t ftp("192.168.10.10", 21);
+        ftp_t ftp(serverIP.toStdString().c_str(), 21);
             ftp.login("sportspip", "drake8283");
             // ftp.get_file_list();
             // ftp.get_file(ftp.m_file_nslt.at(0).c_str());
