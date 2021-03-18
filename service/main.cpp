@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     else
     {
 
-        const std::string &selectedIP = localIps[1];
+        const std::string &selectedIP = localIps[0];
         LOGINFOZ("Selecting %s for all further communication.", selectedIP.c_str());
         Broadcast::Instance()->Create("0", "0", "00", const_cast<char *>(selectedIP.c_str()));
         broadcaster.Start(Broadcast::Instance()->data());

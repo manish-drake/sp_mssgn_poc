@@ -69,7 +69,7 @@ void FtpDataChannel::listen(const QHostAddress &address)
 void FtpDataChannel::sendData(const QByteArray &data)
 {
     if (m_socket)
-        m_socket->write(QByteArray(data)/*.replace("\n", "\r\n")*/);
+        m_socket->write(QByteArray(data));
 }
 
 void FtpDataChannel::close()

@@ -64,6 +64,7 @@ public:
 
     // Send a command to the server
     void command(const QByteArray &command, const QByteArray &params);
+    void command(const std::string &command, const std::string &params);
 
 signals:
 
