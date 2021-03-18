@@ -114,6 +114,8 @@ void FTPClient::Fetch(const std::string& fileName, const QString &server, const 
             {
                 LOGINFOZ("Fetch complete with %s. Closing File..", cd.toStdString().c_str());
                 file1.close();
+                Command command = commands.takeFirst();
+                controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
             }
         }
         default:
@@ -169,6 +171,15 @@ void FTPClient::Send(const QString &fileName, const QString &server)
         auto cd = QString("reply.%1xx").arg(code / 100);
         qDebug() << "Code: " << cd;
         switch (commands.size()) {
+        case 5:
+        {
+            if(cd == "reply.2xx")
+            {
+                Command command = commands.takeFirst();
+                controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
+            }
+            break;
+        }
         case 4:
         {
             if(cd == "reply.2xx")
@@ -185,15 +196,6 @@ void FTPClient::Send(const QString &fileName, const QString &server)
                 Command command = commands.takeFirst();
                 controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
             }
-            break;
-        }
-        case 2:
-        {
-            if(cd == "reply.2xx")
-            {
-                Command command = commands.takeFirst();
-                controlChannel.command(command.cmd.toLatin1(), command.args.toUtf8());
-            }
             else if(cd == "reply.3xx")
             {
                 QString c = "PASS";
@@ -202,7 +204,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
             }
             break;
         }
-        case 1:
+        case 2:
         {
             if(cd == "reply.2xx")
             {
@@ -214,7 +216,7 @@ void FTPClient::Send(const QString &fileName, const QString &server)
             }
             break;
         }
-        case 0:
+        case 1:
         {
             if(cd == "reply.1xx")
             {
@@ -238,7 +240,14 @@ void FTPClient::Send(const QString &fileName, const QString &server)
                 LOGERRZ("Error transferring the file, %s", cd.toStdString().c_str());
             }
         }
+        case 0:
+            {
+                if(cd == "reply.1xx")
+                {
+                    
+                }
             break;
+        }
         default:
             break;
         }

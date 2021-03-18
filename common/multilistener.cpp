@@ -84,10 +84,10 @@ void MultiListener::Start(std::function<void (const std::string &, const std::st
 
         while (1) {
             char msgbuf[MSGBUFSIZE];
-#ifdef Q_OS_IOS
-            unsigned int addrlen = sizeof(addr);
-#else
+#ifdef Q_OS_ANDROID
             int addrlen = sizeof(addr);
+#else
+            unsigned int addrlen = sizeof(addr);
 #endif
             long nbytes = recvfrom(
                         fd,
