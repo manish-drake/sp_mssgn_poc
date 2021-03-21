@@ -1,4 +1,4 @@
-QT       += network
+CONFIG -= qt
 
 TARGET = ftpclient
 TEMPLATE = lib
@@ -25,35 +25,11 @@ win32:{
     LIBS += -lws2_32
 }
 HEADERS += \
-    commandbase.h \
-    commandopts.h \
-    commandport.h \
-    commandstor.h \
-    commanddata.h \
-    commandquit.h \
-    commandpwd.h \
     ftp.h \
-    ftpclient.h \
-    pipeline.h \
-    ftpcontrolchannel.h \
-    ftpdatachannel.h \
-    commanduser.h \
     socket.h
 
 SOURCES += \
-    commandbase.cpp \
     ftp.cpp \
-    pipeline.cpp \
-    ftpclient.cpp \
-    ftpcontrolchannel.cpp \
-    ftpdatachannel.cpp \
-    commandport.cpp \
-    commandstor.cpp \
-    commanddata.cpp \
-    commandquit.cpp \
-    commandpwd.cpp \
-    commandopts.cpp \
-    commanduser.cpp \
     socket.cpp
 
 # Additional import path used to resolve QML modules in Qt Creator's code model

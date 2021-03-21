@@ -19,22 +19,6 @@
 #include <algorithm>
 #include <string>
 
-//FTP uses two TCP connections to transfer files : a control connection and a data connection
-//connect a socket(control socket) to a ftp server on the port 21
-//receive on the socket a message from the ftp server(code : 220)
-//send login to the ftp server using the command USER and wait for confirmation (331)
-//send password using the command PASS and wait for confirmation that you are logged on the server (230)
-//send file:
-//use the passive mode: send command PASV
-//receive answer with an IP address and a port (227), parse this message.
-//connect a second socket(a data socket) with the given configuration
-//use the command STOR on the control socket
-//send data through the data socket, close data socket.
-//leave session using on the control socket the command QUIT.
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::ftp_t()
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ftp_t::ftp_t(const char *host_name, const unsigned short server_port)
     : tcp_client_t(host_name, server_port),
@@ -44,17 +28,11 @@ ftp_t::ftp_t(const char *host_name, const unsigned short server_port)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::~ftp_t()
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ftp_t::~ftp_t()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::login()
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ftp_t::login(const char *user_name, const char *pass)
 {
@@ -62,55 +40,37 @@ void ftp_t::login(const char *user_name, const char *pass)
   std::string str_server_ip;
   std::string str_rsp;
 
-  //create the control socket
   create_socket(sock_ctrl, m_server_ip.c_str(), m_server_port);
 
   get_response(sock_ctrl, str_rsp);
 
-  //construct USER request message using command line parameters
-  //Note: there is no space between the user name and CRLF; example of request is "USER me\r\n"
   sprintf(buf_request, "USER %s\r\n", user_name);
 
-  //send USER request
   send_request(sock_ctrl, buf_request);
 
-  //receive response
   get_response(sock_ctrl, str_rsp);
 
-  //construct PASS request message using command line parameters
   sprintf(buf_request, "PASS %s\r\n", pass);
 
-  //send PASS request
   send_request(sock_ctrl, buf_request);
 
-  //receive response
   get_response(sock_ctrl, str_rsp);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::logout()
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ftp_t::logout()
 {
   char buf_request[255];
   std::string str_rsp;
 
-  //construct QUIT request message
   sprintf(buf_request, "QUIT\r\n");
 
-  //send QUIT request (on control socket)
   send_request(sock_ctrl, buf_request);
 
-  //get 'Goodbye' response
   get_response(sock_ctrl, str_rsp);
 
   close_socket(sock_ctrl);
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::get_file_list()
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ftp_t::get_file_list()
 {
@@ -119,43 +79,29 @@ void ftp_t::get_file_list()
   std::string str_rsp;
   unsigned short server_port = 21;
 
-  //enter passive mode: make PASV request
   sprintf(buf_request, "PASV\r\n");
 
-  //send PASV request
   send_request(sock_ctrl, buf_request);
 
-  //receive response
   get_response(sock_ctrl, str_rsp);
 
-  //parse the PASV response
   parse_PASV_response(str_rsp, str_server_ip, server_port);
 
-  //create the data socket
   create_socket(sock_data, str_server_ip.c_str(), server_port);
 
-  //construct NLST (list) request message
   sprintf(buf_request, "NLST\r\n");
 
-  //send NLST request (on control socket)
   send_request(sock_ctrl, buf_request);
 
-  //get response on control socket
   get_response(sock_ctrl, str_rsp);
 
-  //get list on the data socket
   receive_list(sock_data);
 
-  //get response on control socket
   get_response(sock_ctrl, str_rsp);
 
-  //close data socket
   close_socket(sock_data);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::get_file()
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ftp_t::get_file(const char *file_name)
 {
@@ -224,42 +170,30 @@ void ftp_t::get_file(const char *file_name)
   close_socket(sock_data);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::put_file()
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ftp_t::put_file(const char *file_name)
+void ftp_t::put_file(const char *file_name, const char* name)
 {
   char buf_request[255];
   std::string str_server_ip;
   std::string str_rsp;
   unsigned short server_port;
 
-  //enter passive mode: make PASV request
   sprintf(buf_request, "PASV\r\n");
 
-  //send PASV request
   send_request(sock_ctrl, buf_request);
 
-  //get response on control socket
   get_response(sock_ctrl, str_rsp);
 
-  //parse the PASV response
   parse_PASV_response(str_rsp, str_server_ip, server_port);
 
-  //create the data socket
   create_socket(sock_data, str_server_ip.c_str(), server_port);
 
-  //construct RETR request message
-  sprintf(buf_request, "STOR %s\r\n", "fil1.mp4");
+  sprintf(buf_request, "STOR %s\r\n", name);
 
-  //send RETR request on control socket
   send_request(sock_ctrl, buf_request);
 
-  //get response on control socket
   get_response(sock_ctrl, str_rsp);
 
-  //get the file (data socket), save to local file with same name
   FILE *fp;
   fp = fopen(file_name, "rb");
   if (fp == nullptr)
@@ -269,16 +203,10 @@ void ftp_t::put_file(const char *file_name)
   }
   sendfile(sock_data, fp);
   
-  //close data socket
   close_socket(sock_data);
 
-  //get response
   get_response(sock_ctrl, str_rsp);
-
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::receive_list
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ftp_t::receive_list(int sock)
 {
@@ -328,9 +256,6 @@ void ftp_t::receive_list(int sock)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::create_socket
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ftp_t::create_socket(int &sock, const char *server_ip, const unsigned short server_port)
 {
@@ -356,9 +281,6 @@ void ftp_t::create_socket(int &sock, const char *server_ip, const unsigned short
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::get_response()
-///////////////////////////////////////////////////////////////////////////////////////
 
 void ftp_t::get_response(int sock, std::string &str_rep)
 {
@@ -378,9 +300,6 @@ void ftp_t::get_response(int sock, std::string &str_rep)
   return;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::send_request()
-///////////////////////////////////////////////////////////////////////////////////////
 
 void ftp_t::send_request(int sock, const char *buf_request)
 {
@@ -418,9 +337,6 @@ void ftp_t::parse_PASV_response(const std::string &str_rsp, std::string &str_ser
   str_server_ip = server_ip;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//ftp_t::close_socket
-///////////////////////////////////////////////////////////////////////////////////////
 
 void ftp_t::close_socket(int sock)
 {

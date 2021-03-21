@@ -7,12 +7,12 @@
 #include <thread>
 #include "delegate.h"
 #include <iostream>
-#include "ftpclient.h"
 #include <fstream>
 #include "messages.h"
 #include "../common/network.h"
 #include <QStandardPaths>
 #include <QDir>
+#include "../common/threadpool.h"
 
 using namespace std;
 using namespace Messaging;
@@ -86,5 +86,8 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
-    return app.exec();
+
+    auto result = app.exec();
+    ThreadPool::Factory()->Join();
+    return result;
 }

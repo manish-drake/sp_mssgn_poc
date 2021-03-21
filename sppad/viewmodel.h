@@ -4,7 +4,6 @@
 #include "listener.h"
 #include "delegate.h"
 #include "idelegator.h"
-#include "ftpclient.h"
 #include "messenger.h"
 #include "../common/multilistener.h"
 
@@ -34,7 +33,6 @@ class viewmodel : public QObject, IDelegator
     Messaging::Listener m_listener;
     Messaging::Delegate m_broker;
     Messaging::Messenger m_messenger;
-    FTPClient m_ftp;
     QString m_appMediaFolder;
 public:
     explicit viewmodel(QObject *parent = nullptr);

@@ -12,6 +12,7 @@
 #include <ctime>
 #include "ftp.h"
 #include "socket.h"
+#include "../common/threadpool.h"
 
 QString viewmodel::getUniqueFileName()
 {
@@ -57,16 +58,18 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
     LOGINFOZ("Sending %s to server..", m_fileName.toStdString().c_str());
     setBody("File found");
     QString serverIP{m_epFTP.c_str()};
-//    m_ftp.Send(m_fileName, serverIP);
 
-    std::thread t([this, &serverIP](){
+    ThreadPool::Factory()->Create([this, serverIP](){
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         ftp_t ftp(serverIP.toStdString().c_str(), 21);
-            ftp.login("sportspip", "drake8283");
-            // ftp.get_file_list();
-            // ftp.get_file(ftp.m_file_nslt.at(0).c_str());
-            ftp.put_file(this->m_fileName.toStdString().c_str());
+        ftp.login("sportspip", "drake8283");
+
+        QFileInfo fInfo(this->m_fileName);
+        QString bname = fInfo.baseName();
+        QString fname = bname.append(".").append(fInfo.completeSuffix());
+
+        ftp.put_file(this->m_fileName.toStdString().c_str(), fname.toStdString().c_str());
     });
-    t.join();
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)

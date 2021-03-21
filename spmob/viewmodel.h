@@ -5,7 +5,6 @@
 #include "delegate.h"
 #include "listener.h"
 #include "idelegator.h"
-#include "ftpclient.h"
 #include "messenger.h"
 #include "../common/multilistener.h"
 

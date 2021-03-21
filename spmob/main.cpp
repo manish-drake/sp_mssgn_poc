@@ -3,12 +3,12 @@
 #include <QQmlContext>
 #include "viewmodel.h"
 #include "messages.h"
-#include "ftpclient.h"
 #include "loggerf.h"
 #include "loggerc.h"
 #include "../common/network.h"
 #include <QStandardPaths>
 #include <QDir>
+#include "../common/threadpool.h"
 
 
 void initLog(std::string path = "")
@@ -76,5 +76,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    return app.exec();
+    auto result = app.exec();
+    ThreadPool::Factory()->Join();
+    return result;
 }

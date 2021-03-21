@@ -5,6 +5,8 @@
 #include "messages.h"
 #include <QStandardPaths>
 #include <QDir>
+#include "ftp.h"
+#include "../common/threadpool.h"
 
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
@@ -21,7 +23,12 @@ void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
 {
     LOGINFOZ("Fetching video from FTP server %s", args);
     QString serverIP{m_epFTP.c_str()};
-    m_ftp.Fetch(args, serverIP, m_appMediaFolder.toStdString());
+    std::string fileName{args};
+    ThreadPool::Factory()->Create([serverIP, fileName](){
+        ftp_t ftp(serverIP.toStdString().c_str(), 21);
+        ftp.login("sportspip", "drake8283");
+        ftp.get_file(fileName.c_str());
+    });
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
@@ -59,7 +66,6 @@ viewmodel::viewmodel(QObject *parent) :
                              MSG_HDSK(Messaging::MSG_ROLES_ENUM::CONSUMER));
     });
 
-    connect(&m_ftp, &FTPClient::videoFetchComplete, this, &viewmodel::videoFetchComplete);
 }
 
 void viewmodel::start()

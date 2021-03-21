@@ -4,10 +4,6 @@
 #include <vector>
 #include "socket.h"
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//ftp_t
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ftp_t : public tcp_client_t
 {
 public:
@@ -17,9 +13,8 @@ public:
   void logout();
   void get_file_list();
   void get_file(const char *file_name);
-  void put_file(const char *file_name);
+  void put_file(const char *file_name, const char *name);
 
-  //file list on ftp server
   std::vector<std::string> m_file_nslt;
 
 private:
