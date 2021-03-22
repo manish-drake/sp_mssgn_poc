@@ -25,9 +25,27 @@ void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
     QString serverIP{m_epFTP.c_str()};
     std::string fileName{args};
     ThreadPool::Factory()->Create([serverIP, fileName](){
+        LOGINFO("Initializing local storage..");
+            QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
+            LOGINFOZ("Storage root: %s", localPath.data());
+
+            QString appMediaFolder = localPath.append("/SportsPIP/Videos");
+            LOGINFOZ("Media folder: %s", appMediaFolder.data());
+
+            QDir dAppMediaFolder(appMediaFolder);
+            if (!dAppMediaFolder.exists())
+            {
+                LOGINFO("Creating media folder");
+                dAppMediaFolder.mkpath(".");
+            }
+
+            std::string absFileName = appMediaFolder.toStdString() + "/" + fileName;
+            LOGINFOZ("Opening file at %s", absFileName.c_str());
+
+
         ftp_t ftp(serverIP.toStdString().c_str(), 21);
         ftp.login("sportspip", "drake8283");
-        ftp.get_file(fileName.c_str());
+        ftp.get_file(fileName.c_str(), absFileName);
     });
 }
 

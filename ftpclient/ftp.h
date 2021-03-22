@@ -12,7 +12,7 @@ public:
   void login(const char *user_name, const char *pass);
   void logout();
   void get_file_list();
-  void get_file(const char *file_name);
+  void get_file(const char *file_name, const std::string &destination);
   void put_file(const char *file_name, const char *name);
 
   std::vector<std::string> m_file_nslt;

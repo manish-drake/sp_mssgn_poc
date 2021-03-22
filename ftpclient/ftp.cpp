@@ -103,7 +103,7 @@ void ftp_t::get_file_list()
 }
 
 
-void ftp_t::get_file(const char *file_name)
+void ftp_t::get_file(const char *file_name, const std::string &destination)
 {
   char buf_request[255];
   std::string str_server_ip;
@@ -161,7 +161,7 @@ void ftp_t::get_file(const char *file_name)
   get_response(sock_ctrl, str_rsp);
 
   //get the file (data socket), save to local file with same name
-  receive_all(sock_data, file_name);
+  receive_all(sock_data, destination.c_str());
 
   //get response
   get_response(sock_ctrl, str_rsp);
