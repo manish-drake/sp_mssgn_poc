@@ -102,12 +102,12 @@ std::string Messaging::Messages::MSG_VFTP(const std::string &fileName)
 }
 
 //notification that the source is idle
-string Messaging::Messages::MSG_SRID()
+string Messaging::Messages::MSG_SRID(const char *args)
 {
     return construct({
                          m_endpoint,
                          206,
-                         ""
+                         args
                      });
 }
 

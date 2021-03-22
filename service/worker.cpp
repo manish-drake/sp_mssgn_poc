@@ -6,10 +6,9 @@
 #include <algorithm>
 #include "messages.h"
 
-
-const char* MsgRoleStr(Messaging::MSG_ROLES_ENUM role)
+const char *MsgRoleStr(Messaging::MSG_ROLES_ENUM role)
 {
-    static char* roles[] = {"Source", "Consumer", "Controller"};
+    static char *roles[] = {"Source", "Consumer", "Controller"};
     return roles[role];
 }
 
@@ -33,11 +32,11 @@ void Worker::OnSubscription(const char *from, const char *args)
 void Worker::OnVideoFTPComplete(const char *from, const char *args)
 {
     LOGINFO("Sending notifcation to all subscribers...");
-    for(auto& src: m_subscribers[Messaging::MSG_ROLES_ENUM::CONSUMER])
+    for (auto &src : m_subscribers[Messaging::MSG_ROLES_ENUM::CONSUMER])
         m_messenger.Send(src, Messaging::Messages::Factory()->MSG_NWVA(args));
 
-    for(auto& src: m_subscribers[Messaging::MSG_ROLES_ENUM::CONTROLLER])
-        m_messenger.Send(src, Messaging::Messages::Factory()->MSG_SRID());
+    for (auto &src : m_subscribers[Messaging::MSG_ROLES_ENUM::CONTROLLER])
+        m_messenger.Send(src, Messaging::Messages::Factory()->MSG_SRID(from));
 }
 
 void Worker::OnUnknownMessage(const char *from, const char *args)
@@ -45,15 +44,14 @@ void Worker::OnUnknownMessage(const char *from, const char *args)
     LOGWARNZ("%s -ukn-> %s", from, args);
 }
 
-
 void Worker::OnHandshake(const char *from, const char *args)
 {
     auto roleVal = atoi(args);
     auto role = static_cast<Messaging::MSG_ROLES_ENUM>(roleVal);
-    auto& list = m_subscribers[role];
+    auto &list = m_subscribers[role];
     auto subscriber = std::string(from);
     auto it = std::find(list.begin(), list.end(), subscriber);
-    if(it == list.end())
+    if (it == list.end())
     {
         list.push_back(subscriber);
         LOGINFOZ("%s added to the [%s] role", from, MsgRoleStr(role));
@@ -65,8 +63,8 @@ void Worker::OnHandshake(const char *from, const char *args)
 void Worker::OnRequestSources(const char *from, const char *args)
 {
     std::string csvSources;
-    auto& list = m_subscribers[Messaging::MSG_ROLES_ENUM::SOURCE];
-    for(auto& src: list)
+    auto &list = m_subscribers[Messaging::MSG_ROLES_ENUM::SOURCE];
+    for (auto &src : list)
     {
         csvSources += src + ",";
     }
