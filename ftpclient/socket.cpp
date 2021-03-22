@@ -229,7 +229,7 @@ tcp_server_t::tcp_server_t(const unsigned short server_port)
   WSADATA ws_data;
   if (WSAStartup(MAKEWORD(2, 0), &ws_data) != 0)
   {
-    return 1;
+    return ;
   }
 #endif
   sockaddr_in server_addr; // local address
@@ -319,7 +319,7 @@ tcp_client_t::tcp_client_t()
   WSADATA ws_data;
   if (WSAStartup(MAKEWORD(2, 0), &ws_data) != 0)
   {
-    return 1;
+    return ;
   }
 #endif
 }
@@ -332,7 +332,7 @@ tcp_client_t::tcp_client_t(const char* host_name, const unsigned short server_po
   WSADATA ws_data;
   if (WSAStartup(MAKEWORD(2, 0), &ws_data) != 0)
   {
-    return 1;
+    return ;
   }
 #endif
 

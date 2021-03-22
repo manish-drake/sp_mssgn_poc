@@ -26,6 +26,7 @@ class viewmodel : public QObject, IDelegator
 
     std::string m_epSrv, m_epFTP;
     std::vector<std::string> m_epSrcs;
+    std::string m_localServer;
 
 
     bool m_isRecording;

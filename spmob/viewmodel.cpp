@@ -20,9 +20,21 @@ QString viewmodel::getUniqueFileName()
     time_t t = time(nullptr);
     tm *ltm = localtime(&t);
     char buffer[32];
-    size_t sz = strftime(buffer, 32, "%Y%m%d%H%M%S.mp4", ltm);
+    size_t sz = strftime(buffer, 32, "%Y%m%d%H%M%S", ltm);
     buffer[sz] = '\0';
-    return QString(buffer);
+    std::string uqName{buffer};
+    size_t posDot = 0;
+    posDot = m_localServer.rfind(".");
+    size_t posColon = 0;
+    posColon = m_localServer.rfind(":");
+    if((posColon != std::string::npos) && (posDot != std::string::npos))
+    {
+        std::string ip = m_localServer.substr(posDot + 1, m_localServer.size() - posColon - 2);
+        uqName.append("_");
+        uqName.append(ip);
+    }
+    uqName.append(".mp4");
+    return QString::fromStdString(uqName);
 }
 
 
@@ -185,6 +197,7 @@ void viewmodel::ipSelected(QString ip)
 {
     char localAddress[64] = {0};
     sprintf(localAddress, "tcp://%s:%d", ip.toStdString().c_str(), PORT);
+    m_localServer = localAddress;
     Messaging::Messages::Factory()->Register(localAddress);
     LOGINFOZ("Local address set to %s", localAddress);
     if(!m_epSrv.empty())

@@ -1,10 +1,0 @@
-____________________SPORTSPIP SERVICE____________________
-3-9 20:28:35:0 [GetLocalIP::GetLocalIP] Getting local IP addresses..
-3-9 20:28:36:0 [GetLocalIP::Run] Host name is LAPTOP-8VRI4IJJ.
-3-9 20:28:36:0 [GetLocalIP::Run] IP Address 192.168.1.166
-3-9 20:28:36:0 [MultiSender::MultiSender] Starting multicast service..
-3-9 20:28:36:0 [char**)] Selecting 192.168.1.166 for all further communication.
-3-9 20:28:36:0 [Messaging::Messages::Register] Messages regitered at endpoint: 192.168.1.166:8285
-3-9 20:28:36:0 [MultiSender::Start(const string&)::<lambda] New thread broadcasting 0000192.168.1.166 on 239.255.255.250:7755 at a delay of 2 secs
-3-9 20:28:38:0 [Messaging::Listener::init] Starting listener at: tcp://*:8285
-3-9 20:29:13:0 [Messaging::Listener::Listen(std::function<void(const std::__cxx11::basic_string<char>&)>)::<lambda(std::function<void] Received: |207|0­ºð­ºð­ºð­ºð­ºð­ºð­ºð­ºe
