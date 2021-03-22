@@ -70,10 +70,12 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
         QString fname = bname.append(".").append(fInfo.completeSuffix());
         struct timeval t1, t2;
         gettimeofday(&t1, NULL);
-        ftp.put_file(this->m_fileName.toStdString().c_str(), fname.toStdString().c_str());
+        size_t szFile = ftp.put_file(this->m_fileName.toStdString().c_str(), fname.toStdString().c_str());
         gettimeofday(&t2, NULL);
         int transferTime = (t2.tv_sec - t1.tv_sec) * 1000 + (t2.tv_usec - t1.tv_usec)/1000;
-        LOGINFOZ("FTP_PUSH|%s|%d",fname.toStdString().c_str(), transferTime);
+        auto kbSzFile = szFile/1024;
+        auto mbSzFile = kbSzFile/1024;
+        LOGINFOZ("FTP_PUSH|%s|%.2f|%d", fname.toStdString().c_str(), mbSzFile, transferTime);
         this->videoFTPComplete(fname);
     });
 }
