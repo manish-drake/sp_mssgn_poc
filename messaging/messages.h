@@ -50,6 +50,19 @@ public:
         LOGINFOZ("Messages regitered at endpoint: %s", endpoint);
         s_singleton.m_endpoint = endpoint;
     }
+    static bool cmpIPAddrRange(const std::string &from)
+    {
+        bool cmp = false;
+
+        auto ep = s_singleton.m_endpoint;
+        size_t pos = ep.rfind(".");
+        if (pos != std::string::npos)
+        {
+            std::string range(ep, 0, pos + 1);
+            cmp = (from.find(range) != std::string::npos);
+        }
+        return cmp;
+    }
     Message Parse(const char *argMsg);
     std::string MSG_RCVD();
     std::string MSG_UNKN();

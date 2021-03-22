@@ -26,7 +26,7 @@ Messaging::Listener::Listener(int port):
     m_port{port},
     m_pth{nullptr}
 {
-    
+
 }
 
 void Messaging::Listener::Listen(std::function<void(const std::string&)> cb)

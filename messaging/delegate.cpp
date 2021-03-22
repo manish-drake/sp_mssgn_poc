@@ -13,6 +13,11 @@ void Messaging::Delegate::OnReceived(const std::string &argMsg)
         LOGWARN("The message sender is missing. Disposing of the message.");
         return;
     }
+    if(!Messaging::Messages::Factory()->cmpIPAddrRange(msg.from))
+    {
+        LOGWARNZ("The sender %s doen not belong to the system network. Disposing of the message.", msg.from.c_str());
+        return;
+    }
     switch (msg.task)
     {
     case 200: //acknowledgement received for last sent message

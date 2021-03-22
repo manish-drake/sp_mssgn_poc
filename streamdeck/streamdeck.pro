@@ -17,6 +17,7 @@ SOURCES += \
         main.cpp \
     ../common/network.cpp \
     ../common/multilistener.cpp \
+    ../common/threadpool.cpp \
     viewmodel.cpp \
 
 RESOURCES += qml.qrc
@@ -36,6 +37,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ../common/network.h \
     ../common/multilistener.h \
+    ../common/threadpool.h \
     viewmodel.h \
 
 unix:{
