@@ -121,14 +121,6 @@ string Messaging::Messages::MSG_HDSK(Messaging::MSG_ROLES_ENUM role)
                      });
 }
 
-string Messaging::Messages::MSG_HDID(const char* args)
-{
-    return construct({
-                         m_endpoint,
-                         207,
-                         args
-                     });
-}
 
 string Messaging::Messages::MSG_RQSR()
 {
@@ -148,6 +140,14 @@ string Messaging::Messages::MSG_RPSR(const std::string& csvSources)
                      });
 }
 
+string Messaging::Messages::MSG_HDID(const char* args)
+{
+    return construct({
+                         m_endpoint,
+                         210,
+                         args
+                     });
+}
 Messaging::Messages::~Messages()
 {
 }

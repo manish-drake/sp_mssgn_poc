@@ -61,6 +61,10 @@ void Messaging::Delegate::OnReceived(const std::string &argMsg)
         m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_RCVD());
         m_delegator->OnReplySources(msg.from.c_str(), msg.args.c_str());
         break;
+    case 210: //Hand-shake response with service assigning clientID
+        m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_RCVD());
+        m_delegator->OnHandshakeId(msg.from.c_str(), msg.args.c_str());
+        break;
     default:  //unknown message
         m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_UNKN());
         m_delegator->OnUnknownMessage(msg.from.c_str(), msg.args.c_str());
