@@ -12,8 +12,8 @@ public:
   void login(const char *user_name, const char *pass);
   void logout();
   void get_file_list();
-  void get_file(const char *file_name);
-  void put_file(const char *file_name, const char *name);
+  size_t get_file(const char *file_name, const std::string &destination);
+  size_t put_file(const char *file_name, const char *name);
 
   std::vector<std::string> m_file_nslt;
 
@@ -31,7 +31,7 @@ private:
   void send_all(int sock, const void *vbuf, size_t size_buf);
   void send_file(FILE *fp, int sockfd);
   bool senddata(int sock, void *buf, int buflen);
-  bool sendfile(int sock, FILE *f);
+  size_t sendfile(int sock, FILE *f);
 };
 
 

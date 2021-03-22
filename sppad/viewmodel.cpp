@@ -7,7 +7,7 @@
 #include <QDir>
 #include "ftp.h"
 #include "../common/threadpool.h"
-#include <ctime>
+#include <sys/time.h>
 
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
@@ -26,13 +26,34 @@ void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
     QString serverIP{m_epFTP.c_str()};
     std::string fileName{args};
     ThreadPool::Factory()->Create([serverIP, fileName](){
+        LOGINFO("Initializing local storage..");
+            QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
+            LOGINFOZ("Storage root: %s", localPath.data());
+
+            QString appMediaFolder = localPath.append("/SportsPIP/Videos");
+            LOGINFOZ("Media folder: %s", appMediaFolder.data());
+
+            QDir dAppMediaFolder(appMediaFolder);
+            if (!dAppMediaFolder.exists())
+            {
+                LOGINFO("Creating media folder");
+                dAppMediaFolder.mkpath(".");
+            }
+
+            std::string absFileName = appMediaFolder.toStdString() + "/" + fileName;
+            LOGINFOZ("Opening file at %s", absFileName.c_str());
+
+
         ftp_t ftp(serverIP.toStdString().c_str(), 21);
         ftp.login("sportspip", "drake8283");
-        time_t t1 = time(0);
-        ftp.get_file(fileName.c_str());
-        time_t t2 = time(0);
-        double transferTime = difftime(t2, t1) * 1000;
-        LOGINFOZ("FTP_PULL|%s|%f", fileName.c_str(), transferTime);
+        struct timeval t1, t2;
+        gettimeofday(&t1, nullptr);
+        size_t szFile = ftp.get_file(fileName.c_str(), absFileName);
+        gettimeofday(&t2, nullptr);
+        int transferTime = (t2.tv_sec -t1.tv_sec) * 1000 + (t2.tv_usec - t1.tv_usec)/1000;
+        auto kbSzFile = szFile/1024;
+        auto mbSzFile = kbSzFile/1024;
+        LOGINFOZ("FTP_PULL|%s|%.2f|%d", fileName.c_str(), mbSzFile, transferTime);
     });
 }
 
