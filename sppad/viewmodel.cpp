@@ -7,7 +7,7 @@
 #include <QDir>
 #include "ftp.h"
 #include "../common/threadpool.h"
-#include <ctime>
+#include <sys/time.h>
 
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
@@ -46,11 +46,12 @@ void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
 
         ftp_t ftp(serverIP.toStdString().c_str(), 21);
         ftp.login("sportspip", "drake8283");
-        time_t t1 = time(0);
+        struct timeval t1, t2;
+        gettimeofday(&t1, nullptr);
         ftp.get_file(fileName.c_str(), absFileName);
-        time_t t2 = time(0);
-        double transferTime = difftime(t2, t1) * 1000;
-        LOGINFOZ("FTP_PULL|%s|%f", fileName.c_str(), transferTime);
+        gettimeofday(&t2, nullptr);
+        int transferTime = (t2.tv_sec -t1.tv_sec) * 1000 + (t2.tv_usec - t1.tv_usec)/1000;
+        LOGINFOZ("FTP_PULL|%s|%d", fileName.c_str(), transferTime);
     });
 }
 
