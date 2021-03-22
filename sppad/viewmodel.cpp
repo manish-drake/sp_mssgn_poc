@@ -48,10 +48,12 @@ void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
         ftp.login("sportspip", "drake8283");
         struct timeval t1, t2;
         gettimeofday(&t1, nullptr);
-        ftp.get_file(fileName.c_str(), absFileName);
+        size_t szFile = ftp.get_file(fileName.c_str(), absFileName);
         gettimeofday(&t2, nullptr);
         int transferTime = (t2.tv_sec -t1.tv_sec) * 1000 + (t2.tv_usec - t1.tv_usec)/1000;
-        LOGINFOZ("FTP_PULL|%s|%d", fileName.c_str(), transferTime);
+        auto kbSzFile = szFile/1024;
+        auto mbSzFile = kbSzFile/1024;
+        LOGINFOZ("FTP_PULL|%s|%.2f|%d", fileName.c_str(), mbSzFile, transferTime);
     });
 }
 

@@ -103,7 +103,7 @@ void ftp_t::get_file_list()
 }
 
 
-void ftp_t::get_file(const char *file_name, const std::string &destination)
+size_t ftp_t::get_file(const char *file_name, const std::string &destination)
 {
   char buf_request[255];
   std::string str_server_ip;
@@ -168,10 +168,11 @@ void ftp_t::get_file(const char *file_name, const std::string &destination)
 
   //close data socket
   close_socket(sock_data);
+  return size_file;
 }
 
 
-void ftp_t::put_file(const char *file_name, const char* name)
+size_t ftp_t::put_file(const char *file_name, const char* name)
 {
   char buf_request[255];
   std::string str_server_ip;
@@ -199,13 +200,14 @@ void ftp_t::put_file(const char *file_name, const char* name)
   if (fp == nullptr)
   {
     perror("[-]Error in reading file.");
-    return;
+    return 0;
   }
-  sendfile(sock_data, fp);
+  size_t szFile = sendfile(sock_data, fp);
   
   close_socket(sock_data);
 
   get_response(sock_ctrl, str_rsp);
+  return szFile;
 }
 
 void ftp_t::receive_list(int sock)
@@ -445,7 +447,7 @@ bool ftp_t::senddata(int sock, void *buf, int buflen)
 
     return true;
 }
-bool ftp_t::sendfile(int sock, FILE *f)
+size_t ftp_t::sendfile(int sock, FILE *f)
 {
     fseek(f, 0, SEEK_END);
     size_t filesize = ftell(f);
@@ -467,5 +469,5 @@ bool ftp_t::sendfile(int sock, FILE *f)
         }
         while (filesize > 0);
     }
-    return true;
+    return filesize;
 }
