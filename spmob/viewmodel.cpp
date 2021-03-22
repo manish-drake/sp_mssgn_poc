@@ -13,6 +13,7 @@
 #include "ftp.h"
 #include "socket.h"
 #include "../common/threadpool.h"
+#include <ctime>
 
 QString viewmodel::getUniqueFileName()
 {
@@ -67,8 +68,12 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
         QFileInfo fInfo(this->m_fileName);
         QString bname = fInfo.baseName();
         QString fname = bname.append(".").append(fInfo.completeSuffix());
-
+        time_t t1 = time(0);
         ftp.put_file(this->m_fileName.toStdString().c_str(), fname.toStdString().c_str());
+        time_t t2 = time(0);
+        double transferTime = difftime(t2, t1) * 1000;
+        LOGINFOZ("FTP_PUSH|%s|%f",fname.toStdString().c_str(), transferTime);
+        this->videoFTPComplete(fname);
     });
 }
 
