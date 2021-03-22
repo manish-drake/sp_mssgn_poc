@@ -21,6 +21,7 @@ class viewmodel : public QObject, IDelegator
     void OnStopRecording(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
     void OnReplySources(const char* from, const char* args) override;
+    void OnHandshakeId(const char* from, const char* args) override;
 
     MultiListener m_multListener;
 
@@ -53,6 +54,7 @@ class viewmodel : public QObject, IDelegator
         return m_fileName;
     }
     QString m_appMediaFolder;
+    std::string m_clientID;
 public:
     explicit viewmodel(QObject *parent = nullptr);
     ~viewmodel();

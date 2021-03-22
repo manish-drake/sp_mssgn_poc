@@ -73,6 +73,7 @@ public:
     std::string MSG_VFTP(const std::string &fileName);
     std::string MSG_SRID(const char* args);
     std::string MSG_HDSK(MSG_ROLES_ENUM role);
+    std::string MSG_HDID(const char* args);
     std::string MSG_RQSR();
     std::string MSG_RPSR(const string &csvSources);
 };

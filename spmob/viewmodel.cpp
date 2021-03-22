@@ -23,16 +23,8 @@ QString viewmodel::getUniqueFileName()
     size_t sz = strftime(buffer, 32, "%Y%m%d%H%M%S", ltm);
     buffer[sz] = '\0';
     std::string uqName{buffer};
-    size_t posDot = 0;
-    posDot = m_localServer.rfind(".");
-    size_t posColon = 0;
-    posColon = m_localServer.rfind(":");
-    if((posColon != std::string::npos) && (posDot != std::string::npos))
-    {
-        std::string ip = m_localServer.substr(posDot + 1, m_localServer.size() - posColon - 2);
-        uqName.append("_");
-        uqName.append(ip);
-    }
+    uqName.append("_");
+    uqName.append(m_clientID.c_str());
     uqName.append(".mp4");
     return QString::fromStdString(uqName);
 }
@@ -108,6 +100,11 @@ void viewmodel::OnReplySources(const char *from, const char *args)
             m_epSrcs.insert(m_epSrcs.begin(), list.begin(), list.end());
         }
     }
+}
+
+void viewmodel::OnHandshakeId(const char *from, const char *args)
+{
+    m_clientID = args;
 }
 
 viewmodel::viewmodel(QObject *parent) :

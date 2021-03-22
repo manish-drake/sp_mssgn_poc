@@ -46,6 +46,7 @@ void Worker::OnUnknownMessage(const char *from, const char *args)
 
 void Worker::OnHandshake(const char *from, const char *args)
 {
+    static int uq_id = 0;
     auto roleVal = atoi(args);
     auto role = static_cast<Messaging::MSG_ROLES_ENUM>(roleVal);
     auto &list = m_subscribers[role];
@@ -58,6 +59,8 @@ void Worker::OnHandshake(const char *from, const char *args)
     }
     else
         LOGWARNZ("%s already subscrbed to [%s] role.", from, MsgRoleStr(role));
+    std::string clientID = std::to_string(uq_id++);
+    m_messenger.Send(from, Messaging::Messages::Factory()->MSG_HDID(clientID.c_str()));
 }
 
 void Worker::OnRequestSources(const char *from, const char *args)
