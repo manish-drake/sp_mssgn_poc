@@ -54,8 +54,8 @@ import QtMultimedia 5.4
 Rectangle {
     id : cameraUI
 
-    width: 800
-    height: 480
+    width: parent.width
+    height: parent.height
 
     color: "black"
     state: "PhotoCapture"
@@ -105,7 +105,7 @@ Rectangle {
         }
 
         videoRecorder {
-             resolution: "640x480"
+             resolution: "1920x1080"
              frameRate: 30
         }
     }
