@@ -39,6 +39,7 @@ public:
     Q_PROPERTY(int val READ val WRITE setval )
     Q_INVOKABLE void start();
 signals:
+    void ftpServerNotified(QString serverIP);
 public slots:
     void ipSelected(QString ip);
     void videoFetchComplete(const QString& vid);

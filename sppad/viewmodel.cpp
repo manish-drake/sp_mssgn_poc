@@ -86,6 +86,7 @@ viewmodel::viewmodel(QObject *parent) :
         LOGINFOZ("Broadcast received %s", broadcast.c_str());
         m_epSrv = "tcp://" + broadcast + ":8285";
         m_epFTP = broadcast;
+        emit this->ftpServerNotified(QString::fromStdString(m_epFTP));
         if(Messaging::Messages::IsRegistered())
             m_messenger.Send(m_epSrv,
                              Messaging::Messages::Factory()->

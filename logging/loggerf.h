@@ -16,9 +16,13 @@ class LoggerF : public Logger
         fflush(m_fp);
     }
     FILE *m_fp;
+    std::string m_appLogFolder;
   public:
     LoggerF();
     LoggerF(const char* logHead, string path = "");
+
+    void logFiles(std::vector<std::string> &logList);
+
     ~LoggerF();
 };
 
