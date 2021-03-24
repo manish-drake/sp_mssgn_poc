@@ -21,6 +21,7 @@ SOURCES += \
     ../common/multilistener.cpp \
     ../common/network.cpp \
     ../common/threadpool.cpp \
+    ../common/logmanager.cpp \
         main.cpp \
         viewmodel.cpp \
 
@@ -43,6 +44,7 @@ HEADERS += \
     ../common/multilistener.h \
     ../common/network.h \
     ../common/threadpool.h \
+    ../common/logmanager.h \
     viewmodel.h
 #######################ZMQ REFERENCES######################
 android: {

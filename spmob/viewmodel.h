@@ -78,6 +78,7 @@ signals:
     void footerChanged();
     void isRecordingChanged();
     void fileNameChanged();
+    void ftpServerNotified(QString serverIP);
 private:
     Messaging::Delegate m_broker;
     Messaging::Listener m_listener;

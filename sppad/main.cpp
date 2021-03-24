@@ -13,7 +13,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include "../common/threadpool.h"
-#include "logmanager.h"
+#include "../common/logmanager.h"
 
 using namespace std;
 using namespace Messaging;

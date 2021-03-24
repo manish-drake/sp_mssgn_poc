@@ -24,8 +24,9 @@ Column {
         text: "selected: " + net.selectedIP
         anchors.rightMargin: 10
     }
+
     Button {
-        text: "Open"
+        text: "Manage Logs"
         onClicked: {
             log.refresh();
             popup.open()

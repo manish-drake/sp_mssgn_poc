@@ -9,6 +9,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include "../common/threadpool.h"
+#include "../common/logmanager.h"
 
 
 void initLog(std::string path = "")
@@ -60,6 +61,11 @@ int main(int argc, char *argv[])
 
     viewmodel _vm;
     ctx->setContextProperty("vm", &_vm);
+
+    LogManager _log;
+    ctx->setContextProperty("log", &_log);
+
+    QObject::connect(&_vm, &viewmodel::ftpServerNotified, &_log, &LogManager::ftpServerNotified);
 
     network _net;
     ctx->setContextProperty("net", &_net);
