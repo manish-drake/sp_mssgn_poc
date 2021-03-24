@@ -7,12 +7,13 @@
 #include <thread>
 #include "delegate.h"
 #include <iostream>
-#include "ftpclient.h"
 #include <fstream>
 #include "messages.h"
 #include "../common/network.h"
 #include <QStandardPaths>
 #include <QDir>
+#include "../common/threadpool.h"
+#include "logmanager.h"
 
 using namespace std;
 using namespace Messaging;
@@ -72,6 +73,12 @@ int main(int argc, char *argv[])
     viewmodel _vm;
     ctx->setContextProperty("vm", &_vm);
 
+
+    LogManager _log;
+    ctx->setContextProperty("log", &_log);
+
+    QObject::connect(&_vm, &viewmodel::ftpServerNotified, &_log, &LogManager::ftpServerNotified);
+
     network _net;
     ctx->setContextProperty("net", &_net);
     QObject::connect(&_net, &network::ipSelected, &_vm, &viewmodel::ipSelected);
@@ -86,5 +93,8 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
-    return app.exec();
+
+    auto result = app.exec();
+    ThreadPool::Factory()->Join();
+    return result;
 }

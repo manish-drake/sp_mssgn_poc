@@ -5,7 +5,6 @@
 #include "delegate.h"
 #include "listener.h"
 #include "idelegator.h"
-#include "ftpclient.h"
 #include "messenger.h"
 #include "../common/multilistener.h"
 
@@ -22,11 +21,13 @@ class viewmodel : public QObject, IDelegator
     void OnStopRecording(const char* from, const char* args) override;
     void OnUnknownMessage(const char* from, const char* args) override;
     void OnReplySources(const char* from, const char* args) override;
+    void OnHandshakeId(const char* from, const char* args) override;
 
     MultiListener m_multListener;
 
     std::string m_epSrv, m_epFTP;
     std::vector<std::string> m_epSrcs;
+    std::string m_localServer;
 
 
     bool m_isRecording;
@@ -53,6 +54,7 @@ class viewmodel : public QObject, IDelegator
         return m_fileName;
     }
     QString m_appMediaFolder;
+    std::string m_clientID;
 public:
     explicit viewmodel(QObject *parent = nullptr);
     ~viewmodel();
@@ -80,7 +82,6 @@ private:
     Messaging::Delegate m_broker;
     Messaging::Listener m_listener;
     Messaging::Messenger m_messenger;
-    FTPClient m_ftp;
     bool m_close = false;
     QString getUniqueFileName();
 public slots:

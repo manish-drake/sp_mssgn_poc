@@ -10,15 +10,23 @@
 #include "logger.h"
 #include "csvlist.h"
 #include <ctime>
+#include "ftp.h"
+#include "socket.h"
+#include "../common/threadpool.h"
+#include <sys/time.h>
 
 QString viewmodel::getUniqueFileName()
 {
     time_t t = time(nullptr);
     tm *ltm = localtime(&t);
     char buffer[32];
-    size_t sz = strftime(buffer, 32, "%Y%m%d%H%M%S.mp4", ltm);
+    size_t sz = strftime(buffer, 32, "%Y%m%d%H%M%S", ltm);
     buffer[sz] = '\0';
-    return QString(buffer);
+    std::string uqName{buffer};
+    uqName.append("_");
+    uqName.append(m_clientID.c_str());
+    uqName.append(".mp4");
+    return QString::fromStdString(uqName);
 }
 
 
@@ -55,8 +63,24 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
     LOGINFOZ("Sending %s to server..", m_fileName.toStdString().c_str());
     setBody("File found");
     QString serverIP{m_epFTP.c_str()};
-//    m_ftp.Send(m_fileName, serverIP);
-    m_ftp.Send("z:\\git\\samples\\videos\\video1.mp4", serverIP);
+    ThreadPool::Factory()->Create([this, serverIP](){
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        ftp_t ftp(serverIP.toStdString().c_str(), 21);
+        ftp.login("sportspip", "drake8283");
+
+        QFileInfo fInfo(this->m_fileName);
+        QString bname = fInfo.baseName();
+        QString fname = bname.append(".").append(fInfo.completeSuffix());
+        struct timeval t1, t2;
+        gettimeofday(&t1, NULL);
+        size_t szFile = ftp.put_file(this->m_fileName.toStdString().c_str(), fname.toStdString().c_str());
+        gettimeofday(&t2, NULL);
+        int transferTime = (t2.tv_sec - t1.tv_sec) * 1000 + (t2.tv_usec - t1.tv_usec)/1000;
+        auto kbSzFile = szFile/1024;
+        auto mbSzFile = kbSzFile/1024;
+        LOGINFOZ("FTP_PUSH|%s|%.2f|%d", fname.toStdString().c_str(), mbSzFile, transferTime);
+        this->videoFTPComplete(fname);
+    });
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
@@ -75,6 +99,11 @@ void viewmodel::OnReplySources(const char *from, const char *args)
             m_epSrcs.insert(m_epSrcs.begin(), list.begin(), list.end());
         }
     }
+}
+
+void viewmodel::OnHandshakeId(const char *from, const char *args)
+{
+    m_clientID = args;
 }
 
 viewmodel::viewmodel(QObject *parent) :
@@ -112,7 +141,6 @@ viewmodel::viewmodel(QObject *parent) :
                              MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
     });
 
-    connect(&m_ftp, &FTPClient::videoFTPComplete, this, &viewmodel::videoFTPComplete);
 }
 
 viewmodel::~viewmodel()
@@ -165,6 +193,7 @@ void viewmodel::ipSelected(QString ip)
 {
     char localAddress[64] = {0};
     sprintf(localAddress, "tcp://%s:%d", ip.toStdString().c_str(), PORT);
+    m_localServer = localAddress;
     Messaging::Messages::Factory()->Register(localAddress);
     LOGINFOZ("Local address set to %s", localAddress);
     if(!m_epSrv.empty())

@@ -7,6 +7,7 @@
         <file>Preview_stream.qml</file>
         <file>Settings.qml</file>
         <file>Network.qml</file>
+        <file>ContactModel.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>icons8-settings-384.png</file>

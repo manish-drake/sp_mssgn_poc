@@ -84,7 +84,9 @@ void MultiListener::Start(std::function<void (const std::string &, const std::st
 
         while (1) {
             char msgbuf[MSGBUFSIZE];
-#ifdef Q_OS_ANDROID
+#ifdef ANDROID
+            int addrlen = sizeof(addr);
+#elif WIN32
             int addrlen = sizeof(addr);
 #else
             unsigned int addrlen = sizeof(addr);

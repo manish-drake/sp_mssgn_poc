@@ -5,6 +5,9 @@
 #include "messages.h"
 #include <QStandardPaths>
 #include <QDir>
+#include "ftp.h"
+#include "../common/threadpool.h"
+#include <sys/time.h>
 
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
@@ -21,7 +24,37 @@ void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
 {
     LOGINFOZ("Fetching video from FTP server %s", args);
     QString serverIP{m_epFTP.c_str()};
-    m_ftp.Fetch(args, serverIP, m_appMediaFolder.toStdString());
+    std::string fileName{args};
+    ThreadPool::Factory()->Create([serverIP, fileName](){
+        LOGINFO("Initializing local storage..");
+            QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
+            LOGINFOZ("Storage root: %s", localPath.data());
+
+            QString appMediaFolder = localPath.append("/SportsPIP/Videos");
+            LOGINFOZ("Media folder: %s", appMediaFolder.data());
+
+            QDir dAppMediaFolder(appMediaFolder);
+            if (!dAppMediaFolder.exists())
+            {
+                LOGINFO("Creating media folder");
+                dAppMediaFolder.mkpath(".");
+            }
+
+            std::string absFileName = appMediaFolder.toStdString() + "/" + fileName;
+            LOGINFOZ("Opening file at %s", absFileName.c_str());
+
+
+        ftp_t ftp(serverIP.toStdString().c_str(), 21);
+        ftp.login("sportspip", "drake8283");
+        struct timeval t1, t2;
+        gettimeofday(&t1, nullptr);
+        size_t szFile = ftp.get_file(fileName.c_str(), absFileName);
+        gettimeofday(&t2, nullptr);
+        int transferTime = (t2.tv_sec -t1.tv_sec) * 1000 + (t2.tv_usec - t1.tv_usec)/1000;
+        auto kbSzFile = szFile/1024;
+        auto mbSzFile = kbSzFile/1024;
+        LOGINFOZ("FTP_PULL|%s|%.2f|%d", fileName.c_str(), mbSzFile, transferTime);
+    });
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
@@ -53,13 +86,13 @@ viewmodel::viewmodel(QObject *parent) :
         LOGINFOZ("Broadcast received %s", broadcast.c_str());
         m_epSrv = "tcp://" + broadcast + ":8285";
         m_epFTP = broadcast;
+        emit this->ftpServerNotified(QString::fromStdString(m_epFTP));
         if(Messaging::Messages::IsRegistered())
             m_messenger.Send(m_epSrv,
                              Messaging::Messages::Factory()->
                              MSG_HDSK(Messaging::MSG_ROLES_ENUM::CONSUMER));
     });
 
-    connect(&m_ftp, &FTPClient::videoFetchComplete, this, &viewmodel::videoFetchComplete);
 }
 
 void viewmodel::start()
