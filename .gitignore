@@ -51,6 +51,8 @@ libzmq_dist_ios/
 /build
 /3rdparty
 */*.map
+*/*.log
+*.log
 
 
 
