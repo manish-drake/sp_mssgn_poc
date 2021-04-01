@@ -1,9 +1,20 @@
-QT += quick
+TEMPLATE=app
+
+QT += quick qml multimedia network xml
+TARGET=SPIP
 
 CONFIG += c++11
 
-# You can make your code fail to compile if it uses deprecated APIs.
+
+# The following define makes your compiler emit warnings if you use
+# any Qt feature that has been marked deprecated (the exact warnings
+# depend on your compiler). Refer to the documentation for the
+# deprecated API to know how to port your code away from it.
+DEFINES += QT_DEPRECATED_WARNINGS
+
+# You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
+# You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
@@ -12,7 +23,7 @@ SOURCES += \
     ../common/threadpool.cpp \
     ../common/logmanager.cpp \
         main.cpp \
-    viewmodel.cpp
+        viewmodel.cpp \
 
 RESOURCES += qml.qrc
 
@@ -27,13 +38,14 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+
+
 HEADERS += \
     ../common/multilistener.h \
     ../common/network.h \
     ../common/threadpool.h \
     ../common/logmanager.h \
     viewmodel.h
-
 #######################ZMQ REFERENCES######################
 android: {
     LIBS += -L$$PWD/../3rdparty/libzmq-android-arm-bin/lib/ -lzmq
@@ -65,6 +77,7 @@ ios: {
     DEPENDPATH += $$PWD/../3rdparty/libzmq-ios/include
 }
 ios: PRE_TARGETDEPS += $$PWD/../3rdparty/libzmq-ios/lib/libzmq.a
+
 ###############################################################
 
 
@@ -76,8 +89,8 @@ ios: PRE_TARGETDEPS += $$PWD/../3rdparty/libzmq-ios/lib/libzmq.a
         ANDROID_EXTRA_LIBS = \
         $$PWD/../3rdparty/libzmq-android-arm-bin/lib/libzmq.so \
         Z:/Users/manish/android-ndk-r14b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so \
-    }
-
+        OUT_PWD/../ftpclient/libftpclient.so
+}
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../csvdb/release/ -lcsvdb
@@ -87,8 +100,8 @@ else:unix: LIBS += -L$$OUT_PWD/../csvdb/ -lcsvdb
 INCLUDEPATH += $$PWD/../csvdb
 DEPENDPATH += $$PWD/../csvdb
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/ -lftpclient
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/ -lftpclient
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/release -lftpclient
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ftpclient/debug -lftpclient
 else:unix: LIBS += -L$$OUT_PWD/../ftpclient/ -lftpclient
 
 INCLUDEPATH += $$PWD/../ftpclient
@@ -101,12 +114,12 @@ else:unix: LIBS += -L$$OUT_PWD/../messaging/ -lmessaging
 INCLUDEPATH += $$PWD/../messaging
 DEPENDPATH += $$PWD/../messaging
 
-
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../logging/release/ -llogging
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../logging/debug/ -llogging
 else:unix: LIBS += -L$$OUT_PWD/../logging/ -llogging
 
 INCLUDEPATH += $$PWD/../logging
 DEPENDPATH += $$PWD/../logging
+
 
 win32: LIBS += -lws2_32

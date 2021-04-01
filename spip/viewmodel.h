@@ -7,6 +7,8 @@
 #include "idelegator.h"
 #include "messenger.h"
 #include "../common/multilistener.h"
+#include <QNetworkAccessManager>
+#include <QUrl>
 
 #define PORT 8284
 class viewmodel : public QObject, IDelegator
@@ -55,6 +57,12 @@ class viewmodel : public QObject, IDelegator
     }
     QString m_appMediaFolder;
     std::string m_clientID;
+    void startRequest(const QUrl &requestedUrl);
+    QUrl url;
+    QNetworkAccessManager qnam;
+    QNetworkReply *reply;
+    bool httpRequestAborted;
+    int m_maximum, m_progress;
 public:
     explicit viewmodel(QObject *parent = nullptr);
     ~viewmodel();
@@ -79,15 +87,21 @@ signals:
     void isRecordingChanged();
     void fileNameChanged();
     void ftpServerNotified(QString serverIP);
+    void onRequestReady(const QUrl &requestedUrl);
 private:
     Messaging::Delegate m_broker;
     Messaging::Listener m_listener;
     Messaging::Messenger m_messenger;
     bool m_close = false;
     QString getUniqueFileName();
+    void httpFinished();
+    void httpReadyRead();
+    void setMaximum(int maximum);
+    void setValue(int progress);
 public slots:
     void ipSelected(QString ip);
     void videoFTPComplete(const QString& vid);
+   void networkReplyProgress(qint64 bytesRead, qint64 totalBytes);
 };
 
 #endif // VIEWMODEL_H

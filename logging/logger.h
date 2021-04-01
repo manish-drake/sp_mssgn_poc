@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <stdlib.h>
+#include <typeinfo>
 
 
 using namespace std;
@@ -73,6 +74,24 @@ public:
     void Add(Logger* logger);
     void Log(Level level, const char *module, const std::string &logMsg);
     void Log(Level level, char const *module, char const *fmt, ...);
+
+    template<class CAST>
+    CAST* cast()
+    {
+        CAST* ret = nullptr;
+        std::string c{typeid (CAST).name()};
+        for(auto &logger:m_loggers)
+        {
+            std::string l{typeid (*logger).name()};
+            if( l == c )
+            {
+                ret = static_cast<CAST*>(logger);
+                break;
+            }
+        }
+
+        return ret;
+    }
 };
 
 #endif // LOGGER_H

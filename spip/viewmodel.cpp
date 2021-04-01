@@ -14,6 +14,13 @@
 #include "socket.h"
 #include "../common/threadpool.h"
 #include <sys/time.h>
+#include <QDomDocument>
+#include <QDomNodeList>
+#include <QtNetwork>
+#include <QUrl>
+
+static const char defaultUrl[] = "http://localhost:10080/icamera/cams/ip/";
+static const char defaultFileName[] = "response.xml";
 
 QString viewmodel::getUniqueFileName()
 {
@@ -25,7 +32,6 @@ QString viewmodel::getUniqueFileName()
     std::string uqName{buffer};
     uqName.append("_");
     uqName.append(m_clientID.c_str());
-    uqName.append(".mp4");
     return QString::fromStdString(uqName);
 }
 
@@ -44,13 +50,16 @@ void viewmodel::OnException(const char *from, const char *args)
 
 void viewmodel::OnStartRecording(const char *from, const char *args)
 {
-    auto name = m_appMediaFolder;
-    name = name.append(getUniqueFileName());
+    auto name = getUniqueFileName();
     setFileName(name);
     LOGINFOZ("Target media file: %s", fileName().toStdString().c_str());
     LOGINFO("Starting recording..");
     setBody("Received: Start Recording");
-    setIsRecording(true);
+    QString baseurl = "http://localhost:10080/icamera/cams/ip/startrec/";
+    baseurl.append(name);
+    const QUrl newUrl = QUrl::fromUserInput(baseurl);
+    m_fileName = "";
+    emit onRequestReady(newUrl);
 }
 
 void viewmodel::OnStopRecording(const char *from, const char *args)
@@ -59,6 +68,9 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
     static int num = 0;
     setBody("Received: Stop Recording");
     setIsRecording(false);
+    QString baseurl = "http://localhost:10080/icamera/cams/ip/stoprec";
+    const QUrl newUrl = QUrl::fromUserInput(baseurl);
+    emit onRequestReady(newUrl);
 
     LOGINFOZ("Sending %s to server..", m_fileName.toStdString().c_str());
     setBody("File found");
@@ -68,6 +80,10 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         ftp_t ftp(serverIP.toStdString().c_str(), 21);
         ftp.login("sportspip", "drake8283");
+
+////////////////Letting the file-write operation to complete
+//        std::this_thread::sleep_for(std::chrono::seconds(1));
+////////////////////////////////////////////////////////////
 
         QFileInfo fInfo(this->m_fileName);
         QString bname = fInfo.baseName();
@@ -107,6 +123,74 @@ void viewmodel::OnHandshakeId(const char *from, const char *args)
     m_clientID = args;
 }
 
+void viewmodel::startRequest(const QUrl &requestedUrl)
+{
+    url = requestedUrl;
+    httpRequestAborted = false;
+    QHttpMultiPart *http = new QHttpMultiPart;
+
+    reply = qnam.post(QNetworkRequest(url), http);
+    connect(reply, &QNetworkReply::finished, this, &viewmodel::httpFinished);
+    connect(reply, &QIODevice::readyRead, this, &viewmodel::httpReadyRead);
+}
+void viewmodel::httpFinished()
+{
+
+    if (httpRequestAborted) {
+        reply->deleteLater();
+        reply = Q_NULLPTR;
+        return;
+    }
+
+    if (reply->error()) {
+        reply->deleteLater();
+        reply = Q_NULLPTR;
+        return;
+    }
+
+    const QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+
+    reply->deleteLater();
+    reply = Q_NULLPTR;
+
+    if (!redirectionTarget.isNull()) {
+        const QUrl redirectedUrl = url.resolved(redirectionTarget.toUrl());
+        startRequest(redirectedUrl);
+        return;
+    }
+
+
+}
+
+void viewmodel::httpReadyRead()
+{
+    // this slot gets called every time the QNetworkReply has new data.
+    // We read all of its new data and write it into the file.
+    // That way we use less RAM than when reading it at the finished()
+    // signal of the QNetworkReply
+    auto response = reply->readAll();
+    QDomDocument doc;
+    doc.setContent(response);
+    QDomNodeList list=doc.elementsByTagName("string");
+    if(m_fileName == "")
+    {
+        m_fileName=list.at(0).toElement().text();
+        m_fileName.replace("|","");
+    }
+    else{
+        auto path = list.at(0).toElement().text();
+    }
+}
+
+void viewmodel::setMaximum(int maximum)
+{
+    m_maximum = maximum;
+}
+
+void viewmodel::setValue(int progress)
+{
+    m_progress = progress;
+}
 viewmodel::viewmodel(QObject *parent) :
     QObject(parent),
     m_header{""},
@@ -114,7 +198,10 @@ viewmodel::viewmodel(QObject *parent) :
     m_footer{""},
     m_isRecording{false},
     m_broker{this},
-    m_listener{PORT}
+    m_listener{PORT},
+    httpRequestAborted(false),
+    m_maximum{0},
+    m_progress{0}
 {    
     LOGINFO("Initializing local storage..");
     QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
@@ -142,7 +229,7 @@ viewmodel::viewmodel(QObject *parent) :
                              Messaging::Messages::Factory()->
                              MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
     });
-
+    connect(this, &viewmodel::onRequestReady, this, &viewmodel::startRequest);
 }
 
 viewmodel::~viewmodel()
@@ -207,4 +294,10 @@ void viewmodel::ipSelected(QString ip)
 void viewmodel::videoFTPComplete(const QString &vid)
 {
     m_messenger.Send(m_epSrv, Messaging::Messages::Factory()->MSG_VFTP(vid.toStdString().c_str()));
+}
+
+void viewmodel::networkReplyProgress(qint64 bytesRead, qint64 totalBytes)
+{
+    setMaximum(totalBytes);
+    setValue(bytesRead);
 }

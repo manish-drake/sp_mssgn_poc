@@ -33,11 +33,12 @@ STRIP         = strip
 OBJECTS_DIR   = ./build
 DEP_OBJ_DIR   =  ./csvdb ./messaging ./logging
 ####### Files
-SOURCES_CSVDB		= $(wildcard ../logging/*.cpp)
+SOURCES_LOGGING		= $(wildcard ../logging/*.cpp)
+SOURCES_COMMON		= $(wildcard ../common/*.cpp)
 SOURCES_CSVDB		= $(wildcard ../csvdb/*.cpp)
 SOURCES_MESSAGING	= $(wildcard ../messaging/*.cpp)
 SOURCES_SERVICE		= $(wildcard *.cpp)
-SOURCES				= $(SOURCES_CSVDB) $(SOURCES_MESSAGING) $(SOURCES_SERVICE)
+SOURCES				= $(SOURCES_LOGGING) $(SOURCES_COMMON) $(SOURCES_CSVDB) $(SOURCES_MESSAGING) $(SOURCES_SERVICE)
 $(warning $(SOURCES))
 SOURCEO       = $(SOURCES:.cpp=.o) 
 OBJECTS       = $(addprefix $(OBJECTS_DIR)/,$(SOURCEO))

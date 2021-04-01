@@ -5,8 +5,8 @@ import "camera-qml"
 Rectangle {
     id : cameraUI
     property int vm_state: vm.isRecording
-    width: 800
-    height: 480
+    width: parent.width
+    height: parent.height
 
     color: "black"
     state: "VideoCapture"
@@ -67,11 +67,12 @@ Rectangle {
         }
 
         videoRecorder {
-             resolution: "640x480"
+             resolution: "1920x1080"
              frameRate: 30
              outputLocation: vm.fileName
-
+        
         }
+        
     }
 
     PhotoPreview {

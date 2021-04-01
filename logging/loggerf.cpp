@@ -1,6 +1,24 @@
 #include "loggerf.h"
 #include <ctime>
+#include <stdio.h>
+#include <dirent.h>
+#include <sys/types.h>
 
+static void list_dir(const char *path, std::vector<std::string> & list) {
+    struct dirent *entry;
+    DIR *dir = opendir(path);
+    if (dir == NULL) {
+        return;
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        char filename[512] = {0};
+        sprintf(filename, "%s/%s", path, entry->d_name);
+        list.push_back(filename);
+    }
+
+    closedir(dir);
+}
 LoggerF::LoggerF(): LoggerF("")
 {
 
@@ -10,7 +28,7 @@ LoggerF::LoggerF(): LoggerF("")
   @param[in] logHead is the log messages contains the state of application.
   @details Log file is created and named as per the current date and time.
 */
-LoggerF::LoggerF(const char* logHead, string path)
+LoggerF::LoggerF(const char* logHead, string path):m_appLogFolder{path}
 {
     time_t t = time(nullptr);
     tm *ltm = localtime(&t);
@@ -25,6 +43,11 @@ LoggerF::LoggerF(const char* logHead, string path)
         m_fp = fopen(pathToLog, "a");
     }
     this->Log({logHead});
+}
+
+void LoggerF::logFiles(std::vector<string> &logList)
+{
+    list_dir(m_appLogFolder.c_str(), logList);
 }
 
 

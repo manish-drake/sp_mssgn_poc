@@ -13,6 +13,11 @@ void Messaging::Delegate::OnReceived(const std::string &argMsg)
         LOGWARN("The message sender is missing. Disposing of the message.");
         return;
     }
+    if(!Messaging::Messages::Factory()->cmpIPAddrRange(msg.from))
+    {
+        LOGWARNZ("The sender %s doen not belong to the system network. Disposing of the message.", msg.from.c_str());
+        return;
+    }
     switch (msg.task)
     {
     case 200: //acknowledgement received for last sent message
@@ -55,6 +60,10 @@ void Messaging::Delegate::OnReceived(const std::string &argMsg)
     case 209: //Hand-shake with the service informing about the role
         m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_RCVD());
         m_delegator->OnReplySources(msg.from.c_str(), msg.args.c_str());
+        break;
+    case 210: //Hand-shake response with service assigning clientID
+        m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_RCVD());
+        m_delegator->OnHandshakeId(msg.from.c_str(), msg.args.c_str());
         break;
     default:  //unknown message
         m_messenger.Send(msg.from, Messaging::Messages::Factory()->MSG_UNKN());

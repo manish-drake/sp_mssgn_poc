@@ -20,6 +20,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     ../common/multilistener.cpp \
     ../common/network.cpp \
+    ../common/threadpool.cpp \
+    ../common/logmanager.cpp \
         main.cpp \
         viewmodel.cpp \
 
@@ -41,6 +43,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ../common/multilistener.h \
     ../common/network.h \
+    ../common/threadpool.h \
+    ../common/logmanager.h \
     viewmodel.h
 #######################ZMQ REFERENCES######################
 android: {

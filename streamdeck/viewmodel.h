@@ -64,6 +64,8 @@ private:
             emit statusChanged();
         }
     }
+    void auto_stopAfter(int secs);
+    void auto_startAfter(int secs);
 public:
     explicit viewmodel(QObject *parent = nullptr);
     Q_INVOKABLE bool run(const int &argAction);

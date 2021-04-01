@@ -6,6 +6,7 @@
 #include "loggerf.h"
 #include "loggerc.h"
 #include "../common/network.h"
+#include "../common/threadpool.h"
 
 
 void initLog()
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
-
-    return app.exec();
+    auto result = app.exec();
+    ThreadPool::Factory()->Join();
+    return result;
 }

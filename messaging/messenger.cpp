@@ -1,10 +1,11 @@
 #include "messenger.h"
 #include <zmq.hpp>
 #include "logger.h"
+#include <exception>
+
 Messaging::Messenger::Messenger()
 {
 }
-
 
 void Messaging::Messenger::Send(std::string to, const std::string &argMsg)
 {
@@ -20,7 +21,6 @@ void Messaging::Messenger::Send(std::string to, const std::string &argMsg)
     sock.close();
     ctx.close();
 }
-
 
 Messaging::Messenger::~Messenger()
 {

@@ -5,6 +5,7 @@
 #include "logger.h"
 #include "../common/network.h"
 #include "csvlist.h"
+#include <QTimer>
 
 
 
@@ -50,6 +51,22 @@ void viewmodel::OnReplySources(const char *from, const char *args)
     if(m_epSrcs.size() > 0) setState(1);
     emit sourecesChanged();
 }
+
+void viewmodel::auto_stopAfter(int secs)
+{
+    QTimer::singleShot(secs*1000, [&](){
+        LOGINFO("Auto stopping..");
+        this->run(2);
+    });
+}
+
+void viewmodel::auto_startAfter(int secs)
+{
+    QTimer::singleShot(secs*1000, [&](){
+        LOGINFO("Auto starting..");
+        this->run(1);
+    });
+}
 viewmodel::viewmodel(QObject *parent) :
     QObject(parent),
     m_state{0},
@@ -66,6 +83,7 @@ viewmodel::viewmodel(QObject *parent) :
                              Messaging::Messages::Factory()->
                              MSG_HDSK(Messaging::MSG_ROLES_ENUM::CONTROLLER));
     });
+
 }
 
 bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
@@ -91,6 +109,7 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
         }
         setState(2);
         valid = true;
+//        auto_stopAfter(5);
         break;
     }
     case 2:{
@@ -102,6 +121,7 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
         }
         setState(3);
         valid = true;
+//        auto_startAfter(2);
         break;
     }
     default:
