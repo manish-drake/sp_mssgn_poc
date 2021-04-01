@@ -89,7 +89,6 @@ void MultiListener::Start(std::function<void (const std::string &, const std::st
 #elif WIN32
             int addrlen = sizeof(addr);
 #else
-
             unsigned int addrlen = sizeof(addr);
 #endif
             long nbytes = recvfrom(
