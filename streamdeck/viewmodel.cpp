@@ -109,7 +109,7 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
         }
         setState(2);
         valid = true;
-        auto_stopAfter(30);
+//        auto_stopAfter(5);
         break;
     }
     case 2:{
@@ -121,7 +121,7 @@ bool viewmodel::run(const int &argAction/*[0: STA, 1: STO]*/)
         }
         setState(3);
         valid = true;
-        auto_startAfter(2);
+//        auto_startAfter(2);
         break;
     }
     default:

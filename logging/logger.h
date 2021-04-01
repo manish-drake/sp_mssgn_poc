@@ -79,10 +79,10 @@ public:
     CAST* cast()
     {
         CAST* ret = nullptr;
-        auto c = typeid (CAST).name();
+        std::string c{typeid (CAST).name()};
         for(auto &logger:m_loggers)
         {
-            auto l = typeid (*logger).name();
+            std::string l{typeid (*logger).name()};
             if( l == c )
             {
                 ret = static_cast<CAST*>(logger);
