@@ -68,6 +68,7 @@
                 "${workspaceRoot}/../messaging",
                 "${workspaceRoot}/../logging",
                 "${workspaceRoot}/../csvdb",
+                "${workspaceRoot}/../3rdparty/libzmq64/include",
                 "${workspaceRoot}"
             ],
             "defines": [
