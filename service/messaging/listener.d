@@ -1,3 +1,3 @@
 build/../messaging/listener.o: ../messaging/listener.cpp \
- ../messaging/listener.h ../3rdparty/libzmq64/include/zmq.hpp \
- ../3rdparty/libzmq64/include/zmq.h ../logging/logger.h
+ ../messaging/listener.h ../3rdparty/libzmq-bin-x64/include/zmq.hpp \
+ ../3rdparty/libzmq-bin-x64/include/zmq.h ../logging/logger.h
