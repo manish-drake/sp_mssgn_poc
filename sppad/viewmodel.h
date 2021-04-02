@@ -6,6 +6,7 @@
 #include "idelegator.h"
 #include "messenger.h"
 #include "../common/multilistener.h"
+#include <QStringListModel>
 
 #define PORT 8286
 class viewmodel : public QObject, IDelegator
@@ -29,6 +30,11 @@ class viewmodel : public QObject, IDelegator
         m_val=val;
     }
 
+    QStringListModel m_mediaFiles;
+    QStringListModel* mediaFiles()
+    {
+        return &m_mediaFiles;
+    }
 
     Messaging::Listener m_listener;
     Messaging::Delegate m_broker;
@@ -37,11 +43,15 @@ class viewmodel : public QObject, IDelegator
 public:
     explicit viewmodel(QObject *parent = nullptr);
     Q_PROPERTY(int val READ val WRITE setval )
+    Q_PROPERTY(QStringListModel* mediaFiles READ mediaFiles NOTIFY mediaFilesChanged)
     Q_INVOKABLE void start();
 signals:
     void ftpServerNotified(QString serverIP);
+    void fileFetchComplete();
+    void mediaFilesChanged();
 public slots:
     void ipSelected(QString ip);
     void videoFetchComplete(const QString& vid);
+    void refreshMediaFileList();
 };
 #endif // TEST_H

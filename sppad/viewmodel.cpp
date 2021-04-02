@@ -25,7 +25,7 @@ void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
     LOGINFOZ("Fetching video from FTP server %s", args);
     QString serverIP{m_epFTP.c_str()};
     std::string fileName{args};
-    ThreadPool::Factory()->Create([serverIP, fileName](){
+    ThreadPool::Factory()->Create([serverIP, fileName, this](){
         LOGINFO("Initializing local storage..");
             QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
             LOGINFOZ("Storage root: %s", localPath.data());
@@ -54,12 +54,32 @@ void viewmodel::OnNewVideoAvailable(const char *from, const char *args)
         auto kbSzFile = szFile/1024;
         auto mbSzFile = kbSzFile/1024;
         LOGINFOZ("FTP_PULL|%s|%.2f|%d", fileName.c_str(), mbSzFile, transferTime);
+        emit this->fileFetchComplete();
     });
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
 {
     LOGWARNZ("%s -ukn-> %s", from, args);
+}
+
+void viewmodel::refreshMediaFileList()
+{
+    QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
+    LOGINFOZ("Storage root: %s", localPath.toStdString().c_str());
+
+    QString appMediaFolder = localPath.append("/SportsPIP/Videos");
+    LOGINFOZ("Media folder: %s", appMediaFolder.toStdString().c_str());
+
+    QDir dAppMediaFolder(appMediaFolder);
+    if (!dAppMediaFolder.exists())
+    {
+        LOGINFO("Creating media folder");
+        dAppMediaFolder.mkpath(".");
+    }
+
+    m_mediaFiles.setStringList(dAppMediaFolder.entryList());
+    emit mediaFilesChanged();
 }
 
 viewmodel::viewmodel(QObject *parent) :
@@ -92,7 +112,8 @@ viewmodel::viewmodel(QObject *parent) :
                              Messaging::Messages::Factory()->
                              MSG_HDSK(Messaging::MSG_ROLES_ENUM::CONSUMER));
     });
-
+    connect(this, &viewmodel::fileFetchComplete, this, &viewmodel::refreshMediaFileList);
+    refreshMediaFileList();
 }
 
 void viewmodel::start()

@@ -58,116 +58,32 @@ Item {
             color: "#ffffff"
             height: 11*ml.height/12
             width: ml.width
-            GridLayout{
-                id: grid
-                anchors.fill: parent
-                anchors.topMargin:setHeight(50)
-                anchors.leftMargin:setWidth(60)
-                Text {
-                    id: text1
-                    Layout.row:0
-                    Layout.column: 0
-                    text: qsTr("Name")
-                    font.pixelSize: setWidth(14)
-                    font.bold: true
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text2
-                    Layout.row:0
-                    Layout.column: 1
-                    text: qsTr("Time")
-                    font.pixelSize: setWidth(14)
-                    font.bold: true
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text3
-                    Layout.row:0
-                    Layout.column: 2
-                    text: qsTr("Duration")
-                    font.pixelSize: setWidth(14)
-                    font.bold: true
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text4
-                    Layout.row:0
-                    Layout.column: 3
-                    text: qsTr("Local")
-                    font.pixelSize: setWidth(14)
-                    font.bold: true
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text5
-                    Layout.row:1
-                    Layout.column: 0
-                    text: qsTr("Golf")
-                    font.pixelSize: setWidth(14)
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text6
-                    Layout.row:1
-                    Layout.column: 1
-                    text: qsTr("11:00")
-                    font.pixelSize: setWidth(14)
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text7
-                    Layout.row:1
-                    Layout.column: 2
-                    text: qsTr("02:00:00")
-                    font.pixelSize: setWidth(14)
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text8
-                    Layout.row:1
-                    Layout.column: 3
-                    text: qsTr("Yes")
-                    font.pixelSize: setWidth(14)
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text9
-                    Layout.row:2
-                    Layout.column: 0
-                    text: qsTr("Baseball")
-                    font.pixelSize: setWidth(14)
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text10
-                    Layout.row:2
-                    Layout.column: 1
-                    text: qsTr("15:00")
-                    font.pixelSize: setWidth(14)
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text11
-                    Layout.row:2
-                    Layout.column: 2
-                    text: qsTr("00:50:00")
-                    font.pixelSize: setWidth(14)
-                    height: setHeight(20)
-                }
-                Text {
-                    id: text12
-                    text: '<html><style type="text/css"></style><a href="No">No*</a></html>'
-                    font.bold: true
-                    font.pointSize: setWidth(10)
-                    onLinkActivated: ml.source = "Metadata.qml"
-                    Layout.row:2
-                    Layout.column: 3
-                    height: setHeight(20)
+            id: rectContainer
+            Component {
+                      id: contactsDelegate
+                      Rectangle {
+                          id: wrapper
+                          width: rectContainer.width
+                          height: contactInfo.height
+                          color: ListView.isCurrentItem ? "gray" : "white"
+                          Text {
+                              id: contactInfo
+                              text: index + ": " + display
+                              color: wrapper.ListView.isCurrentItem ? "white" : "black"
+                          }
+                      }
+                  }
 
-                }
-            }
-
+                  ListView {
+                      anchors.fill: parent
+                      model: vm.mediaFiles
+                      delegate: contactsDelegate
+                      highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+                      focus: true
+                      add: Transition {
+                                NumberAnimation { properties: "x,y"; from: 100; duration: 1000 }
+                            }
+                  }
 
         }
     }
