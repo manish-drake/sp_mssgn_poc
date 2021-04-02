@@ -31,10 +31,10 @@ STRIP         = strip
 ####### Output directory
 
 OBJECTS_DIR   = ./build
-DEP_OBJ_DIR   =  ./csvdb ./messaging ./logging
+DEP_OBJ_DIR   =  ./csvdb ./messaging ./logging ./common
 ####### Files
 SOURCES_LOGGING		= $(wildcard ../logging/*.cpp)
-SOURCES_COMMON		= $(wildcard ../common/*.cpp)
+SOURCES_COMMON		= $(filter-out ../common/network.cpp ../common/logmanager.cpp, $(wildcard ../common/*.cpp))
 SOURCES_CSVDB		= $(wildcard ../csvdb/*.cpp)
 SOURCES_MESSAGING	= $(wildcard ../messaging/*.cpp)
 SOURCES_SERVICE		= $(wildcard *.cpp)

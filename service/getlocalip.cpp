@@ -1,5 +1,14 @@
 #include "getlocalip.h"
 #include "logger.h"
+#if _WIN32
+#else
+#include <stdio.h>
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <arpa/inet.h>
+#endif
 using namespace std;
 GetLocalIP::GetLocalIP()
 {
@@ -8,6 +17,7 @@ GetLocalIP::GetLocalIP()
 
 bool GetLocalIP::Run(std::vector<std::string> &localIps)
 {
+#if _WIN32
     if (WSAStartup(MAKEWORD(1, 1), &wsaData) != 0) {
         LOGERR("Failed to start the winsock service. Quitting.");
         return false;
@@ -32,9 +42,41 @@ bool GetLocalIP::Run(std::vector<std::string> &localIps)
         localIps.push_back(ip);
         LOGINFOZ("IP Address %s", ip.c_str());
     }
+#else
+    struct ifaddrs * ifAddrStruct = nullptr;
+    struct ifaddrs * ifa = nullptr;
+    void * tmpAddrPtr = nullptr;
+
+    auto result = getifaddrs(&ifAddrStruct);
+
+    for (ifa = ifAddrStruct; ifa != nullptr; ifa = ifa->ifa_next) {
+        if (!ifa->ifa_addr) {
+            continue;
+        }
+        if (ifa->ifa_addr->sa_family == AF_INET) { // check it is IP4
+            // is a valid IP4 Address
+            tmpAddrPtr=&((struct sockaddr_in *)ifa->ifa_addr)->sin_addr;
+            char addressBuffer[INET_ADDRSTRLEN];
+            inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
+            printf("%s IP Address %s\n", ifa->ifa_name, addressBuffer);
+            localIps.push_back(addressBuffer);
+            
+        } else if (ifa->ifa_addr->sa_family == AF_INET6) { // check it is IP6
+            // is a valid IP6 Address
+            tmpAddrPtr=&((struct sockaddr_in6 *)ifa->ifa_addr)->sin6_addr;
+            char addressBuffer[INET6_ADDRSTRLEN];
+            inet_ntop(AF_INET6, tmpAddrPtr, addressBuffer, INET6_ADDRSTRLEN);
+            printf("%s IP Address %s\n", ifa->ifa_name, addressBuffer);
+        }
+    }
+    if (ifAddrStruct!=NULL) freeifaddrs(ifAddrStruct);
+#endif
+    return true;
 }
 
 GetLocalIP::~GetLocalIP()
 {
+#if _WIN32
     WSACleanup();
+#endif
 }
