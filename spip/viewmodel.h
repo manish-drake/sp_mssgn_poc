@@ -10,7 +10,7 @@
 #include <QNetworkAccessManager>
 #include <QUrl>
 
-#define PORT 8284
+#define PORT 8287
 class viewmodel : public QObject, IDelegator
 {
     Q_OBJECT
