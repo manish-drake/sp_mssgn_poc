@@ -30,6 +30,24 @@ QString viewmodel::getUniqueFileName()
 }
 
 
+void viewmodel::refreshMediaFileList()
+{
+    QString localPath = QStandardPaths::writableLocation( QStandardPaths::MoviesLocation );
+    LOGINFOZ("Storage root: %s", localPath.toStdString().c_str());
+
+    QString appMediaFolder = localPath.append("/SportsPIP/Videos");
+    LOGINFOZ("Media folder: %s", appMediaFolder.toStdString().c_str());
+
+    QDir dAppMediaFolder(appMediaFolder);
+    if (!dAppMediaFolder.exists())
+    {
+        LOGINFO("Creating media folder");
+        dAppMediaFolder.mkpath(".");
+    }
+
+    m_mediaFiles.setStringList(dAppMediaFolder.entryList());
+    emit mediaFilesChanged();
+}
 using namespace Messaging;
 void viewmodel::OnAcknowledgement(const char *from, const char *args)
 {
@@ -82,6 +100,7 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
         LOGINFOZ("FTP_PUSH|%s|%.2f|%d", fname.toStdString().c_str(), mbSzFile, transferTime);
         this->videoFTPComplete(fname);
     });
+    emit mediaRecordingComplete();
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
@@ -142,7 +161,8 @@ viewmodel::viewmodel(QObject *parent) :
                              Messaging::Messages::Factory()->
                              MSG_HDSK(Messaging::MSG_ROLES_ENUM::SOURCE));
     });
-
+    connect(this, &viewmodel::mediaRecordingComplete, this, &viewmodel::refreshMediaFileList);
+    refreshMediaFileList();
 }
 
 viewmodel::~viewmodel()

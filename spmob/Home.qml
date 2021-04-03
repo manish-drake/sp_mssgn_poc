@@ -8,6 +8,7 @@ Item {
     property string footer: "awaiting request.."
     property bool isRecording
     Column{
+        id: homeContainer
         anchors.fill: parent
         visible: !home.isRecording
         Network{
@@ -23,35 +24,38 @@ Item {
             font.pointSize: 16
             height: 50
         }
-        Text {
-            id: hdr
-            anchors.topMargin: 0
-            width: title.width
-            color: "#5ac633"
-            text: qsTr(home.header)
-            font.italic: true
-            font.pointSize: 12
-            horizontalAlignment: Text.AlignHCenter
-        }
-        Text {
-            id: bd
-            width: title.width
-            color: "#5ac633"
-            text: qsTr(home.body)
-            font.italic: true
-            font.pointSize: 12
-            horizontalAlignment: Text.AlignHCenter
-            anchors.topMargin:  parent.height/2
-        }
-        Text {
-            id: fdr
-            width: title.width
-            color: "#5ac633"
-            text: qsTr(home.footer)
-            font.italic: true
-            font.pointSize: 12
-            horizontalAlignment: Text.AlignHCenter
-            anchors.bottomMargin: 0
+
+        Rectangle{
+            color: "#ffffff"
+            height: 11*homeContainer.height/12
+            width: homeContainer.width
+            id: rectContainer
+            Component {
+                      id: contactsDelegate
+                      Rectangle {
+                          id: wrapper
+                          width: rectContainer.width
+                          height: contactInfo.height
+                          color: ListView.isCurrentItem ? "gray" : "white"
+                          Text {
+                              id: contactInfo
+                              text: index + ": " + display
+                              color: wrapper.ListView.isCurrentItem ? "white" : "black"
+                          }
+                      }
+                  }
+
+                  ListView {
+                      anchors.fill: parent
+                      model: vm.mediaFiles
+                      delegate: contactsDelegate
+                      highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+                      focus: true
+                      add: Transition {
+                                NumberAnimation { properties: "x,y"; from: 100; duration: 1000 }
+                            }
+                  }
+
         }
     }
     CamBox{

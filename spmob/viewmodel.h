@@ -7,6 +7,7 @@
 #include "idelegator.h"
 #include "messenger.h"
 #include "../common/multilistener.h"
+#include <QStringListModel>
 
 #define PORT 8284
 class viewmodel : public QObject, IDelegator
@@ -49,6 +50,12 @@ class viewmodel : public QObject, IDelegator
             emit fileNameChanged();
         }
     }
+
+    QStringListModel m_mediaFiles;
+    QStringListModel* mediaFiles()
+    {
+        return &m_mediaFiles;
+    }
     QString fileName() const
     {
         return m_fileName;
@@ -64,6 +71,7 @@ public:
     Q_PROPERTY(QString footer READ footer WRITE setFooter NOTIFY footerChanged)
     Q_PROPERTY(bool isRecording READ isRecording WRITE setIsRecording NOTIFY isRecordingChanged)
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
+    Q_PROPERTY(QStringListModel* mediaFiles READ mediaFiles NOTIFY mediaFilesChanged)
 
     QString header();
     QString body();
@@ -79,13 +87,15 @@ signals:
     void isRecordingChanged();
     void fileNameChanged();
     void ftpServerNotified(QString serverIP);
-    void
+    void mediaFilesChanged();
+    void mediaRecordingComplete();
 private:
     Messaging::Delegate m_broker;
     Messaging::Listener m_listener;
     Messaging::Messenger m_messenger;
     bool m_close = false;
     QString getUniqueFileName();
+    void refreshMediaFileList();
 public slots:
     void ipSelected(QString ip);
     void videoFTPComplete(const QString& vid);
