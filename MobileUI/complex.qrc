@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Drake/UI/Complex/Collapsible.qml</file>
+        <file>images/down_button100.png</file>
+    </qresource>
+</RCC>
