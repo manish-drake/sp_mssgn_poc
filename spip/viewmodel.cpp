@@ -18,6 +18,7 @@
 #include <QDomNodeList>
 #include <QtNetwork>
 #include <QUrl>
+#include <QString>
 
 static const char defaultUrl[] = "http://localhost:10080/icamera/cams/ip/";
 static const char defaultFileName[] = "response.xml";
@@ -76,28 +77,29 @@ void viewmodel::OnStopRecording(const char *from, const char *args)
     setBody("File found");
     QString serverIP{m_epFTP.c_str()};
 
-    ThreadPool::Factory()->Create([this, serverIP](){
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        ftp_t ftp(serverIP.toStdString().c_str(), 21);
-        ftp.login("sportspip", "drake8283");
 
-////////////////Letting the file-write operation to complete
-//        std::this_thread::sleep_for(std::chrono::seconds(1));
-////////////////////////////////////////////////////////////
+    auto list = m_fileName.split("|", QString::SplitBehavior::SkipEmptyParts);
+    for(auto fileToFTP: list)
+    {
+        ThreadPool::Factory()->Create([this, serverIP, fileToFTP](){
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            ftp_t ftp(serverIP.toStdString().c_str(), 21);
+            ftp.login("sportspip", "drake8283");
 
-        QFileInfo fInfo(this->m_fileName);
-        QString bname = fInfo.baseName();
-        QString fname = bname.append(".").append(fInfo.completeSuffix());
-        struct timeval t1, t2;
-        gettimeofday(&t1, NULL);
-        size_t szFile = ftp.put_file(this->m_fileName.toStdString().c_str(), fname.toStdString().c_str());
-        gettimeofday(&t2, NULL);
-        int transferTime = (t2.tv_sec - t1.tv_sec) * 1000 + (t2.tv_usec - t1.tv_usec)/1000;
-        auto kbSzFile = szFile/1024;
-        auto mbSzFile = kbSzFile/1024;
-        LOGINFOZ("FTP_PUSH|%s|%.2f|%d", fname.toStdString().c_str(), mbSzFile, transferTime);
-        this->videoFTPComplete(fname);
-    });
+            QFileInfo fInfo(fileToFTP);
+            QString bname = fInfo.baseName();
+            QString fname = bname.append(".").append(fInfo.completeSuffix());
+            struct timeval t1, t2;
+            gettimeofday(&t1, nullptr);
+            size_t szFile = ftp.put_file(fileToFTP.toStdString().c_str(), fname.toStdString().c_str());
+            gettimeofday(&t2, nullptr);
+            int transferTime = (t2.tv_sec - t1.tv_sec) * 1000 + (t2.tv_usec - t1.tv_usec)/1000;
+            auto kbSzFile = szFile/1024;
+            auto mbSzFile = kbSzFile/1024;
+            LOGINFOZ("FTP_PUSH|%s|%.2f|%d", fname.toStdString().c_str(), mbSzFile, transferTime);
+            this->videoFTPComplete(fname);
+        });
+    }
 }
 
 void viewmodel::OnUnknownMessage(const char *from, const char *args)
@@ -175,7 +177,6 @@ void viewmodel::httpReadyRead()
     if(m_fileName == "")
     {
         m_fileName=list.at(0).toElement().text();
-        m_fileName.replace("|","");
     }
     else{
         auto path = list.at(0).toElement().text();

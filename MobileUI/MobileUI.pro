@@ -23,7 +23,7 @@ RESOURCES += qml.qrc \
     complex.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH = /Users/manishverma/git/MobileUI
+QML_IMPORT_PATH = $$PWD
 
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
@@ -37,6 +37,3 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     uiproperties.h \
     uitextproperties.h
-
-DISTFILES += \
-    Drake/UI/Base/qmldir \

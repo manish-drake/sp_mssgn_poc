@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>Drake/UI/Base/Button.qml</file>
+        <file>Drake/UI/Base/qmldir</file>
     </qresource>
 </RCC>
