@@ -56,14 +56,37 @@ Item{
                 title: "DESKTOP-RI26D458"
                 Column{
                     anchors.fill: parent
-
-                    DB.StdRow{
+                    spacing: 5
+                    DB.TextRow{
                         label: "IP Address"
                         text: "192.168.10.21"
                     }
-                    DB.StdRow{
+                    DB.TextRow{
                         label: "Description"
                         text: "Pro Matrix Server - DESKTOP-RI26D458"
+                    }
+                    Item{
+                        width: parent.width
+                        height: 30
+                        DB.Button{
+                            id:buttPair
+                            anchors.left: parent.left
+                            text: "Pair"
+                            onAction: {
+                                buttForget.visible=true
+                                buttPair.visible=false
+                            }
+                        }
+                        DB.Button{
+                            id:buttForget
+                            visible: false
+                            anchors.right: parent.right
+                            text: "Forget"
+                            onAction: {
+                                buttForget.visible=false
+                                buttPair.visible=true
+                            }
+                        }
                     }
                 }
             }
