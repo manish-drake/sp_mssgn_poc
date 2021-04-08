@@ -1,13 +1,13 @@
 import QtQuick 2.0
 
 
-item{
+Item{
     id: txtRoot
-    property string str: ""
+    property string text: ""
     Text {
         id: txt
-        text: txtRoot.str
+        text: txtRoot.text
         font.pixelSize: ui.text.medium
-        anchors.centerIn: parent
+        height: ui.text.medium + 5
     }
 }

@@ -6,14 +6,16 @@ Rectangle {
     property string iconCollapseButton: "qrc:/images/icon.png"
     property bool isCollapsed: true
     property string title: ""
+    property real collapsedHeight: 70
     default property alias innerObject : container.children
+
     onIsCollapsedChanged: {
-        height = collapsibleRoot.isCollapsed? 70: (2*width/3)
+        height = collapsibleRoot.isCollapsed? collapsibleRoot.collapsedHeight: (ui.height/5)
         container.visible = collapsibleRoot.isCollapsed? false: true
     }
 
     width: ui.width - 20
-    height:  width/3
+    height:  collapsibleRoot.collapsedHeight
     color: "lightgray"
     Text {
         id: txtTitle
@@ -39,9 +41,7 @@ Rectangle {
     Item {
         id: container
         visible: false
-        anchors.top: arrowIcon.bottom
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 5
-        width: parent.width
+        anchors.fill: parent
+        anchors.margins: 40
     }
 }

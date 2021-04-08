@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle {
     id: baseButton
-    signal hit
+    signal action
     property string text: "Press"
     height: 30
     width: 110
@@ -18,6 +18,6 @@ Rectangle {
     }
     MouseArea{
         anchors.fill: parent
-        onClicked: baseButton.hit()
+        onClicked: baseButton.action()
     }
 }

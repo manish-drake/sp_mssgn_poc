@@ -5,3 +5,5 @@ Title       1.0 PageTitle.qml
 Sub         1.0 SubTitle.qml
 TextAction  1.0 TextAction.qml
 StdText     1.0 StdText.qml
+StdSwitch   1.0 StdSwitch.qml
+StdRow      1.0 KeyValuePair.qml

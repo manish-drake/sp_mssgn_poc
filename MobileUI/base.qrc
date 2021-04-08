@@ -7,5 +7,7 @@
         <file>Drake/UI/Base/SubTitle.qml</file>
         <file>Drake/UI/Base/TextAction.qml</file>
         <file>Drake/UI/Base/StdText.qml</file>
+        <file>Drake/UI/Base/StdSwitch.qml</file>
+        <file>Drake/UI/Base/KeyValuePair.qml</file>
     </qresource>
 </RCC>
