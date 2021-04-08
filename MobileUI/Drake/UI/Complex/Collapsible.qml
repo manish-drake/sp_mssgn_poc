@@ -1,12 +1,14 @@
 import QtQuick 2.0
+import Drake.UI.Base 1.0 as DB
 
 Rectangle {
     id:collapsibleRoot
+    property string iconCollapseButton: "qrc:/images/icon.png"
     property bool isCollapsed: true
     property string title: ""
     default property alias innerObject : container.children
     onIsCollapsedChanged: {
-        height = collapsibleRoot.isCollapsed? 70: 2*width/3
+        height = collapsibleRoot.isCollapsed? 70: (2*width/3)
         container.visible = collapsibleRoot.isCollapsed? false: true
     }
 
@@ -18,14 +20,13 @@ Rectangle {
         text: collapsibleRoot.title
         font.pixelSize: ui.text.medium
     }
-    Image {
+    DB.Image {
+        id: arrowIcon
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.rightMargin: 10
         anchors.topMargin: 10
-        id: arrowIcon
-        fillMode: Image.PreserveAspectFit
-        source: "qrc:/images/down_button100.png"
+        icon: collapsibleRoot.iconCollapseButton
         rotation: 180
         height: 30; width: 30
 
