@@ -6,14 +6,14 @@ import Drake.UI.Base 1.0 as DB
 Item {
     Rectangle{
         anchors.fill: parent
-        DB.Image{
+        DB.IconAction{
             anchors.top: parent.top
             anchors.topMargin: 10
             anchors.left: parent.left
             anchors.leftMargin: 10
             icon: "qrc:/images/icon.png"
             height: 30; width: 30
-            onHit: {
+            onAction: {
                 root.push("qrc:/Setup.qml")
             }
         }
@@ -25,14 +25,14 @@ Item {
         }
 
 
-        DB.Image{
+        DB.IconAction{
             anchors.top: parent.top
             anchors.topMargin: 10
             anchors.right: parent.right
             anchors.rightMargin: 10
             icon: "qrc:/images/icon.png"
             height: 30; width: 30
-            onHit: {
+            onAction: {
                 root.push("qrc:/Connection.qml")
             }
         }
@@ -53,23 +53,23 @@ Item {
             color: "#5B74B7"
             anchors.bottom: parent.bottom
 
-            DB.Image{
+            DB.IconAction{
                 id: imgMatrix
                 anchors.centerIn: parent
                 icon: "qrc:/images/icon.png"
                 height: 60; width: 60
-                onHit: {
+                onAction: {
                     root.push("qrc:/Matrix.qml")
                 }
             }
-            DB.Image{
+            DB.IconAction{
                 anchors.top: parent.top
                 anchors.topMargin: 5
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 icon: "qrc:/images/icon.png"
                 height: 30; width: 30
-                onHit: {
+                onAction: {
                     footerExpanded.visible=true
                     footerDefault.visible=false
                 }
@@ -83,7 +83,7 @@ Item {
             color: "#5B74B7"
             anchors.bottom: parent.bottom
 
-            DB.Image{
+            DB.IconAction{
                 id: imgMatrixEx
                 anchors.top: parent.top
                 anchors.topMargin: 10
@@ -91,28 +91,30 @@ Item {
                 icon: "qrc:/images/icon.png"
                 caption: "New Matrix"
                 height: 60; width: 60
-                onHit: {
+                onAction: {
                     root.push("qrc:/Matrix.qml")
                 }
             }
-            DB.Image{
+            DB.IconAction{
                 anchors.top: parent.top
                 anchors.topMargin: 5
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 icon: "qrc:/images/icon.png"
                 height: 30; width: 30
-                onHit: {
+                onAction: {
                     footerExpanded.visible=false
                     footerDefault.visible=true
                 }
             }
-            DB.TextButton {
+            DB.TextAction {
                 id: txtBottomLabel
                 text: qsTr("Samsung Cam Test")
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 10
-
+                onAction:{
+                    console.log("Samsung Cam Text: action()")
+                }
             }
         }
     }

@@ -4,7 +4,7 @@ import Drake.UI.Base 1.0 as DB
 
 Item {
     Rectangle{
-        DB.SubTitle{
+        DB.Sub{
             anchors.top: parent.top
             anchors.topMargin: 10
             text: "MATRIX"

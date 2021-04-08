@@ -8,12 +8,12 @@ Rectangle {
 
     width: parent.width
     color: "#e2d9d9"
-    ButtonIcon{
+    IconAction{
         id: sideImage
         icon: subTitleRoot.sideIcon
         anchors.left: parent.left
         height: 30; width: 30
-        onHit: stackRoot.pop()
+        onAction: stackRoot.pop()
     }
     Text {
         id: txt

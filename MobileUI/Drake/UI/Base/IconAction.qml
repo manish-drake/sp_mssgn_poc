@@ -4,7 +4,7 @@ Item {
     id: imgRoot
     property string icon: ""
     property string caption: ""
-    signal hit;
+    signal action;
     Image {
         id: img
         fillMode: Image.PreserveAspectFit
@@ -23,6 +23,6 @@ Item {
         width: parent.width + 10
         height: parent.height + 10
         anchors.centerIn: parent
-        onClicked: imgRoot.hit()
+        onClicked: imgRoot.action()
     }
 }

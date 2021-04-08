@@ -1,6 +1,7 @@
 module Drake.UI.Base
 Button      1.0 StdButton.qml
-Image       1.0 ButtonIcon.qml
+IconAction  1.0 IconAction.qml
 Title       1.0 PageTitle.qml
-SubTitle    1.0 SubTitle.qml
-TextButton  1.0 TextButton.qml
+Sub         1.0 SubTitle.qml
+TextAction  1.0 TextAction.qml
+StdText     1.0 StdText.qml

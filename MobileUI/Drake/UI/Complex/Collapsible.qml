@@ -20,7 +20,7 @@ Rectangle {
         text: collapsibleRoot.title
         font.pixelSize: ui.text.medium
     }
-    DB.Image {
+    DB.IconAction {
         id: arrowIcon
         anchors.right: parent.right
         anchors.top: parent.top
@@ -30,14 +30,9 @@ Rectangle {
         rotation: 180
         height: 30; width: 30
 
-        MouseArea{
-            width: parent.width*2
-            height: parent.height*2
-            anchors.centerIn: parent
-            onClicked: {
-                arrowIcon.rotation += 180
-                collapsibleRoot.isCollapsed = !collapsibleRoot.isCollapsed
-            }
+        onAction: {
+            arrowIcon.rotation += 180
+            collapsibleRoot.isCollapsed = !collapsibleRoot.isCollapsed
         }
 
     }

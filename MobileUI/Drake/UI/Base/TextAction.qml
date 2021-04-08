@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item {
     id: textButtonRoot
-    signal hit
+    signal action
     property string text: "TEXT"
     height: ui.text.big +5
     Text{
@@ -11,6 +11,6 @@ Item {
     }
     MouseArea{
         anchors.fill: parent
-        onClicked: textButtonRoot.hit()
+        onClicked: textButtonRoot.action()
     }
 }
