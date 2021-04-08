@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     auto root = engine.rootContext();
 
+    engine.addImportPath("qrc:/");
+
     UIProperties _ui;
     root->setContextProperty("ui", &_ui);
 
